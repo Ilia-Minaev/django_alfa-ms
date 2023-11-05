@@ -1,0 +1,120 @@
+<ul class="navbar-nav">
+    {% for item in menu_items %}
+        {% if item.slug == 'home' %}
+        <li class="nav-item">
+            <a class="nav-link" title="{{ item.title }}" href="{% url 'pages:home' %}">{{ item.title }}</a>
+        </li>
+        {% elif item.childrens %}
+        <li class="nav-item dropdown dropdown-mega position-static">
+            <a  class="nav-link dropdown-toggle"
+                href="/{{ item.slug }}/"
+                data-bs-toggle="dropdown"
+                data-bs-auto-close="outside"
+                aria-expanded="false"
+                title="{{ item.title }}">
+                {{ item.title }}
+            </a>
+            <div class="dropdown-menu border-0 shadow mt-2 w-100">
+                <div class="mega-content px-4">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 pt-4">
+                                <h5>
+                                    <a class="list-group-item" href="/{{ item.slug }}/" title="Все статьи">
+                                        {{ item.title }}
+                                    </a>
+                                </h5>
+                            </div>
+                            {% for menu_sub in item.childrens %}
+                            <div class="col-md-2 py-4">
+                                <div class="card border-0 bg-danger shadow" >
+                                    <a href="/{{ item.slug }}/{{ menu_sub.slug }}/" title="{{ menu_sub.title }}">
+                                        {% if menu_sub.image %}
+                                        <img src="/media/{{ menu_sub.image }}" class="card-img-top" alt="{{ menu_sub.title }}">
+                                        {% else %}
+                                        <!--
+                                        <img src="/media/uploads/pages/2023-10-30/chastye-voprosy_1.jpg" class="card-img-top" alt="{{ menu_sub.title }}">
+                                        -->
+                                        {% endif %}
+                                        <div class="card-body ">
+                                            <div class="card-title">
+                                                {{ menu_sub.title }}
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" title="{{ item.title }}" href="/{{ item.slug }}/">{{ item.title }}</a>
+        </li>
+        {% endif %}
+    {% endfor %}
+    <li class="nav-item dropdown dropdown-mega position-static">
+        <a  class="nav-link dropdown-toggle"
+            href="{% url 'blog:blog' %}"
+            data-bs-toggle="dropdown"
+            data-bs-auto-close="outside"
+            aria-expanded="false">
+            Блог
+        </a>
+        <div class="dropdown-menu border-0 shadow mt-2 w-100">
+            <div class="mega-content px-4">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 col-sm-4 col-md-3 py-4">
+                            <h5>Блог</h5>
+                            <div class="list-group">
+                                <a class="list-group-item" href="{% url 'blog:articles' %}" title="Все статьи">
+                                    Все статьи
+                                </a>
+                                <a class="list-group-item" href="{% url 'blog:portfolio' %}" title="наши проекты">
+                                    Все наши проекты
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-3 py-4">
+                            <h5>Последняя статья</h5>
+                            <div class="card">
+                                <a href="{{ article_last.get_absolute_url }}">
+                                    <img src="{{ article_last.image.url }}" class="img-fluid" alt="image">
+                                </a>
+                                <div class="card-body">
+                                    <a href="{{ article_last.get_absolute_url }}">
+                                        <p class="card-title"><b>{{ article_last.title }}</b></p>
+                                    </a>
+                                    <p class="card-text">{{ article_last.description|safe|truncatewords_html:10 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-3 py-4">
+                            <h5>Наша последняя работа</h5>
+                            <div class="card">
+                                <a href="{{ portfolio_last.get_absolute_url }}">
+                                    <img src="{{ portfolio_last.image.url }}" class="img-fluid" alt="image">
+                                </a>
+                                <div class="card-body">
+                                    <a href="{{ portfolio_last.get_absolute_url }}">
+                                        <p class="card-title"><b>{{ portfolio_last.title }}</b></p>
+                                    </a>
+                                    <p class="card-text">{{ portfolio_last.description|safe|truncatewords_html:10 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-4 col-md-3 py-4">
+                            <h5>О нашей работе</h5>
+                            <p>Команда компании <b>Альфа-М</b> следит за последними тенденциями в мире офисной мебели и сама учавствует в формиравании трендов.</p>
+                            <p>Узнать подробнее о нашей работе Вы можете в нашем <a href="{% url 'blog:blog' %}">блоге</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>

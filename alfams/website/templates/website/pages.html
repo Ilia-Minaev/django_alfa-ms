@@ -1,0 +1,62 @@
+{% extends "./base_website.html" %}
+{% load static %}
+{% load breadcrumbs %}
+
+{% block breadcrumbs %}
+    {% include breadcrumbs.category_path with breadcrumbs=breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block main_sidebar %}
+    {% include 'website/inc/_banners.html' %}
+{% endblock main_sidebar %}
+
+{% block title %}
+
+<div class="container-fluid pt-4 pb-4">
+    <div class="row">
+        <div class="col">
+            <div class="h1-title">
+                <h1 class="fs-1 text-uppercase">{{ title }}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid pt-4 pb-4">
+    <div class="row">
+        {% for page in pages %}
+        <div class="col-md-3 py-3">
+            <div class="card border-0 bg-danger shadow" >
+                <a href="{{ request.get_full_path }}{{ page.slug }}/" title="{{ page.title }}">
+                    {% if page.image %}
+                    <img src="{{ page.image.url }}" class="card-img-top" alt="{{ page.title }}">
+                    {% else %}
+                    <!--
+                    <img src="/media/uploads/pages/2023-10-30/chastye-voprosy_1.jpg" class="card-img-top" alt="{{ page.title }}">
+                    -->
+                    {% endif %}
+                    <div class="card-body ">
+                        <div class="card-title">
+                            {{ page.title }}
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container-fluid pt-4 pb-4">
+    <div class="row">
+        <div class="col">
+            {{ description|safe }}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,17 @@
+<ul class="list-group mb-3">
+{% for category in categories_sidebar %}
+    {% if category.childs %}
+        {% include 'product/tags/sidebar-submenu.html' with categories=category.childs %}
+    {% else %}
+    <li class="list-group-item list-group-item-action">
+        
+        <a href="{% url 'product:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
+            {% if category.icon %}
+            <img src="/media/{{ category.icon }}" class="me-2" alt="{{ category.title }}">
+            {% endif %}
+            <span>{{ category.title }}</span>
+        </a>
+    </li>
+    {% endif %}
+{% endfor %}
+</ul>

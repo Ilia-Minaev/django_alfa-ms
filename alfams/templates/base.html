@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta %}
+    <meta name="description" content="{{ meta_description }}">
+    <meta name="keywords" content="{{ meta_keywords }}">
+    {% endblock meta %}
+
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="{% static 'website/css/bootstrap/bootstrap-reboot.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'website/css/bootstrap/bootstrap.min.css' %}" />
+    <!-- font awesome style -->
+    <link rel="stylesheet" href="{% static 'website/css/fontawesome.min.css' %}" />
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{% static 'website/css/main.css' %}" />
+
+
+    <title>{% block meta_title %}{{ meta_title }}{% endblock meta_title %}</title>
+</head>
+<body>
+
+    <header>
+        {% block header %}
+            {% include 'inc/_header.html' %}
+            {% include 'inc/_navbar-top.html' %}
+        {% endblock header %}
+    </header>
+    <main>
+        <section class="section">
+            <div class="container-fluid pt-2 pb-2">
+                <div class="row">
+                    <div class="col">
+                        {% block breadcrumbs %}{% endblock breadcrumbs %}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% block main %}
+        <section class="section">
+            <div class="container-fluid pt-4 pb-4">
+                <div class="row">
+                    <div class="col-md-3">
+                    {% block main_sidebar %}{% endblock main_sidebar %}
+                    </div>
+                    <div class="col-md-9">
+                    {% block main_content %}
+                        {% block title %}{% endblock title %}
+                        {% block content %}{% endblock content %}
+                    {% endblock main_content %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endblock main %}
+    </main>
+    <footer>
+        {% block footer %}
+            {% include 'inc/_footer.html' %}
+        {% endblock footer %}
+    </footer>
+
+    <!-- bootstrap js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="{% static 'website/js/bootstrap/bootstrap.min.js' %}"></script>
+
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</body>
+</html>

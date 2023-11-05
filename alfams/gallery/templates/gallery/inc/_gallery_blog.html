@@ -1,0 +1,13 @@
+<section class="section">
+    <div class="container-fluid pt-4 pb-4">
+        <div class="row">
+            {% for img in gallery %}
+            <div class="col-md-2">
+                <a href="{{ img.image }}" target="_blank">
+                    <img src="{{ img.image.url }}" class="img-fluid py-2" alt="">
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

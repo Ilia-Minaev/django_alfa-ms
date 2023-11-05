@@ -1,0 +1,78 @@
+body {
+  font-family: Open Sans;
+  font-size: 18px;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+}
+a:hover {
+  color: red;
+}
+
+i {
+  position: relative;
+  color: #af0000;
+  font-size: 24px;
+}
+i:hover {
+  color: red;
+}
+
+.section-title {
+  display: inline-block;
+  border-bottom: 2px solid #A92725;
+}
+
+.h1-title {
+  border-left: 5px solid red;
+  padding: 0 0 0 20px;
+}
+
+.navbar-top {
+  background-color: #F4F4F4;
+}
+
+.header i {
+  top: 4px;
+}
+
+.search i {
+  top: 0px;
+}
+
+.navbar-top i {
+  top: 4px;
+}
+
+.footer {
+  background-color: #F4F4F4;
+}
+.footer_warning-text {
+  font-size: 14px;
+}
+.footer_copy {
+  font-size: 14px;
+}
+
+.nav-link {
+  color: #000;
+  text-decoration: none;
+}
+.nav-link:hover {
+  color: red;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: red;
+}
+
+.card-header {
+  background-color: #ffffff;
+}/*# sourceMappingURL=main.css.map */

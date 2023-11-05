@@ -1,0 +1,45 @@
+{% extends "./base_blog.html" %}
+{% load breadcrumbs %}
+
+{% block breadcrumbs %}
+{% breadcrumb_start %}
+    {% breadcrumb_home '/' 'Главная' %}
+    {% url 'blog:blog' as url_blog %}
+    {% url 'blog:articles' as url_articles %}
+    {% breadcrumb_item url_blog 'Блог' 1 %}
+    {% breadcrumb_active url_articles 'Статьи' 2 %}
+{% breadcrumb_end %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+<section class="section">
+    <div class="container-fluid pt-4 pb-4">
+        <div class="row">
+            <div class="col">
+                {% for item in articles%}                
+                <div class="card mb-3 border-top-0 border-end-0 border-start-0 rounded-0">
+                    <div class="row g-0">
+                        <div class="col-md-2 d-flex flex-column justify-content-center">
+                            <a href="{{ item.get_absolute_url }}" title="{{ item.title }}">
+                                {% if item.image %}
+                                <img src="{{ item.image.url }}" class="img-fluid" alt="{{ item.title }}">
+                                {% else %}
+                                <img src="{{ logo.url }}" class="img-fluid" alt="{{ item.title }}">
+                                {% endif %}
+                            </a>
+                        </div>
+                        <div class="col-md-10">
+                            <div class="card-body">
+                                <h4 class="card-title"><a href="{{ item.get_absolute_url }}" title="{{ item.title }}">{{ item.title }}</a></h4>
+                                <div class="card-text">{{ item.description|safe|truncatewords_html:40 }}</div>
+                                <p class="card-text"><small class="text-body-secondary">{{ item.date_created }}</small></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

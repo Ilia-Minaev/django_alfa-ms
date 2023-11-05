@@ -1,0 +1,42 @@
+{% extends "./base_blog.html" %}
+{% load static %}
+{% load breadcrumbs %}
+
+{% block breadcrumbs %}
+{% breadcrumb_start %}
+    {% breadcrumb_home '/' 'Главная' %}
+    {% url 'blog:blog' as url_blog %}
+    {% url 'blog:articles' as url_articles %}
+    {% breadcrumb_active url_blog 'Блог' 1 %}
+{% breadcrumb_end %}
+{% endblock breadcrumbs %}
+
+
+{% block content %}
+<section class="section">
+    <div class="container-fluid pt-4 pb-4">
+        <div class="row">
+            <div class="col-md-2 mt-3">
+                <div class="card text-bg-dark">
+                    <a href="{% url 'blog:articles' %}" class="w-100 h-100">
+                        <img src="{% static 'website/logo.svg' %}" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">Новости</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-2 mt-3">
+                <div class="card text-bg-dark">
+                    <a href="{% url 'blog:portfolio' %}" class="w-100 h-100">
+                        <img src="{% static 'website/logo.svg' %}" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">Наши проекты</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

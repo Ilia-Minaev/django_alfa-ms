@@ -1,0 +1,20 @@
+<ul class="navbar-nav">
+    {% for item in menu_items %}
+        {% if item.slug == 'home' %}
+        <li class="nav-item">
+            <a class="nav-link" title="{{ item.title }}" href="{% url 'pages:home' %}">{{ item.title }}</a>
+        </li>
+        {% elif forloop.last %}
+        <li class="nav-item">
+            <a class="nav-link" title="Блог" href="{% url 'blog:blog' %}">Блог</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" title="{{ item.title }}" href="/{{ item.slug }}/">{{ item.title }}</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" title="{{ item.title }}" href="/{{ item.slug }}/">{{ item.title }}</a>
+        </li>
+        {% endif %}
+    {% endfor %}
+</ul>

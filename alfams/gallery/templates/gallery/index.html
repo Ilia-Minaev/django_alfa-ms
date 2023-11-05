@@ -1,0 +1,30 @@
+{% extends "./base_gallery.html" %}
+{% load static %}
+{% load breadcrumbs %}
+
+{% block breadcrumbs %}
+{% breadcrumb_start %}
+    {% breadcrumb_home '/' 'Главная' %}
+
+    {% breadcrumb_active '' title 1 %}
+{% breadcrumb_end %}
+{% endblock breadcrumbs %}
+
+
+{% block content %}
+<section class="section">
+    <div class="container-fluid pt-4 pb-4">
+        <div class="row">
+            <div class="col-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Save">
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}

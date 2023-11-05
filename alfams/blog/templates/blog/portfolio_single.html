@@ -1,0 +1,72 @@
+{% extends "./base_blog.html" %}
+{% load breadcrumbs %}
+
+{% block breadcrumbs %}
+{% breadcrumb_start %}
+    {% breadcrumb_home '/' 'Главная' %}
+    {% url 'blog:blog' as url_blog %}
+    {% url 'blog:portfolio' as url_portfolio %}
+    {% breadcrumb_item url_blog 'Блог' 1 %}
+    {% breadcrumb_item url_portfolio 'Наши проекты' 2 %}
+    {% breadcrumb_active portfolio.get_absolute_url portfolio.title 2 %}
+{% breadcrumb_end %}
+{% endblock breadcrumbs %}
+
+{% block title %}{% endblock title %}
+
+{% block content %}
+<section class="section">
+    <div class="container-fluid pt-4 pb-4">
+        <div class="row">
+            <div class="col">
+                <div class="card mb-3 border-top-0 border-end-0 border-start-0 rounded-0">
+                    <div class="card-header text-bg-white">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                {% if portfolio.image %}
+                                <img src="{{ portfolio.image.url }}" class="img-fluid" alt="{{ portfolio.title }}">
+                                {% else %}
+                                <img src="{{ logo.url }}" class="img-fluid" alt="{{ portfolio.title }}">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-10">
+                                <h4 class="card-title h1-title">{{ portfolio.title }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-text">{{ portfolio.description|safe }}</div>
+                        <p class="card-text"><small class="text-body-secondary">{{ portfolio.date_created }}</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                {% if previous_object %}
+                <div class="float-start text-start">
+                    <a class="btn btn-outline-danger d-flex flex-nowrap" title="{{ previous_object.title }}" href="{% url 'blog:portfolio' %}{{ previous_object.slug }}/">
+                        <i class="fa-solid fa-arrow-left me-3"></i>
+                        Предыдущий проект
+                    </a>
+                    <small class="text-body-secondary">{{ previous_object.title }}</small>
+                </div>
+                {% endif %}
+                {% if next_object %}
+                <div class="float-end text-end">
+                    <a class="btn btn-outline-danger d-flex flex-nowrap" title="{{ next_object.title }}" href="{% url 'blog:portfolio' %}{{ next_object.slug }}/">
+                        Следующий проект
+                        <i class="fa-solid fa-arrow-right ms-3"></i>
+                    </a>
+                    <small class="text-body-secondary">{{ next_object.title }}</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if gallery %}
+{% include 'gallery/inc/_gallery_blog.html' with gallery=gallery %}
+{% endif %}
+{% endblock content %}

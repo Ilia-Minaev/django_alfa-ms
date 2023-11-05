@@ -1,0 +1,34 @@
+<!--https://frontendscript.com/bootstrap-mega-menu-with-submenu/-->
+<!--https://frontendscript.com/demo/bootstrap-5-mega-menu-responsive-examples/-->
+<ul class="navbar-nav">
+    <li class="nav-item dropdown">
+        <a  class="nav-link dropdown-toggle"
+            href="#"
+            data-bs-toggle="dropdown"
+            data-bs-auto-close="outside"
+            aria-expanded="false"
+            data-bs-offset="0,0">
+            <i class="fa-solid fa-bars me-2"></i>
+            <span>Каталог</span>
+        </a>
+        <ul class="dropdown-menu border-0 mt-3 shadow" style="width: max-content;">
+            <li class=""><a class="dropdown-item" href="{% url 'product:category' %}">Каталог</a></li>
+            <li><hr class="dropdown-divider"></li>
+            {% for category in categories %}
+                {% if category.childs %}
+                    {% include 'product/tags/submenu.html' with categories=category.childs %}
+                {% else %}
+                <li class="">
+                    <a class="dropdown-item" href="{% url 'product:category' %}{{ category.full_slug }}/" title="{{ category.title }}">
+                        {% if category.icon %}
+                        <img src="/media/{{ category.icon }}" class="me-2" alt="{{ category.title }}">
+                        {% endif %}
+                        <span>{{ category.title }}</span>
+                    </a>
+                </li>
+                {% endif %}
+            {% endfor %}
+
+        </ul>
+    </li>
+</ul>

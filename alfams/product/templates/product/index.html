@@ -1,0 +1,35 @@
+{% extends "./base_category.html" %}
+{% load static %}
+{% load menu_category %}
+
+{% block breadcrumbs %}
+    {% include breadcrumbs.category_path with breadcrumbs=breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block main_sidebar %}
+    {% show_sidebar_menu %}
+    {% include 'website/inc/_banners.html' %}
+{% endblock main_sidebar %}
+
+{% block content %}
+
+<div class="row">
+    {% for category in categories %}
+    <div class="col-md-3 mt-3">
+        <div class="card text-bg-dark border-0 w-100 h-100" style="background-color: #F4F4F4 !important;">
+            <a href="{% url 'product:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
+                {% if category.image %}
+                    <img src="{{ category.image.url }}" class="card-img" alt="{{ category.title }}">
+                {% else %}
+                    <img src="{{ logo.url }}" class="card-img" alt="{{ category.title }}">
+                {% endif %}
+                <div class="card-img-overlay" style="background: #ffffff24;">
+                    <h3 class="card-title">{{ category.title }}</h3>
+                </div>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}
