@@ -22,7 +22,7 @@ class Constants(models.Model):
         if self.logo:
             return mark_safe(u'<a href="{0}" target="_blank"><img src="{0}" width="100" height="100"></a>'.format(self.logo.url))
         else:
-            return '<div>No photo</div>'
+            return mark_safe('<div style="color:red">No photo</div>')
         
     show_img.short_description = 'Image'
     show_img.allow_tags = True
@@ -50,7 +50,7 @@ class Slider(models.Model):
         if self.image:
             return mark_safe(u'<a href="{0}" target="_blank"><img src="{0}" width="100" height="100"></a>'.format(self.image.url))
         else:
-            return '<div>No photo</div>'
+            return mark_safe('<div style="color:red">No photo</div>')
         
     show_img.short_description = 'Image'
     show_img.allow_tags = True

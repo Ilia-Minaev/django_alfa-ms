@@ -3,8 +3,11 @@ class ProductMixin():
     obj = None
 
     def get_category(self, **kwargs):
-        self.obj = super().get_queryset().get(slug=self.get_path_name())
-        return self.obj
+        if self.obj:
+            return self.obj
+        else:
+            self.obj = super().get_queryset().get(slug=self.get_path_name())
+            return self.obj
 
     def get_path_name(self, **kwargs):
         for i in range(10, -1, -1):
@@ -42,7 +45,7 @@ class ProductMixin():
         
     def get_meta_product(self, **kwargs):
         context = kwargs
-        page = self.obj
+        page = self.get_category()
 
         context['title'] = page.title
         context['description'] = page.description

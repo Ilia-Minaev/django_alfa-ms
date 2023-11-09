@@ -23,12 +23,28 @@ class SeriesAdmin(admin.ModelAdmin):
 
     list_display = ('is_published', 'title', 'show_img')
     list_display_links = ('title',)
-    fields = ('is_published', 'title', 'slug', 'full_slug', 
-              'show_img', 'image', 'description', 'meta_title',
-              'meta_keywords', 'meta_description', 'date_created', 'date_updated')
+    fields = (
+        'is_published', 'title', 'slug', 'full_slug', 
+        'show_img', 'image', 'description',
+
+        'product_call_us', 'product_recommended',
+
+        'product_price',
+
+        'product_article', 'product_code',
+        'product_guarantee', 'product_top_table',
+        'product_production_time', 'product_delivery_time',
+        
+        'parent', 'product_brand', 'product_class', 'product_furniture',
+        
+        'product_country', 'product_color',
+
+        'gallery',
+              
+        'meta_title', 'meta_keywords', 'meta_description', 'date_created', 'date_updated')
     readonly_fields = ('full_slug', 'show_img', 'date_created', 'date_updated')
 
-    prepopulated_fields = {'slug': ('title',)}
+    prepopulated_fields = {'slug': ('product_article',)}
 
 class ProductsAdmin(admin.ModelAdmin):
     form = CategoriesAdminForm

@@ -1,12 +1,10 @@
-from collections.abc import Iterable
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from gallery.models import Name, Images
+from characteristics.models import ProductBrand, ProductCountry, ProductClass, ProductFurniture, ProductColor
+from datetime import datetime, date
 
-#products
-#products
-#categories
-#series
 
 class ProductBaseModel(models.Model):
     is_published = models.BooleanField(default=True)
@@ -24,10 +22,13 @@ class ProductBaseModel(models.Model):
         if self.image:
             return mark_safe(u'<a href="{0}" target="_blank"><img src="{0}" width="100" height="100"></a>'.format(self.image.url))
         else:
-            return '<div>No photo</div>'
+            return mark_safe('<div style="color:red">No photo</div>')
         
     show_img.short_description = 'Image'
     show_img.allow_tags = True
+
+    def get_full_url(self):
+        return '/category/' + self.full_slug + '/'
 
     def __str__(self):
         return self.title
@@ -46,7 +47,8 @@ class Categories(ProductBaseModel):
         if self.icon:
             return mark_safe(u'<a href="{0}" target="_blank"><img src="{0}" width="20" height="20"></a>'.format(self.icon.url))
         else:
-            return '<div>No photo</div>'
+            return mark_safe('<div style="color:red">No photo</div>')
+            #return u'<p>No photo</p>'
         
     show_icon.short_description = 'Icon'
     show_icon.allow_tags = True
@@ -194,10 +196,9 @@ class Categories(ProductBaseModel):
         ordering = ('level', 'parent_id')
 
 
-from gallery.models import Name
-from characteristics.models import ProductBrand, ProductCountry, ProductClass, ProductFurniture, ProductColor
 
 class Series(ProductBaseModel):
+    parent = models.ForeignKey(Categories, blank=False, null=False, related_name='parent_series', verbose_name='parent_series', on_delete=models.PROTECT)
     image = models.ImageField(upload_to='uploads/series/%Y-%m-%d/', blank=True, verbose_name='image')
 
     product_call_us = models.BooleanField(default=False, verbose_name='Баннер "Звоните нам"')
@@ -221,6 +222,47 @@ class Series(ProductBaseModel):
 
     gallery = models.ForeignKey(Name, blank=True, null=True, related_name='series_gallery', verbose_name='series_gallery', on_delete=models.PROTECT)
 
+    def get_colors(self):
+        return ProductColor.objects.filter(parent=self.pk)
+    
+    def get_card_slider(self):
+        return Images.objects.filter(parent=self.gallery.pk)
+    
+    def check_new_banner(self):
+        date_now = datetime.now()
+        date_created = self.date_created
+        date_now = {
+            'y': int(date_now.strftime("%Y")),
+            'm': int(date_now.strftime("%m")),
+            'd': int(date_now.strftime("%d")),
+        }
+        date_created = {
+            'y': int(date_created.strftime("%Y")),
+            'm': int(date_created.strftime("%m")),
+            'd': int(date_created.strftime("%d")),
+        }
+        time_passed = (
+            date(date_now['y'], date_now['m'], date_now['d'])
+            -
+            date(date_created['y'], date_created['m'], date_created['d'])
+        ).days
+        time_needed = 30 * 6
+
+        if time_passed < time_needed:
+            return True
+        else:
+            return False
+
+
+    def __str__(self):
+        return self.title
+    
+    def save(self, *args, **kwargs):
+        if self.parent:
+            category_slug = Categories.objects.get(pk=self.parent.pk).full_slug
+            self.full_slug = category_slug + '/' + self.slug
+        return super(Series, self).save(*args, **kwargs)
+    
     class Meta:
         verbose_name = 'Серия'
         verbose_name_plural = 'Серии'

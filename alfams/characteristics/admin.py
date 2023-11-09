@@ -8,11 +8,15 @@ class CharacteristicsBaseAdmin(admin.ModelAdmin):
     fields = ('title',)
 
 
-class ProductBrandAdmin(CharacteristicsBaseAdmin):
-    pass
-
-class ProductCountryAdmin(CharacteristicsBaseAdmin):
+class ProductBrandAdmin(admin.ModelAdmin):
     list_display = ('title', 'show_img')
+    list_display_links = ('title',)
+    fields = ('title', 'show_img', 'image')
+    readonly_fields = ('show_img',)
+
+class ProductCountryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'show_img')
+    list_display_links = ('title',)
     fields = ('title', 'show_img', 'image')
     readonly_fields = ('show_img',)
 
@@ -28,6 +32,7 @@ class ProductMaterialAdmin(CharacteristicsBaseAdmin):
 
 class ProductColorAdmin(CharacteristicsBaseAdmin):
     list_display = ('title', 'parent', 'show_img')
+    list_display_links = ('title',)
     list_filter = ('parent',)
     fields = ('title', 'parent', 'show_img', 'image')
     readonly_fields = ('show_img',)

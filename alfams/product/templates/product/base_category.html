@@ -5,7 +5,7 @@
 
 {% block main %}
 <section class="section">
-    <div class="container-fluid pt-4 pb-4">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
                 {% block main_sidebar %}{% endblock main_sidebar %}
@@ -13,7 +13,7 @@
             <div class="col-md-9">
                 {% block main_content %}
                     {% block title %}
-                        <div class="row">
+                        <div class="row mb-4">
                             <div class="col">
                                 <div class="h1-title">
                                     <h1 class="fs-1 text-uppercase">{{ title }}</h1>

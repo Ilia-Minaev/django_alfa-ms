@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.db.models.query import QuerySet
 from django.views.generic import ListView, TemplateView
 
-from product.models import Categories
+from product.models import Categories, Series, Products
 from constants.utils import ConstantsMixin
 from product.utils import ProductMixin
 
@@ -71,6 +71,9 @@ class SubCategoryView(ConstantsMixin, ProductMixin, ListView):
         context = context | context_page | context_constants
         
         context['breadcrumbs'] = self.get_breadcrumbs_path()
+
+        context['series'] = Series.objects.filter(parent=self.get_category().pk).filter(is_published=True)
+        #context['series'] = Series.objects.filter(is_published=True)
 
         return context
 

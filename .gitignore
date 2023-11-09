@@ -1,5 +1,6 @@
 venv/
 .vscode/
+alfams/media/uploads
 *.pyc
 *.zip
 __pycache__

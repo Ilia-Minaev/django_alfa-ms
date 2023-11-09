@@ -13,23 +13,92 @@
 
 {% block content %}
 
+{% if categories %}
 <div class="row">
-    {% for category in categories %}
+    {% for item in categories %}
     <div class="col-md-3 mt-3">
         <div class="card text-bg-dark border-0 w-100 h-100" style="background-color: #F4F4F4 !important;">
-            <a href="{% url 'product:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
-                {% if category.image %}
-                    <img src="{{ category.image.url }}" class="card-img" alt="{{ category.title }}">
+            <a href="{{ item.get_full_url }}" class="" title="{{ item.title }}">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img" alt="{{ item.title }}">
                 {% else %}
-                    <img src="{{ logo.url }}" class="card-img" alt="{{ category.title }}">
+                    <img src="{{ logo.url }}" class="card-img" alt="{{ item.title }}">
                 {% endif %}
                 <div class="card-img-overlay" style="background: #ffffff24;">
-                    <h3 class="card-title">{{ category.title }}</h3>
+                    <h3 class="card-title">{{ item.title }}</h3>
                 </div>
             </a>
         </div>
     </div>
     {% endfor %}
 </div>
+{% endif %}
+
+{% if series %}
+
+<style>
+    .d11::after  {
+        content: '';
+        border-left: 45px solid red;
+        border-bottom: 190px solid transparent;
+        position: absolute;
+        right: -45px;
+        top: 0;
+        }
+</style>
+
+<div class="row">
+    {% for item in series %}
+    <div class="col-md-4 mb-3">
+        <div class="card border-danger">
+            
+            <a href="{{ item.get_full_url }}" class="card border-0">
+                <div class="position-absolute top-0 end-0 d-grid mt-3 me-3 fs-6 fst-italic fw-semibold" style="z-index: 2;">
+                    {% if item.product_recommended %}
+                    <div class="text-wrap bg-info mb-1" style="--bs-bg-opacity: .7;">
+                        <span>Рекомендуем</span>
+                    </div>
+                    {% endif %}
+    
+                    {% if item.check_new_banner %}
+                    <div class="text-wrap bg-success mb-1" style="--bs-bg-opacity: .7;">
+                        <span>Новинка!</span>
+                    </div>
+                    {% endif %}
+                </div>
+    
+                {% if item.product_call_us %}
+                <div class="position-absolute top-0 start-0 d-grid mt-3 ms-3 fs-6 fst-italic fw-semibold" style="z-index: 2;">
+                    
+                    <div class="text-wrap bg-primary text-center mb-1" style="--bs-bg-opacity: .7;"> <!-- transform: rotateZ(-40deg); -->
+                        <span>Хотите дешевле? <br>Звоните!</span>
+                    </div>
+                </div>
+                {% endif %}
+                {% include 'product/inc/_card-slider.html' with slides=item.get_card_slider %}
+            </a>
+            <div class="card-body">
+                <a href="{{ item.get_full_url }}" class="mb-3">
+                    <h3 class="card-title">{{ item.title }}</h3>
+                </a>
+                <div class="card-text">
+                    <div class="text-success mb-3">
+                        {% for color in item.get_colors %}
+                            <img src="{{ color.image.url }}" alt="{{ color.title }}" width="50" class="p-1">
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        Цена: от {{ item.product_price }} рублей
+                    </div>
+                    <div class="text-success mb-5">В наличии</div>
+                </div>
+                <a href="#" class="btn btn-danger d-block">В корзину</a>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
 {% endblock content %}
