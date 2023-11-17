@@ -1,0 +1,24 @@
+<div class="mb-3">
+    <div class="nav nav-tabs border-0" id="nav-tab" role="tablist">
+        {% for item in tabs_nav %}
+            <button
+                class="nav-link border-0 rounded {% if forloop.counter0 == 0 %}active{% endif %}" id="{{ item.title }}-tab" data-bs-toggle="tab"
+                data-bs-target="#{{ item.title }}" type="button" role="tab" 
+                aria-controls="{{ item.title }}" aria-selected="true">
+                {{ item.title }}
+            </button>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="tab-content mb-3" id="nav-tabContent">
+    {% for tabs in tabs_nav %}
+        <div class="tab-pane fade {% if forloop.counter0 == 0 %}show active{% endif %}" id="{{ tabs.title }}" role="tabpanel" aria-labelledby="{{ tabs.title }}-tab">
+            {% for color in tabs_items %}
+                {% if color.parent.title == tabs.title %}
+                <img src="{{ color.image.url }}" alt="{{ color.title }}" width="50" class="p-1">
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

@@ -3,6 +3,7 @@ from product.models import Categories
 register = template.Library()
 
 
+
 @register.inclusion_tag('product/tags/top-menu.html')
 def show_top_menu():
     categories = get_tree()

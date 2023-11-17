@@ -69,7 +69,7 @@ class ProductMaterial(models.Model):
         return super(ProductMaterial, self).save(*args, **kwargs)
     
 class ProductColor(CharacteristicsBaseModel):
-    title = models.CharField(max_length=30, blank=False, unique=True, verbose_name='Цвет')
+    title = models.CharField(max_length=30, blank=False, verbose_name='Цвет')
     parent = models.ForeignKey(ProductMaterial, blank=True, null=True, related_name='color_material_parent', verbose_name='Материал (тип цвета)', on_delete=models.PROTECT)
 
     def __str__(self):

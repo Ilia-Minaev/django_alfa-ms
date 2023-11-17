@@ -6,11 +6,13 @@ class PostMixin():
 
 
     def get_post(self, **kwargs):
+        if self.obj:
+            return self.obj
         self.obj = super().get_queryset().get(slug=self.kwargs['post_slug'])
         return self.obj
     
     def get_gallery(self, **kwargs):
-        post_id = self.obj.gallery_id
+        post_id = self.get_post().gallery_id
         try:
             gallery_name = Name.objects.get(pk=post_id, is_published=True).pk
             gallery_image = Images.objects.filter(parent_id=gallery_name).filter(is_published=True)
@@ -20,7 +22,7 @@ class PostMixin():
     
     def get_meta_post_single(self, **kwargs):
         context = kwargs
-        page = self.obj
+        page = self.get_post()
 
         context['title'] = page.title
         context['description'] = page.description

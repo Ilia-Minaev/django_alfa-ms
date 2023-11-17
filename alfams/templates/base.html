@@ -30,8 +30,8 @@
     </header>
     <main>
         <section class="section">
-            <div class="container-fluid pt-2 pb-2">
-                <div class="row">
+            <div class="container-fluid">
+                <div class="row py-3">
                     <div class="col">
                         {% block breadcrumbs %}{% endblock breadcrumbs %}
                     </div>
@@ -40,8 +40,8 @@
         </section>
 
         {% block main %}
-        <section class="section">
-            <div class="container-fluid pt-4 pb-4">
+        <section class="section mb-5">
+            <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-3">
                     {% block main_sidebar %}{% endblock main_sidebar %}

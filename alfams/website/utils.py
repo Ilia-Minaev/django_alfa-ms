@@ -4,6 +4,8 @@ class WebsiteMixin:
     obj = None
 
     def get_page_obj(self, **kwargs):
+        if self.obj:
+            return self.obj
         self.obj = super().get_queryset().get(slug=self.kwargs.get('page_slug'))
         return self.obj
     
@@ -39,10 +41,7 @@ class WebsiteMixin:
 
     def get_page_context(self, **kwargs):
         context = kwargs
-        if self.obj == None:
-            page = self.get_page_obj()
-        else:
-            page = self.obj
+        page = self.get_page_obj()
 
         context['title'] = page.title
         context['description'] = page.description

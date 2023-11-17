@@ -222,11 +222,31 @@ class Series(ProductBaseModel):
 
     gallery = models.ForeignKey(Name, blank=True, null=True, related_name='series_gallery', verbose_name='series_gallery', on_delete=models.PROTECT)
 
+    def get_full_url(self):
+        return '/product/' + self.full_slug + '/'
+    
     def get_colors(self):
-        return ProductColor.objects.filter(parent=self.pk)
+        return self.product_color.all()
+    """
+    def get_colors_for_card(self):
+        color_list = self.product_color.all()
+        color_dict = {}
+        for item in color_list:
+            print(item.parent)
+    """
     
     def get_card_slider(self):
         return Images.objects.filter(parent=self.gallery.pk)
+    
+    def get_country(self):
+        country_all = self.product_country.all()
+        if len(country_all) == 1:
+            return country_all.values('title')[0]['title']
+        country_list = []
+        for item in country_all:
+            country_list.append(item.title)
+        country_list = '-'.join(country_list)
+        return country_list
     
     def check_new_banner(self):
         date_now = datetime.now()

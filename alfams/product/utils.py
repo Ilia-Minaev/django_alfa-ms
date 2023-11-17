@@ -1,3 +1,5 @@
+from product.models import Categories, Series, Products
+
 class ProductMixin():
 
     obj = None
@@ -6,20 +8,12 @@ class ProductMixin():
         if self.obj:
             return self.obj
         else:
-            self.obj = super().get_queryset().get(slug=self.get_path_name())
+            url = self.request.get_full_path()[1:-1].split('/')[-1]
+            self.obj = super().get_queryset().get(slug=url)
             return self.obj
-
-    def get_path_name(self, **kwargs):
-        for i in range(10, -1, -1):
-            path_name = 'category_slug_' + str(i)
-            if self.kwargs.get(path_name):
-                return self.kwargs[path_name]
-        return False
     
-    def get_breadcrumbs_path(self, **kwargs):
+    def get_breadcrumbs_cat(self, **kwargs):
         url = self.request.get_full_path()[1:-1].split('/')
-        #url = url[1:-1]
-        #url = url.split('/')
         path_nested = len(url)
 
         category_path = 'product/breadcrumbs/_' + str(path_nested) + '.html'
@@ -31,9 +25,38 @@ class ProductMixin():
             },
         }
 
-        for i in range(1 ,int(path_nested) + 1):
+        for i in range(1 ,int(path_nested)):
             try:
                 url_category = super().get_queryset().get(slug=url[i])
+                cat = 'category_' + str(i)
+                category_dict[cat] = {}
+                category_dict[cat]['title'] = url_category.title
+                category_dict[cat]['full_slug'] = category_dict['category']['full_slug'] + url_category.full_slug + '/'
+            except:
+                pass
+
+        return category_dict
+    
+    def get_breadcrumbs_ser(self, **kwargs):
+        url = self.request.get_full_path()[1:-1].split('/')
+        path_nested = len(url)
+
+        category_path = 'product/breadcrumbs/_' + str(path_nested) + '.html'
+        category_dict = {
+            'category_path': category_path,
+            'category': {
+                'title': 'Каталог',
+                'full_slug': '/category/',
+            },
+        }
+
+        for i in range(1 ,int(path_nested)):
+            try:
+                url_category = ''
+                if i == (path_nested - 1):
+                    url_category = Series.objects.get(slug=url[i])
+                else:
+                    url_category = Categories.objects.get(slug=url[i])
                 cat = 'category_' + str(i)
                 category_dict[cat] = {}
                 category_dict[cat]['title'] = url_category.title

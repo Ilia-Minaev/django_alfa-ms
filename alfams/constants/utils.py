@@ -1,5 +1,4 @@
 from constants.models import Constants
-#import re
 from re import sub
 
 

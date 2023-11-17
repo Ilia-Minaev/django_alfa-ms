@@ -80,7 +80,7 @@ class ArticleSingleView(ConstantsMixin, PostMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj = self.obj
+        obj = self.get_post()
         current_date_created = obj.date_created
         
         context_page = self.get_meta_post_single()
@@ -102,7 +102,7 @@ class PortfolioSingleView(ConstantsMixin, PostMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj = self.obj
+        obj = self.get_post()
         current_date_created = obj.date_created
 
         context_page = self.get_meta_post_single()

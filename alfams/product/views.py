@@ -3,7 +3,7 @@ from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import render
 
 from django.db.models.query import QuerySet
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView
 
 from product.models import Categories, Series, Products
 from constants.utils import ConstantsMixin
@@ -35,7 +35,7 @@ class CategoryView(ConstantsMixin, ProductMixin, ListView):
         context['meta_description'] = 'каталог, интернет-магазин, офисная мебель, мебель для персонала, кабинеты для руководителя, офисные кресла, %city_name%'
         context['meta_keywords'] = 'Каталог офисной мебели интернет-магазина «Офисная мебель АЛЬФА-М» %city_name%. Качественная мебель для офиса по низкой цене.'
 
-        context['breadcrumbs'] = self.get_breadcrumbs_path()
+        context['breadcrumbs'] = self.get_breadcrumbs_cat()
         
         return context
     
@@ -70,36 +70,31 @@ class SubCategoryView(ConstantsMixin, ProductMixin, ListView):
         context_constants = self.get_constants()
         context = context | context_page | context_constants
         
-        context['breadcrumbs'] = self.get_breadcrumbs_path()
+        context['breadcrumbs'] = self.get_breadcrumbs_cat()
 
         context['series'] = Series.objects.filter(parent=self.get_category().pk).filter(is_published=True)
-        #context['series'] = Series.objects.filter(is_published=True)
 
         return context
 
-"""   
-class SubSubCategoryView(ConstantsMixin, ListView):
-    model = Categories
-    template_name = 'product/index.html'
-    context_object_name = 'categories'
 
-    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-        category_current = Categories.objects.get(slug=self.kwargs.get('category_slug_2'))
-        category_current_full_slug = '/category/' + category_current.full_slug + '/'
-        url = request.get_full_path()
-        if url != category_current_full_slug:
-            raise 'sdfsdfsd'
-        return super().get(request, *args, **kwargs)
+class SingleSeries(ConstantsMixin, ProductMixin, DetailView): #DetailView
+    model = Series
+    template_name = 'product/single_serie.html'
+    context_object_name = 'serie'
 
     def get_queryset(self):
-        category_current = Categories.objects.get(slug=self.kwargs.get('category_slug_2'))
-        categories = Categories.objects.filter(parent=category_current.pk)
-        return categories
-    
+        #return Series.objects.get(slug='riva')
+        return super().get_queryset()
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        #context_page = self.get_page_context()
+        context_page = self.get_meta_product()
         context_constants = self.get_constants()
-        context = context | context_constants
+        context = context | context_page | context_constants
+
+        context['breadcrumbs'] = self.get_breadcrumbs_ser()
+
+        #context['series'] = Series.objects.filter(parent=self.get_category().pk).filter(is_published=True)
+
         return context
-"""

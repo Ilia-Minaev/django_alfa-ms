@@ -76,4 +76,5 @@ class SubPagesView(ConstantsMixin, WebsiteMixin, ListView):
         context = context | context_page | context_constants
 
         context['breadcrumbs'] = self.get_breadcrumbs_path()
+        
         return context
