@@ -2,7 +2,14 @@ from django import template
 from product.models import Categories
 register = template.Library()
 
+global cat
+cat = Categories.objects.filter(is_published=True).values('id', 'title', 'image', 'icon', 'level', 'parent_id')
 
+#class CategoriesList():
+    #cat = None
+    #cat = Categories.objects.filter(is_published=True).values('id', 'title', 'image', 'icon', 'level', 'parent_id')
+    #print(cat)
+    
 
 @register.inclusion_tag('product/tags/top-menu.html')
 def show_top_menu():
@@ -17,10 +24,9 @@ def show_sidebar_menu():
     return {'categories_sidebar': categories}
 
 
+@register.simple_tag
 def get_tree():
-    categories = Categories.objects.filter(is_published=True)
-    categories = categories.values()
-    categories = list(categories)
+    categories = Categories.objects.filter(is_published=True).values('id', 'title', 'image', 'icon', 'level', 'parent_id', 'full_slug')
     max_level = list()
     category_dict = dict()
 
@@ -29,7 +35,7 @@ def get_tree():
         max_level.append(item['level'])
     max_level = max(max_level)
 
-    #распределяем категории в словарь, где ключь - это левел, значение - список категорий
+    #распределяем категории в словарь, где ключ - это левел, значение - список категорий
     for lvl in range(0, max_level + 1):
         category_dict[lvl] = []
         for item in categories:

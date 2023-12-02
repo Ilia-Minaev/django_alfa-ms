@@ -5,66 +5,14 @@ class ProductMixin():
     obj = None
 
     def get_category(self, **kwargs):
+        #print(self.kwargs['slug'])
         if self.obj:
             return self.obj
         else:
-            url = self.request.get_full_path()[1:-1].split('/')[-1]
+            #url = self.request.get_full_path()[1:-1].split('/')[-1]
+            url = self.kwargs['slug']
             self.obj = super().get_queryset().get(slug=url)
             return self.obj
-    
-    def get_breadcrumbs_cat(self, **kwargs):
-        url = self.request.get_full_path()[1:-1].split('/')
-        path_nested = len(url)
-
-        category_path = 'product/breadcrumbs/_' + str(path_nested) + '.html'
-        category_dict = {
-            'category_path': category_path,
-            'category': {
-                'title': 'Каталог',
-                'full_slug': '/category/',
-            },
-        }
-
-        for i in range(1 ,int(path_nested)):
-            try:
-                url_category = super().get_queryset().get(slug=url[i])
-                cat = 'category_' + str(i)
-                category_dict[cat] = {}
-                category_dict[cat]['title'] = url_category.title
-                category_dict[cat]['full_slug'] = category_dict['category']['full_slug'] + url_category.full_slug + '/'
-            except:
-                pass
-
-        return category_dict
-    
-    def get_breadcrumbs_ser(self, **kwargs):
-        url = self.request.get_full_path()[1:-1].split('/')
-        path_nested = len(url)
-
-        category_path = 'product/breadcrumbs/_' + str(path_nested) + '.html'
-        category_dict = {
-            'category_path': category_path,
-            'category': {
-                'title': 'Каталог',
-                'full_slug': '/category/',
-            },
-        }
-
-        for i in range(1 ,int(path_nested)):
-            try:
-                url_category = ''
-                if i == (path_nested - 1):
-                    url_category = Series.objects.get(slug=url[i])
-                else:
-                    url_category = Categories.objects.get(slug=url[i])
-                cat = 'category_' + str(i)
-                category_dict[cat] = {}
-                category_dict[cat]['title'] = url_category.title
-                category_dict[cat]['full_slug'] = category_dict['category']['full_slug'] + url_category.full_slug + '/'
-            except:
-                pass
-
-        return category_dict
         
     def get_meta_product(self, **kwargs):
         context = kwargs
@@ -77,3 +25,84 @@ class ProductMixin():
         context['meta_keywords'] = page.meta_keywords or page.title
 
         return context
+    
+
+class BreadcrumbsMixin():
+    slug_list = None
+    category = 'category'
+    series = 'series'
+    product = 'product'
+
+    def _get_slugs(self, **kwargs):
+        url = self.request.get_full_path()[1:-1]
+        slug_list = url.split('/')
+        self.slug_list = slug_list
+
+        return slug_list
+
+    def _breadcrumbs_start(self, kwargs):
+        breadcrumbs_list = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Каталог',
+                'full_slug': '/' + self.slug_list[0] + '/' + self.category + '/',
+            },
+        ]
+        return breadcrumbs_list
+
+    def _breadcrumbs_category(self, kwargs):
+        categories = []
+        for item in kwargs:
+            cat = Categories.objects.get(slug=item)
+            categories.append({
+                'title': cat.title,
+                'full_slug': '/' + self.slug_list[0] + '/' + self.category + '/' + cat.full_slug + '/',
+            })
+
+        return categories
+
+    def _breadcrumbs_series(self, kwargs):
+        item = Series.objects.get(slug=kwargs)
+        return [{
+            'title': item.title,
+            'full_slug': '/' + self.slug_list[0] + '/' + self.series + '/' + item.full_slug + '/',
+        }]
+    
+    def _breadcrumbs_product(self, kwargs):
+        item = Products.objects.get(slug=kwargs)
+        return [{
+            'title': item.title,
+            'full_slug': '/' + self.slug_list[0] + '/' + self.product + '/' + item.full_slug + '/',
+        }]
+    
+
+    def breadcrumbs_category(self, **kwargs):
+        slug_list = self._get_slugs()
+
+        breadcrumbs_start = self._breadcrumbs_start(kwargs=slug_list)
+        breadcrumbs_category = self._breadcrumbs_category(kwargs=slug_list[2:])
+
+        return breadcrumbs_start + breadcrumbs_category
+
+    def breadcrumbs_series(self, **kwargs):
+        slug_list = self._get_slugs()
+
+        breadcrumbs_start = self._breadcrumbs_start(kwargs=slug_list)
+        breadcrumbs_category = self._breadcrumbs_category(kwargs=slug_list[2:-1])
+        breadcrumbs_series = self._breadcrumbs_series(kwargs=slug_list[-1])
+
+        return breadcrumbs_start + breadcrumbs_category + breadcrumbs_series
+    
+    def breadcrumbs_product(self, **kwargs):
+        slug_list = self._get_slugs()
+        i = len(slug_list)
+
+        breadcrumbs_start = self._breadcrumbs_start(kwargs=slug_list)
+        breadcrumbs_category = self._breadcrumbs_category(kwargs=slug_list[2:i-2])
+        breadcrumbs_series = self._breadcrumbs_series(kwargs=slug_list[i-2])
+        breadcrumbs_product = self._breadcrumbs_product(kwargs=slug_list[i-1])
+
+        return breadcrumbs_start + breadcrumbs_category + breadcrumbs_series + breadcrumbs_product

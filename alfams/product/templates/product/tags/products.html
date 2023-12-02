@@ -1,0 +1,78 @@
+
+{% regroup products by product_code_color as products_list %}
+
+{% for product in products_list %}
+
+<div class="col-md-3">
+    <div class="card border-danger mb-3" style="background-color: #F4F4F4;">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-1">
+                <div class="text-success">В наличии</div>
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item border-0 p-0 me-3" style="background-color: #F4F4F4;">
+                        <a class="" href="#">
+                            <i class="fa-solid fa-heart"></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item border-0 p-0" style="background-color: #F4F4F4;">
+                        <a class="" href="#">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content" id="nav-tabContent">
+                {% for item in product.list %}
+                <div class="tab-pane fade {% if forloop.counter0 == 0 %}show active{% endif %}" id="nav-card-{{ item.pk }}" role="tabpanel" aria-labelledby="nav-card-{{ item.pk }}-tab">
+                    <div class="mb-3">
+                        <a href="{{ item.get_full_url }}" title="{{ item.title }}" >
+                            <img src="{{ item.image.url }}" class="card-img-top rounded" alt="{{ item.title }}">
+                        </a>
+                    </div>
+                    <h4 class="mb-3"><a href="{{ item.get_full_url }}" title="{{ item.title }}">{{ item.title }}</a></h4>
+                    <div class="mb-3">
+                        <div>Код товара: {{ item.product_code }}</div>
+                        <div>Артикул: {{ item.product_article }}</div>
+                        <div>Размер: {{ item.product_length }}x{{ item.product_width }}x{{ item.product_height }}</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6 d-flex flex-nowrap align-items-center">
+                            <div><b>Цена:</b></div>
+                            <div class="ms-3 fs-4"><span class="text-danger">{{ item.product_price }}</span> ₽</div>
+                        </div>
+
+                        <div class="col-md-6 d-flex justify-content-end">
+                            <div class="input-group" style="width: 100px;">
+                                <button class="btn btn-outline-danger" type="button" id="button-minus" data-action="minus"><span class="text-dark">-</span></button>
+                                <input class="form-control border-danger" type="text" id="calc" value="1" >
+                                <button class="btn btn-outline-danger" type="button" id="button-plus" data-action="plus"><span class="text-dark">+</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                            <div class="col-md-6"><a href="{{ item.get_full_url }}" class="btn btn-outline-danger d-block">Подробнее</a></div>
+                            <div class="col-md-6"><a href="{{ item.get_full_url }}" class="btn btn-outline-danger d-block">Купить</a></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div>
+                <div><b>Цвета:</b></div>
+                <div class="nav nav-tabs border-0" id="nav-tab" role="tablist">
+                    {% for item in product.list %}
+                    <a class="nav-link border-0 rounded p-1 m-1 {% if forloop.counter0 == 0 %}active{% endif %}" id="nav-card-{{ item.pk }}-tab" data-bs-toggle="tab" data-bs-target="#nav-card-{{ item.pk }}" type="button" role="tab" aria-controls="nav-card-{{ item.pk }}" aria-selected="{% if forloop.counter0 == 0 %}true{% else %}false{% endif %}">
+                        {% for color in item.product_color.all %}
+                        <img src="{{color.image.url}}" class="rounded" alt="{{ item.title }}" width="40" height="40">
+                        {% endfor %}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+

@@ -5,7 +5,7 @@
     {% else %}
     <li class="list-group-item list-group-item-action">
         
-        <a href="{% url 'product:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
+        <a href="{% url 'shop:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
             {% if category.icon %}
             <img src="/media/{{ category.icon }}" class="me-2" alt="{{ category.title }}">
             {% endif %}

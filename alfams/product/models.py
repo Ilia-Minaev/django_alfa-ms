@@ -27,9 +27,6 @@ class ProductBaseModel(models.Model):
     show_img.short_description = 'Image'
     show_img.allow_tags = True
 
-    def get_full_url(self):
-        return '/category/' + self.full_slug + '/'
-
     def __str__(self):
         return self.title
 
@@ -180,14 +177,8 @@ class Categories(ProductBaseModel):
     #    }
     #    return reverse('product:category_1', kwargs=kwargs)
     
-    #def get_absolute_full_url(self):
-    #    parent_id = Categories.objects.get(slug=self.slug).parent_id
-    #    parent_slug = Categories.objects.get(pk=parent_id).slug
-    #    kwargs = {
-    #        'category_slug_1': parent_slug,
-    #        'category_slug_2': self.slug,
-    #    }
-    #    return reverse('product:category_2', kwargs=kwargs)
+    def get_full_url(self):
+        return '/shop/category/' + self.full_slug + '/'
 
 
     class Meta:
@@ -223,7 +214,7 @@ class Series(ProductBaseModel):
     gallery = models.ForeignKey(Name, blank=True, null=True, related_name='series_gallery', verbose_name='series_gallery', on_delete=models.PROTECT)
 
     def get_full_url(self):
-        return '/product/' + self.full_slug + '/'
+        return '/shop/series/' + self.full_slug + '/'
     
     def get_colors(self):
         return self.product_color.all()
@@ -236,7 +227,16 @@ class Series(ProductBaseModel):
     """
     
     def get_card_slider(self):
-        return Images.objects.filter(parent=self.gallery.pk)
+        if self.gallery:
+            card_slider = Images.objects.filter(parent=self.gallery.pk)
+        else:
+            card_slider = []
+        
+        if self.image:
+            return [self] + list(card_slider)
+        else:
+            return card_slider
+
     
     def get_country(self):
         country_all = self.product_country.all()
@@ -273,10 +273,6 @@ class Series(ProductBaseModel):
         else:
             return False
 
-
-    def __str__(self):
-        return self.title
-    
     def save(self, *args, **kwargs):
         if self.parent:
             category_slug = Categories.objects.get(pk=self.parent.pk).full_slug
@@ -295,12 +291,13 @@ class Products(ProductBaseModel):
 
     product_price = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Цена')
 
-    product_article = models.CharField(max_length=30, blank=False, unique=True, verbose_name='Артикул (уникальный)', help_text='Обязательное поле, используется как КРАТКОЕ НАИМЕНОВАНИЕ')
+    product_article = models.CharField(max_length=30, blank=True, verbose_name='Артикул (уникальный)', help_text='Не обязательное поле, используется как КРАТКОЕ НАИМЕНОВАНИЕ')
     product_code = models.CharField(max_length=30, blank=False, unique=True, verbose_name='Код товара (уникальный)', help_text='Обязательное поле')
-    product_guarantee = models.CharField(max_length=30, blank=True, unique=True, verbose_name='Гарантия (год)')
-    product_top_table = models.CharField(max_length=30, blank=True, unique=True, verbose_name='Толщина столешницы')
-    product_production_time = models.CharField(max_length=30, blank=True, unique=True, verbose_name='Время производства')
-    product_delivery_time = models.CharField(max_length=30, blank=True, unique=True, verbose_name='Время доставки')
+    product_code_color = models.CharField(max_length=30, blank=True, verbose_name='Код объединения товара', help_text='Данный код объединяет товар по цвету')
+    product_guarantee = models.CharField(max_length=30, blank=True, verbose_name='Гарантия (год)')
+    product_top_table = models.CharField(max_length=30, blank=True, verbose_name='Толщина столешницы')
+    product_production_time = models.CharField(max_length=30, blank=True, verbose_name='Время производства')
+    product_delivery_time = models.CharField(max_length=30, blank=True, verbose_name='Время доставки')
     
     product_brand = models.ForeignKey(ProductBrand, blank=True, null=True, related_name='product_brand', verbose_name='Производитель (бренд)', on_delete=models.PROTECT)
     product_class = models.ForeignKey(ProductClass, blank=True, null=True, related_name='product_class', verbose_name='Класс товара', on_delete=models.PROTECT)
@@ -309,14 +306,74 @@ class Products(ProductBaseModel):
     product_country = models.ManyToManyField(ProductCountry, blank=True, related_name='product_country', verbose_name='Страна-производитель')
     product_color = models.ManyToManyField(ProductColor, blank=True, related_name='product_color', verbose_name='Цвет')
     
-    gallery = models.ForeignKey(Name, blank=True, null=True, related_name='product_gallery', verbose_name='series_gallery', on_delete=models.PROTECT)
-
+    gallery = models.ForeignKey(Name, blank=True, null=True, related_name='product_gallery', verbose_name='series_gallery', on_delete=models.PROTECT, help_text='Только для 3D галерей')
 
     product_height = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Высота, мм')
     product_width = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Ширина, мм')
     product_length = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Длина, мм')
     product_diameter = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Диаметр, мм')
     product_weight = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Вес, кг')
+
+    def get_full_url(self):
+        return '/shop/product/' + self.full_slug + '/'
+    
+    def get_colors(self):
+        return self.product_color.all()
+    
+    def get_card_slider(self):
+        if self.gallery:
+            card_slider = Images.objects.filter(parent=self.gallery.pk)
+        else:
+            card_slider = []
+        
+        if self.image:
+            return [self] + list(card_slider)
+        else:
+            return card_slider
+
+    
+    def get_country(self):
+        country_all = self.product_country.all()
+        if len(country_all) == 1:
+            return country_all.values('title')[0]['title']
+        country_list = []
+        for item in country_all:
+            country_list.append(item.title)
+        country_list = '-'.join(country_list)
+        return country_list
+    
+    def get_colors_for_admin(self):
+        colors_list = self.product_color.all()
+        colors_name = ''
+        for item in colors_list:
+            colors_name += item.title + ', '
+        return colors_name
+
+    def save(self, *args, **kwargs):
+        parent = Series.objects.get(pk=self.parent.pk)
+        if self.parent:
+            self.full_slug = parent.full_slug + '/' + self.slug
+
+        if not self.slug:
+            self.slug = self.product_code
+        if not self.product_code_color:
+            self.product_code_color = self.product_code.split('_')[0]
+        if not self.product_guarantee:
+            self.product_guarantee = parent.product_guarantee
+        if not self.product_brand:
+            self.product_brand = parent.product_brand
+        if not self.product_class:
+            self.product_class = parent.product_class
+
+        return super(Products, self).save(*args, **kwargs)
+
+        print(self.product_country)
+        if not self.product_country == None:
+            obj = Products.objects.get(pk=self.pk)
+            for item in parent.product_country.all():
+                print(item.pk)
+                obj.product_country.add(item)
+            #obj.save()
     
     class Meta:
         verbose_name = 'Товар'

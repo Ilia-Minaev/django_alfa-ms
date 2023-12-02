@@ -4,15 +4,9 @@
 
         <div class="carousel-inner">
             {% for slide in slides %}
-                {% if forloop.counter0 == 0 %}
-                <div class="carousel-item active">
+                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
                     <img src="{{ slide.image.url }}" class="d-block" alt="{{ title }}">
                 </div>
-                {% else %}
-                <div class="carousel-item">
-                    <img src="{{ slide.image.url }}" class="d-block" alt="{{ title }}">
-                </div>
-                {% endif %}
             {% endfor %}
         </div>
 

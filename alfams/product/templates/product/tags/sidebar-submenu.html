@@ -1,5 +1,5 @@
 <li class="list-group-item list-group-item-action dropend">
-    <a href="{% url 'product:category' %}{{ category.full_slug }}/" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-offset="-9,16">
+    <a href="{% url 'shop:category' %}{{ category.full_slug }}/" class="dropdown-item dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside" data-bs-offset="-9,16">
         {% if category.icon %}
         <img src="/media/{{ category.icon }}" class="me-2" alt="{{ category.title }}">
         {% endif %}
@@ -7,7 +7,7 @@
     </a>
     <ul class="dropdown-menu dropdown-submenu border-0 rounded-start-0" style="width: max-content; padding: 0">
         <li class="list-group-item list-group-item-action list-group-item-secondary">
-            <a href="{% url 'product:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
+            <a href="{% url 'shop:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
                 {% if category.icon %}
                 <img src="/media/{{ category.icon }}" class="me-2" alt="{{ category.title }}">
                 {% endif %}
@@ -19,7 +19,7 @@
                 {% include 'product/tags/sidebar-submenu.html' with categories=category.childs %}
             {% else  %}
             <li class="list-group-item list-group-item-action">
-                <a href="{% url 'product:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
+                <a href="{% url 'shop:category' %}{{ category.full_slug }}/" class="" title="{{ category.title }}">
                     {% if category.icon %}
                     <img src="/media/{{ category.icon }}" class="me-2" alt="{{ category.title }}">
                     {% endif %}

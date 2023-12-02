@@ -1,16 +1,6 @@
 {% extends "./base_category.html" %}
-{% load static %}
-{% load menu_category %}
-{% load tabs %}
+{% load series_tags %}
 
-{% block breadcrumbs %}
-{% include breadcrumbs.category_path with breadcrumbs=breadcrumbs %}
-{% endblock breadcrumbs %}
-
-{% block main_sidebar %}
-{% show_sidebar_menu %}
-{% include 'website/inc/_banners.html' %}
-{% endblock main_sidebar %}
 
 {% block main %}
 
@@ -18,12 +8,18 @@
     <div class="container-fluid">
         <div class="row mb-3">
             <div class="col-md-6">
-                {% include 'product/inc/_serie-slider.html' with slides=serie.get_card_slider %}
-                {% include 'product/inc/_tabs-card.html' %}
+
+                {% with slider=product.get_card_slider %}
+                    {% if slider %}
+                        {% include 'product/inc/_series-slider.html' with slides=slider %}
+                    {% endif %}
+                {% endwith %}
+
+                {% include 'product/inc/_tabs-card.html' with items=product %}
 
             </div>
             <div class="col-md-6">
-                <h1 class="h1-title mb-5">{{ serie.title }}</h1>
+                <h1 class="h1-title mb-5">{{ product.title }}</h1>
                 <div class="card border-0" style="background-color: #F4F4F4;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
@@ -42,10 +38,10 @@
                             </ul>
                         </div>
 
-                        {% show_tabs serie.get_colors %}
+                        {% show_tabs product.get_colors %}
 
                         <div class="row">
-                            <div class="col-12 mb-3"> Цена: от {{ serie.product_price }}</div>
+                            <div class="col-12 mb-3"> Цена: от {{ product.product_price }}</div>
                             <div class="col-md-6 mb-3">
                                 <a href="/klientam/vyzov-menedzhera/" class="btn btn-danger">В корзину</a>
                             </div>
@@ -64,27 +60,27 @@
                         <table class="table table-borderless table-striped mb-3">
                             <tr>
                                 <td>Страна-производитель:</td>
-                                <td>{{ serie.get_country }}</td>
+                                <td>{{ product.get_country }}</td>
                             </tr>
                             <tr>
                                 <td>Срок доставки:</td>
-                                <td>{{ serie.product_delivery_time }}</td>
+                                <td>{{ product.product_delivery_time }}</td>
                             </tr>
                             <tr>
                                 <td>Класс:</td>
-                                <td>{{ serie.product_class }}</td>
+                                <td>{{ product.product_class }}</td>
                             </tr>
                             <tr>
                                 <td>Код товара:</td>
-                                <td>{{ serie.product_code }}</td>
+                                <td>{{ product.product_code }}</td>
                             </tr>
                             <tr>
                                 <td>Гарантия:</td>
-                                <td>{{ serie.product_guarantee }}</td>
+                                <td>{{ product.product_guarantee }}</td>
                             </tr>
                             <tr>
                                 <td>Артикул:</td>
-                                <td>{{ serie.product_article }}</td>
+                                <td>{{ product.product_article }}</td>
                             </tr>
                             <tr>
                                 <td>Срок производства:</td>
@@ -96,7 +92,7 @@
                             </tr>
                             <tr>
                                 <td>Толщина столешницы, мм:</td>
-                                <td>{{ serie.product_top_table }}</td>
+                                <td>{{ product.product_top_table }}</td>
                             </tr>
                         </table>
 
@@ -125,12 +121,15 @@
                 </div>
             </div>
         </div>
-
+<!--
         <div class="row mb-3" style="background-color: #F4F4F4;">
-            <div class="col p-3">
-                <h2>Элементы серии {{ serie.product_article }}</h2>
+            <div class="col py-3">
+                <h2>Элементы серии {{ product.product_article }}</h2>
             </div>
-        </div>                
+        </div>
+-->    
+
+
     </div>
 </section>
 

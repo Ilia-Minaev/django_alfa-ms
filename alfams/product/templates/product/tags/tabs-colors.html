@@ -16,7 +16,8 @@
         <div class="tab-pane fade {% if forloop.counter0 == 0 %}show active{% endif %}" id="{{ tabs.title }}" role="tabpanel" aria-labelledby="{{ tabs.title }}-tab">
             {% for color in tabs_items %}
                 {% if color.parent.title == tabs.title %}
-                <img src="{{ color.image.url }}" alt="{{ color.title }}" width="50" class="p-1">
+                <input type="radio" class="btn-check" name="options" id="btn-color-check-{{ forloop.counter0 }}" autocomplete="off" {% if forloop.counter0 == 0 %}checked{% endif %}>
+                <label class="btn " for="btn-color-check-{{ forloop.counter0 }}"><img src="{{ color.image.url }}" alt="{{ color.title }}" width="50" class=""></label>
                 {% endif %}
             {% endfor %}
         </div>

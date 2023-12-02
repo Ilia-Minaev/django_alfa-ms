@@ -49,15 +49,35 @@ class SeriesAdmin(admin.ModelAdmin):
 class ProductsAdmin(admin.ModelAdmin):
     form = CategoriesAdminForm
 
-    list_display = ('is_published', 'title', 'parent', 'show_img')
+    list_display = ('is_published', 'product_code', 'product_code_color', 'title', 'parent', 'product_brand', 'get_colors_for_admin', 'show_img')
     list_display_links = ('title',)
     list_filter = ('parent',)
-    fields = ('is_published', 'title', 'slug', 'full_slug', 'parent', 
-              'show_img', 'image', 'description', 'meta_title',
-              'meta_keywords', 'meta_description', 'date_created', 'date_updated')
+    fields = (
+        'is_published', 'title', 'slug', 'full_slug', 
+        'show_img', 'image', 'description',
+
+
+
+        'product_price',
+
+        'product_article', 'product_code', 'product_code_color',
+        'product_guarantee', 'product_top_table',
+        'product_production_time', 'product_delivery_time',
+        
+        'parent', 'product_brand', 'product_class', 'product_furniture',
+        
+        'product_country', 'product_color',
+
+        'product_height', 'product_width', 'product_length',
+
+        'gallery',
+              
+        'meta_title', 'meta_keywords', 'meta_description', 'date_created', 'date_updated')
     readonly_fields = ('full_slug', 'show_img', 'date_created', 'date_updated')
     
-    prepopulated_fields = {'slug': ('title',)}
+    prepopulated_fields = {'slug': ('product_code',)}
+    ordering = ('product_brand', 'product_code')
+    save_as = True
 
 
 admin.site.register(Categories, CategoriesAdmin)
