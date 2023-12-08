@@ -49,7 +49,7 @@ class SeriesAdmin(admin.ModelAdmin):
 class ProductsAdmin(admin.ModelAdmin):
     form = CategoriesAdminForm
 
-    list_display = ('is_published', 'product_code', 'product_code_color', 'title', 'parent', 'product_brand', 'get_colors_for_admin', 'show_img')
+    list_display = ('is_published', 'product_code', 'product_code_color', 'title', 'parent', 'product_brand', 'product_color', 'show_img')
     list_display_links = ('title',)
     list_filter = ('parent',)
     fields = (

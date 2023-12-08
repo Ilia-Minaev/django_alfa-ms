@@ -37,7 +37,8 @@ urlpatterns += [
 
     path('gallery/', include('gallery.urls')),
     path('blog/', include('blog.urls')),
-    path('shop/', include('product.urls'), name='main_category'),
+    path('shop/', include('product.urls')),
+    path('cart/', include('ecommerce.urls')),
     #path('category/', include('product.urls'), name='main_category'),
     #path('product/', include('product.urls_ex'), name='main_product'),
     path('', include('website.urls')),

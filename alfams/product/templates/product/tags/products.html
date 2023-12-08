@@ -61,9 +61,10 @@
                 <div><b>Цвета:</b></div>
                 <div class="nav nav-tabs border-0" id="nav-tab" role="tablist">
                     {% for item in product.list %}
+
                     <a class="nav-link border-0 rounded p-1 m-1 {% if forloop.counter0 == 0 %}active{% endif %}" id="nav-card-{{ item.pk }}-tab" data-bs-toggle="tab" data-bs-target="#nav-card-{{ item.pk }}" type="button" role="tab" aria-controls="nav-card-{{ item.pk }}" aria-selected="{% if forloop.counter0 == 0 %}true{% else %}false{% endif %}">
+                        <img src="{{ item.product_color.image.url }}" class="rounded" alt="{{ item.product_color.title }}" width="40" height="40">
                         {% for color in item.product_color.all %}
-                        <img src="{{color.image.url}}" class="rounded" alt="{{ item.title }}" width="40" height="40">
                         {% endfor %}
                     </a>
                     {% endfor %}

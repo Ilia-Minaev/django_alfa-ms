@@ -217,14 +217,14 @@ class Series(ProductBaseModel):
         return '/shop/series/' + self.full_slug + '/'
     
     def get_colors(self):
-        return self.product_color.all()
-    """
-    def get_colors_for_card(self):
-        color_list = self.product_color.all()
-        color_dict = {}
-        for item in color_list:
-            print(item.parent)
-    """
+        products = Products.objects.filter(parent=self.pk)
+
+        colors = set()
+
+        for item in products:
+            colors.add(item.product_color)
+        
+        return colors
     
     def get_card_slider(self):
         if self.gallery:
@@ -304,7 +304,7 @@ class Products(ProductBaseModel):
     product_furniture = models.ForeignKey(ProductFurniture, blank=True, null=True, related_name='product_furniture', verbose_name='Тип мебели', on_delete=models.PROTECT)
     
     product_country = models.ManyToManyField(ProductCountry, blank=True, related_name='product_country', verbose_name='Страна-производитель')
-    product_color = models.ManyToManyField(ProductColor, blank=True, related_name='product_color', verbose_name='Цвет')
+    product_color = models.ForeignKey(ProductColor, null=True, related_name='product_color', verbose_name='Цвет', on_delete=models.PROTECT, )
     
     gallery = models.ForeignKey(Name, blank=True, null=True, related_name='product_gallery', verbose_name='series_gallery', on_delete=models.PROTECT, help_text='Только для 3D галерей')
 
@@ -341,13 +341,6 @@ class Products(ProductBaseModel):
             country_list.append(item.title)
         country_list = '-'.join(country_list)
         return country_list
-    
-    def get_colors_for_admin(self):
-        colors_list = self.product_color.all()
-        colors_name = ''
-        for item in colors_list:
-            colors_name += item.title + ', '
-        return colors_name
 
     def save(self, *args, **kwargs):
         parent = Series.objects.get(pk=self.parent.pk)

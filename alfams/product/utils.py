@@ -56,7 +56,10 @@ class BreadcrumbsMixin():
     def _breadcrumbs_category(self, kwargs):
         categories = []
         for item in kwargs:
-            cat = Categories.objects.get(slug=item)
+            try:
+                cat = Categories.objects.get(slug=item)
+            except:
+                pass
             categories.append({
                 'title': cat.title,
                 'full_slug': '/' + self.slug_list[0] + '/' + self.category + '/' + cat.full_slug + '/',

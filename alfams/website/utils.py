@@ -1,4 +1,4 @@
-from website.models import PagesBaseModel
+from website.models import PagesBaseModel, Pages
 
 class WebsiteMixin:
     obj = None
@@ -9,35 +9,26 @@ class WebsiteMixin:
         self.obj = super().get_queryset().get(slug=self.kwargs.get('page_slug'))
         return self.obj
     
-    def get_breadcrumbs_path(self, **kwargs):
-        full_url = self.request.get_full_path()
-        url = full_url[1:-1].split('/')
-        path_nested = len(url)
+    def get_breadcrumbs(self, **kwargs):
+        breadcrumbs_list = []
+        page = self.get_page_obj()
+        parent = None
 
-        category_path = 'website/breadcrumbs/_' + str(path_nested) + '.html'
-        category_dict = {
-            'category_path': category_path,
-            'category': {
-                'title': 'Каталог',
-                'full_slug': '/category/',
-            },
-            'url': ''
-        }
-
-        for i in range(0 ,int(path_nested) + 1):
-            try:
-                url_category = PagesBaseModel.objects.get(slug=url[i])
-                cat = 'category_' + str(i)
-                category_dict[cat] = {}
-                category_dict[cat]['title'] = url_category.title
-                if i == 0:
-                    category_dict[cat]['full_slug'] = '/' + url[0] + '/'
-                else:
-                    category_dict[cat]['full_slug'] = full_url
-            except:
-                pass
-
-        return category_dict
+        breadcrumbs_list.append({
+            'title': 'Главная',
+            'full_slug': '/'
+        })
+        if self.kwargs.get('page_slug_1'):
+            parent = Pages.objects.get(slug=self.kwargs.get('page_slug_1'))
+            breadcrumbs_list.append({
+                'title': parent.title,
+                'full_slug': f'/{parent.slug}/'
+            })
+        breadcrumbs_list.append({
+            'title': page.title,
+            'full_slug': f'/{parent.slug}/{page.slug}/' if parent else f'/{page.slug}/'
+        })
+        return breadcrumbs_list
 
     def get_page_context(self, **kwargs):
         context = kwargs

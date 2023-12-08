@@ -3,7 +3,19 @@
 {% load breadcrumbs %}
 
 {% block breadcrumbs %}
-    {% include breadcrumbs.category_path with breadcrumbs=breadcrumbs %}
+{% breadcrumb_start %}
+    {% for item in breadcrumbs %}
+
+        {% if forloop.first %}
+            {% breadcrumb_home item.full_slug item.title %}
+        {% elif forloop.last %}
+            {% breadcrumb_active item.full_slug item.title forloop.counter0 %}
+        {% else %}
+            {% breadcrumb_item item.full_slug item.title forloop.counter0 %}
+        {% endif %}
+        
+    {% endfor %}
+{% breadcrumb_end %}
 {% endblock breadcrumbs %}
 
 {% block main_sidebar %}

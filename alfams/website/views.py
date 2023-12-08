@@ -48,7 +48,9 @@ class PagesView(ConstantsMixin, WebsiteMixin, ListView):
         context_constants = self.get_constants()
         context = context | context_page | context_constants
 
-        context['breadcrumbs'] = self.get_breadcrumbs_path()
+        #context['breadcrumbs'] = self.get_breadcrumbs_path()
+        context['breadcrumbs'] = self.get_breadcrumbs()
+
         return context
     
 
@@ -63,18 +65,18 @@ class SubPagesView(ConstantsMixin, WebsiteMixin, ListView):
             raise Http404('Bad url')
         return super().get(request, *args, **kwargs)
 
-
     #def get_queryset(self):
         #return super().get_queryset().filter(parent=None).filter(is_published=True)
     
     def get_context_data(self, **kwargs):
-        self.kwargs['page_slug'] = self.kwargs['page_slug_1']
+        #self.kwargs['page_slug'] = self.kwargs['page_slug_1']
 
         context = super().get_context_data(**kwargs)
         context_page = self.get_page_context()
         context_constants = self.get_constants()
         context = context | context_page | context_constants
 
-        context['breadcrumbs'] = self.get_breadcrumbs_path()
+        #context['breadcrumbs'] = self.get_breadcrumbs_path()
+        context['breadcrumbs'] = self.get_breadcrumbs()
         
         return context

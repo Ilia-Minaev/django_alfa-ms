@@ -156,7 +156,6 @@ class SeriesSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVie
 
 
     def get_queryset(self):
-        #self.get_breadcrumbs()
         return super().get_queryset()
     
 
@@ -177,18 +176,16 @@ class ProductSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVi
     template_name = 'product/single_product.html'
     context_object_name = 'product'
 
-#    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-#        try:
-#            return super().get(request, *args, **kwargs)
-#        except:
-#            url = self.request.get_full_path().replace('series', 'category').replace('product', 'category')
-#            return redirect(url)
-
+    def get(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        try:
+            return super().get(request, *args, **kwargs)
+        except:
+            url = self.request.get_full_path().replace('series', 'category').replace('product', 'category')
+            return redirect(url)
 
     def get_queryset(self):
-        #self.get_breadcrumbs()
+        #print(super().get_queryset())
         return super().get_queryset()
-    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -196,8 +193,11 @@ class ProductSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVi
         context_constants = self.get_constants()
         context = context | context_page | context_constants
 
-        context['breadcrumbs'] = self.breadcrumbs_product()
+        #products_colors = super().get_queryset().filter(product_code_color=self.get_category().product_code_color)
+        context['products_colors'] = super().get_queryset().filter(product_code_color=self.get_category().product_code_color)
+        #print(products_colors)
+        #print(super().get_queryset())
 
-        
+        context['breadcrumbs'] = self.breadcrumbs_product()        
 
         return context

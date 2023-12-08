@@ -15,7 +15,6 @@ cat = Categories.objects.filter(is_published=True).values('id', 'title', 'image'
 def show_top_menu():
     categories = get_tree()
     return {'categories': categories}
-
     
 
 @register.inclusion_tag('product/tags/sidebar-menu.html')
