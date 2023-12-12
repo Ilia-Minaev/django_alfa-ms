@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load cache %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -23,10 +24,12 @@
 <body>
 
     <header>
+        {% cache 86400 header %}
         {% block header %}
             {% include 'inc/_header.html' %}
             {% include 'inc/_navbar-top.html' %}
-        {% endblock header %}
+        {% endblock %}
+        {% endcache header %}
     </header>
     <main>
         <section class="section">
@@ -44,7 +47,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-3">
+                    {% cache 86400 sidebar %}
                     {% block main_sidebar %}{% endblock main_sidebar %}
+                    {% endcache sidebar %}
                     </div>
                     <div class="col-md-9">
                     {% block main_content %}
@@ -58,9 +63,11 @@
         {% endblock main %}
     </main>
     <footer>
+        {% cache 86400 footer %}
         {% block footer %}
             {% include 'inc/_footer.html' %}
         {% endblock footer %}
+        {% endcache footer %}
     </footer>
 
     <!-- bootstrap js -->
