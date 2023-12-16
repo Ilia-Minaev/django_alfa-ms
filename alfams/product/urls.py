@@ -1,7 +1,9 @@
 
 from django.urls import path, include, re_path
 
-from product.views import ShopRedirectView, CategoryView, SeriesSingleView, ProductSingleView
+from product.views import (
+    ShopRedirectView, CategoryView, SeriesSingleView, ProductSingleView, 
+)
 
 
 app_name = 'shop'

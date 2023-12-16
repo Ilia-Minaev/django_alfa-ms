@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.db.models.query import QuerySet
-from django.views.generic import ListView, DetailView, TemplateView, RedirectView
+from django.views.generic import ListView, DetailView, TemplateView, RedirectView, FormView
 
 from product.models import Categories, Series, Products
 from constants.utils import ConstantsMixin
@@ -184,7 +184,6 @@ class ProductSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVi
             return redirect(url)
 
     def get_queryset(self):
-        #print(super().get_queryset())
         return super().get_queryset()
 
     def get_context_data(self, **kwargs):
@@ -193,11 +192,9 @@ class ProductSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVi
         context_constants = self.get_constants()
         context = context | context_page | context_constants
 
-        #products_colors = super().get_queryset().filter(product_code_color=self.get_category().product_code_color)
         context['products_colors'] = super().get_queryset().filter(product_code_color=self.get_category().product_code_color)
-        #print(products_colors)
-        #print(super().get_queryset())
 
-        context['breadcrumbs'] = self.breadcrumbs_product()        
+
+        context['breadcrumbs'] = self.breadcrumbs_product()
 
         return context

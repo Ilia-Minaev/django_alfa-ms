@@ -1,0 +1,45 @@
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Картинка</th>
+            <th scope="col">Наименование</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Цена с НДС</th>
+            <th scope="col">Скидка</th>
+            <th scope="col">Итого</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in products %}
+
+        {{ item }}
+        <tr>
+            <th scope="row">
+                <a href="{% url 'shop:product' %}{{ item.obj.full_slug }}/" title="{{ item.obj.title }}">
+                    <img src="{{ item.obj.image.url }}" width="200" alt="{{ item.obj.title }}">
+                </a>
+            </th>
+            <td>
+                <a href="{% url 'shop:product' %}{{ item.obj.full_slug }}/" title="{{ item.obj.title }}">
+                    {{ item.obj.title }}
+                </a>
+            </td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.price.fake }}</td>
+            <td>{{ item.price.discount }} %</td>
+            <td>{{ item.price.real }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+<form action="{% url 'cart:cart_delete' %}" method="POST" class="row" >
+    {% csrf_token %}
+    
+    <button type="submit" class="btn btn-danger h-100 w-100">Del</button>
+</form>

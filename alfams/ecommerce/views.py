@@ -7,9 +7,10 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from django.db.models.query import QuerySet
-from django.views.generic import ListView, DetailView, TemplateView, RedirectView
+from django.views.generic import ListView, DetailView, TemplateView, RedirectView, FormView
 
 from constants.utils import ConstantsMixin
+from django.views.generic.base import View
 
 
 class CartView(ConstantsMixin, TemplateView):
@@ -37,3 +38,65 @@ class CartView(ConstantsMixin, TemplateView):
         context = context | context_constants
 
         return context
+
+
+
+class AddToCart(FormView):
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        
+        id = int(request.POST['id'])
+        qty = None
+        url = request.POST['url_from']
+        cart = request.session.get('cart')
+
+        try:
+            qty = int(request.POST['qty'])
+        except:
+            return redirect(url)
+        print(True)
+        if cart:
+            request.session['cart'] = list(request.session['cart'])
+        else:
+            request.session['cart'] = list()
+
+        
+        item_exist = None
+        for item in request.session['cart']:
+            if item['id'] == id:
+                item['qty'] = qty
+                item_exist = True
+
+        add_data = {
+            'id': id,
+            'qty': qty,
+        }
+
+        if not item_exist:
+            request.session['cart'].append(add_data)
+            request.session.modified = True
+
+        return redirect(url)
+        #return super().post(request, *args, **kwargs)
+
+
+class RemoveFromCart(View):
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        for item in request.session['cart']:
+            if item['type'] == request.POST.get('type') and item['id'] == self.request['id']: #GHJDTHBNM!
+                item.clear()
+
+        while {} in request.session['cart']:
+            request.session['cart'].remove({})
+
+        if not request.session['cart']:
+            del request.session['cart']
+
+        request.session.modified = True
+        
+        return super().post(request, *args, **kwargs)
+    
+class DeleteCart(View):
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        if request.session.get('cart'):
+            del request.session['cart']
+        return redirect('/cart/')

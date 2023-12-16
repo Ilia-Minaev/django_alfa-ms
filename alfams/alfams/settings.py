@@ -261,3 +261,5 @@ CACHES = {
         'LOCATION': BASE_DIR / 'cache',
     }
 }
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'

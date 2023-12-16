@@ -1,9 +1,10 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from datetime import datetime, date
+
 from gallery.models import Name, Images
 from characteristics.models import ProductBrand, ProductCountry, ProductClass, ProductFurniture, ProductColor
-from datetime import datetime, date
 
 
 class ProductBaseModel(models.Model):
@@ -341,6 +342,21 @@ class Products(ProductBaseModel):
             country_list.append(item.title)
         country_list = '-'.join(country_list)
         return country_list
+    
+    
+    def get_price(self):
+        from ecommerce.models import Course
+        course = Course.objects.filter(parent_brand=self.product_brand).filter(parent_series=self.parent)[0]
+
+        res = self.product_price - (self.product_price / 100 * course.discount_real)
+        res = res + (res / 100 * course.extra_charge)
+        res = round(res)
+
+        fake = 100 - course.discount_fake
+        fake = res / fake * 100
+        fake = round(fake)
+        return {'real': res, 'fake': fake}
+    
 
     def save(self, *args, **kwargs):
         parent = Series.objects.get(pk=self.parent.pk)
