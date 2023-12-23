@@ -41,45 +41,45 @@
                         {% show_tabs_colors_product products_colors product.pk %}
 
                         <div class="row">
-<!--
-                            <div class="col-md-6 mb-3">Цена: от {{ product.product_price }}</div>
-
-                            <div class="col-md-6 mb-3">
-                                <div class="input-group" style="width: 100px;">
-                                    <button class="btn btn-outline-danger" type="button" id="button-minus" data-action="minus"><span class="text-dark">-</span></button>
-                                    <input class="form-control border-danger" type="text" id="calc" value="1">
-                                    <button class="btn btn-outline-danger" type="button" id="button-plus" data-action="plus"><span class="text-dark">+</span></button>
-                                </div>
-                            </div>
--->
-
                             <div class="col-md-12 mb-3">
                                 <form action="{% url 'cart:cart_add' id=product.pk %}" method="POST" class="row" >
                                     {% csrf_token %}
                                     
                                     {% with price=product.get_price %}
-                                    <div class="col-md-3 mb-3 d-flex align-items-center">Цена: <span class="text-decoration-line-through me-3"> {{ price.fake }}</span> {{ price.real }} ₽</div>
+                                    <div class="col-xl-4 d-flex flex-nowrap align-items-center mb-3">
+                                        <div class="me-3"><b>Цена:</b></div>
+                                        <div>
+                                            <div class="text-decoration-line-through fs-5"> {{ price.fake }} ₽</div> 
+                                            <div class="text-danger fs-4">{{ price.real }} ₽</div>
+                                        </div>
+                                    </div>
                                     {% endwith %}
 
-                                    <div class="col-md-3 mb-3">
-                                        <input type="hidden" name="id" value="{{ product.pk }}">
-                                        <input type="text" class="col-md-6 form-control border-danger" name="qty" value="" style="width: 100px;">
-                                        <input type="hidden" name="url_from" value="{% url 'shop:product' %}{{ product.full_slug }}/">
-                                    </div>
-                                    <div class="col-md-6 mb-3"></div>
+                                    <div class="col-xl-8 d-flex align-items-center mb-3">
 
-                                    <div class="col-md-6 mb-3" style="height: 50px;">
+                                        <input type="hidden" name="id" value="{{ product.pk }}">
+                                        <div class="input-group" style="width: 120px;">
+                                            <button class="btn btn-outline-danger button-minus" type="button" id="button-minus"><span class="text-dark">-</span></button>
+                                            <input class="form-control border-danger bg-transparent text-center calc" type="text" id="calc" value="1" name="qty">
+                                            <button class="btn btn-outline-danger button-plus" type="button" id="button-plus"><span class="text-dark">+</span></button>
+                                        </div>
+                                        <input type="hidden" name="url_from" value="{% url 'shop:product' %}{{ product.full_slug }}/">
+
+                                    </div>
+
+
+                                    <div class="col-xl-4 mb-3" style="height: 50px;">
                                         <button type="submit" class="btn btn-danger h-100 w-100">В корзину</button>
                                     </div>
-                                    <div class="col-md-6 mb-3" style="height: 50px;">
-                                        <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger h-100 w-100">Купить в 1 клик</a>
+                                    <div class="col-xl-4 mb-3" style="height: 50px;">
+                                        <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger h-100 w-100 d-flex justify-content-center align-items-center">Купить в 1 клик</a>
+                                    </div>
+                                    <div class="col-xl-4 mb-3" style="height: 50px;">
+                                        <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger h-100 w-100 d-flex justify-content-center align-items-center">Нужна консультация?</a>
                                     </div>
                                 </form>
                             </div>
 
-                            <div class="col-md-12 mb-3" style="height: 50px;">
-                                <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger h-100 w-100">Нужна консультация?</a>
-                            </div>
                         </div>
 
                         <table class="table table-borderless table-striped mb-3">
@@ -158,6 +158,6 @@
     </div>
 </section>
 
-{{ request.session.cart }}
+
 
 {% endblock main %}

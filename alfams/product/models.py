@@ -1,5 +1,5 @@
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.safestring import mark_safe
 from datetime import datetime, date
 
@@ -179,7 +179,7 @@ class Categories(ProductBaseModel):
     #    return reverse('product:category_1', kwargs=kwargs)
     
     def get_full_url(self):
-        return '/shop/category/' + self.full_slug + '/'
+        return reverse_lazy('shop:category') + self.full_slug + '/'
 
 
     class Meta:
@@ -215,7 +215,7 @@ class Series(ProductBaseModel):
     gallery = models.ForeignKey(Name, blank=True, null=True, related_name='series_gallery', verbose_name='series_gallery', on_delete=models.PROTECT)
 
     def get_full_url(self):
-        return '/shop/series/' + self.full_slug + '/'
+        return reverse_lazy('shop:series') + self.full_slug + '/'
     
     def get_colors(self):
         products = Products.objects.filter(parent=self.pk)
@@ -316,7 +316,7 @@ class Products(ProductBaseModel):
     product_weight = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Вес, кг')
 
     def get_full_url(self):
-        return '/shop/product/' + self.full_slug + '/'
+        return reverse_lazy('shop:product') + self.full_slug + '/'
     
     def get_colors(self):
         return self.product_color.all()
@@ -345,17 +345,19 @@ class Products(ProductBaseModel):
     
     
     def get_price(self):
-        from ecommerce.models import Course
-        course = Course.objects.filter(parent_brand=self.product_brand).filter(parent_series=self.parent)[0]
+        #from ecommerce.models import Course
+        from ecommerce.utils import get_price as price_mixin
+        return price_mixin(obj=self)
+        #course = Course.objects.filter(parent_brand=self.product_brand).filter(parent_series=self.parent)[0]
 
-        res = self.product_price - (self.product_price / 100 * course.discount_real)
-        res = res + (res / 100 * course.extra_charge)
-        res = round(res)
+        #res = self.product_price - (self.product_price / 100 * course.discount_real)
+        #res = res + (res / 100 * course.extra_charge)
+        #res = round(res)
 
-        fake = 100 - course.discount_fake
-        fake = res / fake * 100
-        fake = round(fake)
-        return {'real': res, 'fake': fake}
+        #fake = 100 - course.discount_fake
+        #fake = res / fake * 100
+        #fake = round(fake)
+        #return {'real': res, 'fake': fake}
     
 
     def save(self, *args, **kwargs):

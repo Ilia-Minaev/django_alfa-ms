@@ -14,7 +14,7 @@
 {% if categories %}
 <div class="row">
     {% for item in categories %}
-    <div class="col-md-3 mt-3">
+    <div class="col-md-3 mb-3">
         <div class="card text-bg-dark border-0 w-100 h-100" style="background-color: #F4F4F4 !important;">
             <a href="{{ item.get_full_url }}" class="" title="{{ item.title }}">
                 {% if item.image %}
@@ -78,7 +78,7 @@
                     </div>
                     <div class="text-success mb-5">В наличии</div>
                 </div>
-                <a href="#" class="btn btn-danger d-block">В корзину</a>
+                <a href="{{ item.get_full_url }}" class="btn btn-danger d-block">Подробнее</a>
 
             </div>
         </div>

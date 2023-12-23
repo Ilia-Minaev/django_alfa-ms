@@ -10,6 +10,7 @@ from django.db.models.query import QuerySet
 from django.views.generic import ListView, DetailView, TemplateView, RedirectView, FormView
 
 from constants.utils import ConstantsMixin
+from ecommerce.models import Order
 from django.views.generic.base import View
 
 
@@ -17,31 +18,75 @@ class CartView(ConstantsMixin, TemplateView):
     template_name = 'ecommerce/index.html'
     #model = ''
 
-
-
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
 
         context_page = {}
-        context_page['title'] = 'Каталог'
-        context_page['description'] = """
-            <p>На этой странице представлен весь ассортимент, предлагаемый компанией. Для вашего удобства мы разделили каталог на категории и подкатегории. Даже неопытный пользователь интернета сможет выбрать для себя нужную мебель для любой зоны офиса.<br />
-            Стоимость офисной мебели %city_name_two% доступна, так как мы не делаем большой наценки на товар от производителя. Достигнуть этого удалось благодаря внушительному товарообороту.<br />
-            Если вам трудно подобрать мебель самостоятельно, то звоните нам по указанному номеру %phone% или свяжитесь с менеджером по электронной почте: %mail%. Он поможет вам выбрать комплект элементов мебели, чтобы ваш офис выглядел солидно, но при этом в нем было комфортно работать.</p>
-        """
-        context_page['meta_title'] = 'Каталог мебели интернет-магазина «Офисная мебель АЛЬФА-М» %city_name%'
-        context_page['meta_description'] = 'каталог, интернет-магазин, офисная мебель, мебель для персонала, кабинеты для руководителя, офисные кресла, %city_name%'
-        context_page['meta_keywords'] = 'Каталог офисной мебели интернет-магазина «Офисная мебель АЛЬФА-М» %city_name%. Качественная мебель для офиса по низкой цене.'
+        context_page['title'] = 'Корзина'
+        context_page['description'] = 'Корзина'
+        context_page['meta_title'] = 'Корзина'
+        context_page['meta_description'] = 'Корзина'
+        context_page['meta_keywords'] = 'Корзина'
         
         context_constants = self.get_constants()
+        from ecommerce.utils import get_table_by_order
+        order = get_table_by_order(self.request.session['cart'])
+        print(order)
         
-        context = context | context_constants
-
         return context
+    
+class CartOrder(View):
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        
+        name = request.POST['name']
+        email = request.POST['email']
+        phone = request.POST['phone']
+        street = request.POST['street']
+        city = request.POST['city']
+        payment_method = request.POST['payment_method']
+        comment = request.POST['comment']
+        from ecommerce.utils import get_table_by_order
+
+        order = get_table_by_order(request.session['cart'])
+        print(
+            name,
+            '========================',
+            email,
+            '========================',
+            phone,
+            '========================',
+            street,
+            '========================',
+            city,
+            '========================',
+            payment_method,
+            '========================',
+            comment,
+            '========================',
+            order,
+            '========================',
+        )
+
+        order_obj = Order()
+        order_obj.name = name
+        order_obj.email = email
+        order_obj.phone = phone
+        order_obj.street = street
+        order_obj.city = city
+        order_obj.payment_method = payment_method
+        order_obj.comment = comment
+        order_obj.order = order
+        order_obj.save()
+
+
+        #if request.session.get('cart'):
+        #    del request.session['cart']
+
+        return redirect('/')
 
 
 
-class AddToCart(FormView):
+class AddToCart(View):
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         
         id = int(request.POST['id'])
@@ -53,12 +98,14 @@ class AddToCart(FormView):
             qty = int(request.POST['qty'])
         except:
             return redirect(url)
-        print(True)
+        
+        if qty < 1:
+            return redirect(url)
+
         if cart:
             request.session['cart'] = list(request.session['cart'])
         else:
             request.session['cart'] = list()
-
         
         item_exist = None
         for item in request.session['cart']:
@@ -66,12 +113,11 @@ class AddToCart(FormView):
                 item['qty'] = qty
                 item_exist = True
 
-        add_data = {
-            'id': id,
-            'qty': qty,
-        }
-
         if not item_exist:
+            add_data = {
+                'id': id,
+                'qty': qty,
+            }
             request.session['cart'].append(add_data)
             request.session.modified = True
 
@@ -81,22 +127,31 @@ class AddToCart(FormView):
 
 class RemoveFromCart(View):
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
-        for item in request.session['cart']:
-            if item['type'] == request.POST.get('type') and item['id'] == self.request['id']: #GHJDTHBNM!
+        id = int(request.POST['id'])
+        url = request.POST['url_from']
+        cart = request.session.get('cart')
+
+        if not cart:
+            return redirect(url)
+
+        for item in cart:
+            if item['id'] == id: #GHJDTHBNM!
                 item.clear()
 
-        while {} in request.session['cart']:
-            request.session['cart'].remove({})
+        while {} in cart:
+            cart.remove({})
 
-        if not request.session['cart']:
-            del request.session['cart']
+        if not cart:
+            del cart
 
         request.session.modified = True
         
-        return super().post(request, *args, **kwargs)
+        return redirect(url)
+        #return super().post(request, *args, **kwargs)
     
 class DeleteCart(View):
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         if request.session.get('cart'):
             del request.session['cart']
-        return redirect('/cart/')
+        return redirect(reverse_lazy('cart:cart'))
+        #return redirect('/cart/')

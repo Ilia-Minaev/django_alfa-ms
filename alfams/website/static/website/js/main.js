@@ -1,34 +1,103 @@
 
-    //$('#button-minus').click(function(){
-    // $("#calc").val(parseInt($("#calc").val())-1);
-    //});
-    //$('#button-plus').click(function(){
-    // $("#calc").val(parseInt($("#calc").val())+1);
-    //}); 
-
-//$('.button-minus').on('click', function(){
-//        $(this).parent().siblings('input').val(parseInt($(this).parent().siblings('input').val()) - 1)
-//})
-//$('.button-plus').on('click', function(){
-//        $(this).parent().siblings('input').val(parseInt($(this).parent().siblings('input').val()) + 1)
-//})
-
-$(document).on('click', '.button-minus', function () {
-    var $input = $(this).parent().find('input');
-    var count = parseInt($input.val()) - 1;
+// Убавляем кол-во по клику
+$( document ).ready(function() {
+  $('.button-minus').click(function() {
+    let $input = $(this).parent().find('.calc');
+    let count = parseInt($input.val()) - 1;
     count = count < 1 ? 1 : count;
     $input.val(count);
-    $input.attr('value', count);
-    $input.change();
-    return false;
+    
+    
   });
+  // Прибавляем кол-во по клику
+  $('.button-plus').click(function() {
+    let $input = $(this).parent().find('.calc');
+    let count = parseInt($input.val()) + 1;
+    //count = count > parseInt($input.data('max-count')) ? parseInt($input.data('max-count')) : count;
+    $input.val(parseInt(count));
+    console.log('+')
+  });
+  // Убираем все лишнее и невозможное при изменении поля
+  $('.calc').bind("change keyup input click", function() {
+    if (this.value.match(/[^0-9]/g)) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    }
+    if (this.value == "") {
+        this.value = 1;
+    }
+    //if (this.value > parseInt($(this).data('max-count'))) {
+    //    this.value = parseInt($(this).data('max-count'));
+    //}    
+  });
+});
+/*
+let iii = window.document.querySelectorAll('.js-cart-item-price')
+num_list = []
 
-  $(document).on('click', '.button-minus', function () {
-    var $input = $(this).parent().find('input');
-    var count = parseInt($input.val()) + 1;
-    count = count > ($input.attr("maxlength")) ? ($input.attr("maxlength")) : count;
+iii.forEach(element => {
+  num = element.textContent;
+  num = num.replace(/[^\w\s!?]/g,'');
+  num = Number(num)
+
+  num_list.push(num);
+
+});
+console.log(num_list)
+let sum = num_list.reduce((total, current) => total + current, 0);
+console.log(sum)
+*/
+/*
+body.on('input change', '.calc', function () {
+  valideInputNumber(this);
+  var product = $(this).parents('.cart-item-js'); 
+  var productId = +$(this).parents('.cart-item-js').data('product-id');
+  var productCount = +$(this).val();
+  var newPriceValue = $(this).data('price') || 0;
+  var newPrice = product.find('.js-cart-item-price') || null;
+  setProductCountCart(productId, productCount);
+  if(newPriceValue && newPrice ) {
+    var updateNewPrice = parseInt(newPriceValue) * parseInt(productCount);
+    var prepareCurrentPrice = parseInt(newPrice.text().replace(/\s+/g, ''));
+    $({numberValue: prepareCurrentPrice}).animate({numberValue: updateNewPrice}, {
+      duration: 500,
+      easing: "swing",
+      step: function(val) {
+        newPrice.text(getFormattedPrice(Math.ceil(val.toFixed(0))));
+      }
+    });
+  }
+});
+*/
+
+
+/*
+$( document ).ready(function() {
+  $('.button-minus').click(function() {
+    let $input = $(this).parent().find('.calc');
+    let count = parseInt($input.val()) - 1;
+    count = count < 1 ? 1 : count;
     $input.val(count);
-    $input.attr('value', count);
-    $input.change();
-    return false;
+    console.log('-')
   });
+  // Прибавляем кол-во по клику
+  $('.button-plus').click(function() {
+    let $input = $(this).parent().find('.calc');
+    let count = parseInt($input.val()) + 1;
+    //count = count > parseInt($input.data('max-count')) ? parseInt($input.data('max-count')) : count;
+    $input.val(parseInt(count));
+    console.log('+')
+  });
+  // Убираем все лишнее и невозможное при изменении поля
+  $('.calc').bind("change keyup input click", function() {
+    if (this.value.match(/[^0-9]/g)) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+    }
+    if (this.value == "") {
+        this.value = 1;
+    }
+    //if (this.value > parseInt($(this).data('max-count'))) {
+    //    this.value = parseInt($(this).data('max-count'));
+    //}    
+  });
+});
+*/

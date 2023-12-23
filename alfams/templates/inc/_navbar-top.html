@@ -30,6 +30,8 @@
                         <a class="nav-link" href="{% url 'cart:cart' %}">
                             <i class="fa-solid fa-cart-shopping me-2"></i>
                             <span>Корзина</span>
+                            <span class="d-inline-flex justify-content-center align-items-center border-0 rounded-circle bg-danger fs-6"
+                                style="width: 20px; height: 20px;">{{ request.session.cart|length }}</span>
                         </a>
                     </li>
                 </ul>

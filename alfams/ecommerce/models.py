@@ -38,3 +38,30 @@ class Course(models.Model):
         verbose_name_plural = 'Курсы'
         ordering = ('id',)
 
+class Order(models.Model):
+    PAYMENT_VALUES = [
+        ('1', 'Безналичный расчет'),
+        ('2', 'Банковской картой'),
+        ('3', 'Яндекс-деньги'),
+        ('4', 'Webmoney'),
+    ]
+
+    name = models.CharField(max_length=127, blank=False, verbose_name='Имя клиента')
+    email = models.EmailField(max_length=47, blank=False, verbose_name='email клиента')
+    phone = models.CharField(max_length=15, blank=False, verbose_name='телефон клиента')
+    street = models.CharField(max_length=127, blank=False, verbose_name='улица клиента')
+    city = models.CharField(max_length=47, blank=False, verbose_name='город клиента')
+    payment_method = models.CharField(max_length=127, blank=False, choices=PAYMENT_VALUES, default=PAYMENT_VALUES[0][0], verbose_name='Способ оплаты')
+    comment = models.TextField(max_length=511, blank=False, verbose_name='Комментарий клиента')
+    order = models.TextField(blank=False, verbose_name='Заказ')
+    
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name='Create date')
+    date_updated = models.DateTimeField(auto_now=True, verbose_name='Update date')
+
+    def __str__(self):
+        return f'{self.pk} - {self.name}'
+
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+        ordering = ('id',)

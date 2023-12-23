@@ -48,7 +48,6 @@ def show_products(context, *args, **kwargs):
         code = item.product_code.split('_')[0]
         products_color.append(code)
 
-
     products_color = list(set(products_color))
         
-    return {'products': products, 'products_color': products_color}
+    return {'products': products, 'products_color': products_color, 'series_url': args[1]}

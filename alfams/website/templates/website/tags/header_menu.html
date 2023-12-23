@@ -69,7 +69,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-12 col-sm-4 col-md-3 py-4">
-                            <h5>Блог</h5>
+                            <h5 class="mb-4">Блог</h5>
                             <div class="list-group">
                                 <a class="list-group-item" href="{% url 'blog:articles' %}" title="Все статьи">
                                     Все статьи
@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-4 col-md-3 py-4">
-                            <h5>Последняя статья</h5>
+                            <h5 class="mb-4">Последняя статья</h5>
                             <div class="card">
                                 <a href="{{ article_last.get_absolute_url }}">
                                     <img src="{{ article_last.image.url }}" class="img-fluid" alt="image">
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-4 col-md-3 py-4">
-                            <h5>Наша последняя работа</h5>
+                            <h5 class="mb-4">Наша последняя работа</h5>
                             <div class="card">
                                 <a href="{{ portfolio_last.get_absolute_url }}">
                                     <img src="{{ portfolio_last.image.url }}" class="img-fluid" alt="image">
@@ -108,7 +108,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-4 col-md-3 py-4">
-                            <h5>О нашей работе</h5>
+                            <h5 class="mb-4">О нашей работе</h5>
                             <p>Команда компании <b>Альфа-М</b> следит за последними тенденциями в мире офисной мебели и сама учавствует в формиравании трендов.</p>
                             <p>Узнать подробнее о нашей работе Вы можете в нашем <a href="{% url 'blog:blog' %}">блоге</a></p>
                         </div>

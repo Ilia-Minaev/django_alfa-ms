@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 
-from ecommerce.models import CurrencyRates, Course
+from ecommerce.models import CurrencyRates, Course, Order
+from ecommerce.forms import OrderAdminForm
 
 
 class CurrencyRatesAdmin(admin.ModelAdmin):
@@ -20,7 +21,15 @@ class CourseAdmin(admin.ModelAdmin):
 
     #prepopulated_fields = {'slug': ('title',)}
 
+class OrderAdmin(admin.ModelAdmin):
+    form = OrderAdminForm
+    
+    list_display = ('id', 'name', 'email', 'phone', 'date_created',)
+    list_display_links = ('id', 'name',)
+    fields = ('id', 'name', 'email', 'phone', 'street', 'city', 'payment_method', 'comment', 'order', 'date_created', 'date_updated',)
+    readonly_fields = ('id', 'date_created', 'date_updated')
 
 
 admin.site.register(CurrencyRates, CurrencyRatesAdmin)
 admin.site.register(Course, CourseAdmin)
+admin.site.register(Order, OrderAdmin)

@@ -2,7 +2,7 @@
 
 
 
-<table class="table">
+<table class="table table-borderless table-striped table-hover">
     <thead>
         <tr>
             <th scope="col">Картинка</th>
@@ -11,35 +11,51 @@
             <th scope="col">Цена с НДС</th>
             <th scope="col">Скидка</th>
             <th scope="col">Итого</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         {% for item in products %}
-
-        {{ item }}
-        <tr>
+        <tr class="align-middle cart-item-js">
             <th scope="row">
                 <a href="{% url 'shop:product' %}{{ item.obj.full_slug }}/" title="{{ item.obj.title }}">
                     <img src="{{ item.obj.image.url }}" width="200" alt="{{ item.obj.title }}">
                 </a>
             </th>
             <td>
-                <a href="{% url 'shop:product' %}{{ item.obj.full_slug }}/" title="{{ item.obj.title }}">
-                    {{ item.obj.title }}
-                </a>
+                <div>
+                    <a href="{% url 'shop:product' %}{{ item.obj.full_slug }}/" title="{{ item.obj.title }}">
+                        <b>{{ item.obj.title }}</b>
+                    </a>
+                </div>
+                <div>Код товара: {{ item.obj.product_code }}</div>
+                <div>Цвет: <img src="{{ item.obj.product_color.image.url }}" width="30" class="ms-2"></div>
             </td>
-            <td>{{ item.qty }}</td>
-            <td>{{ item.price.fake }}</td>
+            <td>
+                <div class="input-group" style="width: 120px;">
+                    <button class="btn btn-outline-danger button-minus" type="button" id="button-minus"><span class="text-dark">-</span></button>
+                    <input class="form-control border-danger bg-transparent text-center calc" type="text" id="calc" value="{{ item.qty }}">
+                    <button class="btn btn-outline-danger button-plus" type="button" id="button-plus"><span class="text-dark">+</span></button>
+                </div>
+            </td>
+            <td>{{ item.price.fake }} ₽</td>
             <td>{{ item.price.discount }} %</td>
-            <td>{{ item.price.real }}</td>
+            <td>
+                <div class="js-cart-item-price">
+
+                    {% widthratio item.qty 1 item.price.real %} ₽
+                </div>
+            </td>
+            <td>
+                <form action="{% url 'cart:cart_remove' id=item.obj.pk %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="id" value="{{ item.obj.pk }}">
+                    <input type="hidden" name="url_from" value="{% url 'cart:cart' %}">
+
+                    <button type="submit" class="border-0 bg-transparent"><i class="fa-solid fa-xmark"></i></button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-
-<form action="{% url 'cart:cart_delete' %}" method="POST" class="row" >
-    {% csrf_token %}
-    
-    <button type="submit" class="btn btn-danger h-100 w-100">Del</button>
-</form>

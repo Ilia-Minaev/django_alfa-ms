@@ -4,20 +4,20 @@
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-md-3">
-                <div class="footer_logo">
+                <div class="footer_logo mb-3">
                     <a href="{% url 'pages:home' %}" title="{{ site_name }}">
                         <img src="{% static 'website/logo.svg' %}" alt="{{ site_name }}">
                     </a>
                 </div>
-                <div class="footer_warning-text mt-3">
+                <div class="footer_warning-text mb-3">
                     Цены и сведения указанные в интернет-магазине «Офисная мебель АЛЬФА-М» в городе Москва не являются
                     публичной офертой и носят исключительно информационный характер (ст. 437 Гражданского кодекса РФ).
                     Уточнить указанные данные можно по электронной почте или контактному номеру.
                 </div>
-                <div class="footer_copy mt-3">
+                <div class="footer_copy mb-3">
                     © 2009-{% now "Y" %} <a href="/">{{ site_name }}</a> - офисная мебель Москва
                 </div>
-                <div class="footer_sitemap mt-3">
+                <div class="footer_sitemap mb-3">
                     <a href="/sitemap/">Карта сайта</a>
                 </div>
             </div>
@@ -25,18 +25,18 @@
                 {% show_footer_menu %}
             </div>
             <div class="col-md-3">
-                <div class="mt-3">
+                <div class="mb-3">
                     <i class="fa-solid fa-city me-2"></i>
                     <span>Бизнес-центр «Тушино» - Москва</span>
                 </div>
                 {% if address %}
-                <div class="mt-3">
+                <div class="mb-3">
                     <i class="fa-solid fa-location-dot me-2"></i>
                     <span>{{ address }}</span>
                 </div>
                 {% endif %}
                 {% if phone1 %}
-                <div class="mt-3">
+                <div class="mb-3">
                     <a href="tel:{{ phone1.phone_int }}">
                         <i class="fa-solid fa-phone me-2"></i>
                         {{ phone1.phone_str }}
@@ -44,7 +44,7 @@
                 </div>
                 {% endif %}
                 {% if phone2 %}
-                <div class="mt-3">
+                <div class="mb-3">
                     <a href="tel:{{ phone2.phone_int }}">
                         <i class="fa-solid fa-phone me-2"></i>
                         {{ phone2.phone_str }}
@@ -52,7 +52,7 @@
                 </div>
                 {% endif %}
                 {% if email %}
-                <div class="mt-3">
+                <div class="mb-3">
                     <a href="mailto:{{ email }}">
                         <i class="fa-solid fa-envelope me-2"></i>
                         {{ email }}
@@ -60,20 +60,20 @@
                 </div>
                 {% endif %}
 
-                <div class="mt-3">
+                <div class="mb-3">
                     <i class="fa-regular fa-clock me-2"></i>
                     <span>Пн-Пт 9:00 - 18:00</span>
                 </div>
-                <div class="mt-3">
+                <div class="mb-3">
                     <a href="/politika-konfidencialnosti/">Политика конфиденциальности</a>
                 </div>
-                <div class="mt-3">
+                <div class="mb-3">
                     <span>Рейтинги</span>
                 </div>
 
             </div>
             <div class="col-md-3">
-                <div class="mt-3">
+                <div class="mb-3">
                     <div class="info_social">
 
                         {% if facebook %}
@@ -82,42 +82,42 @@
                         </a>
                         {% endif %}
                         {% if twitter %}
-                        <a href="{{ twitter }}">
+                        <a class="me-2" href="{{ twitter }}">
                             <i class="fa-brands fa-twitter"></i>
                         </a>
                         {% endif %}
                         {% if instagram %}
-                        <a href="{{ instagram }}">
+                        <a class="me-2" href="{{ instagram }}">
                             <i class="fa-brands fa-instagram"></i>
                         </a>
                         {% endif %}
                         {% if linkedin %}
-                        <a href="{{ linkedin }}">
+                        <a class="me-2" href="{{ linkedin }}">
                             <i class="fa-brands fa-linkedin"></i>
                         </a>
                         {% endif %}
                         {% if youtube %}
-                        <a href="{{ youtube }}">
+                        <a class="me-2" href="{{ youtube }}">
                             <i class="fa-brands fa-youtube"></i>
                         </a>
                         {% endif %}
                         {% if vk %}
-                        <a href="{{ vk }}">
+                        <a class="me-2" href="{{ vk }}">
                             <i class="fa-brands fa-vk"></i>
                         </a>
                         {% endif %}
                     </div>
                 </div>
-                <div class="mt-3">
+                <div class="mb-3">
                     <div class="btn btn-outline-danger">Заказать звонок</div>
                 </div>
-                <div class="mt-3">
+                <div class="mb-3">
                     <div class="btn btn-outline-danger">Задать вопрос</div>
                 </div>
-                <div class="mt-3">
+                <div class="mb-3">
                     <div>ИНН 7733708887<br>ОГРН 1097746500720</div>
                 </div>
-                <div class="mt-3">
+                <div class="mb-3">
                     <img src="{% static 'website/pay.png' %}" alt="" style="width: 200px;">
                 </div>
             </div>

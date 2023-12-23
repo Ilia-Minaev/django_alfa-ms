@@ -36,17 +36,14 @@
 
                         <div class="row">
                             <div class="col-12 mb-3"> Цена: от {{ series.product_price }}</div>
-                            <div class="col-md-6 mb-3">
-                                <a href="/klientam/vyzov-menedzhera/" class="btn btn-danger">В корзину</a>
+                            <div class="col-xl-4 mb-3" style="height: 50px;">
+                                <a href="/klientam/vyzov-menedzhera/" class="btn btn-danger h-100 w-100 d-flex justify-content-center align-items-center">Купить в 1 клик</a>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger">Купить в 1 клик</a>
+                            <div class="col-xl-4 mb-3" style="height: 50px;">
+                                <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger h-100 w-100 d-flex justify-content-center align-items-center">Прайс-лист</a>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger">Прайс-лист</a>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger">Нужна
+                            <div class="col-xl-4 mb-3" style="height: 50px;">
+                                <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger h-100 w-100 d-flex justify-content-center align-items-center">Нужна
                                     консультация?</a>
                             </div>
                         </div>
@@ -124,7 +121,7 @@
         
         {% if products %}        
         <div class="row mb-3">
-            {% show_products products %}
+            {% show_products products series.get_full_url %}
         </div>
         {% endif %}
     </div>
