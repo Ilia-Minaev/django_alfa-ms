@@ -29,9 +29,8 @@ class CartView(ConstantsMixin, TemplateView):
         context_page['meta_keywords'] = 'Корзина'
         
         context_constants = self.get_constants()
-        from ecommerce.utils import get_table_by_order
-        order = get_table_by_order(self.request.session['cart'])
-        print(order)
+
+        context = context | context_page | context_constants
         
         return context
     
@@ -48,24 +47,6 @@ class CartOrder(View):
         from ecommerce.utils import get_table_by_order
 
         order = get_table_by_order(request.session['cart'])
-        print(
-            name,
-            '========================',
-            email,
-            '========================',
-            phone,
-            '========================',
-            street,
-            '========================',
-            city,
-            '========================',
-            payment_method,
-            '========================',
-            comment,
-            '========================',
-            order,
-            '========================',
-        )
 
         order_obj = Order()
         order_obj.name = name

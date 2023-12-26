@@ -1,4 +1,5 @@
 from product.models import Categories, Series, Products
+from django.urls import reverse_lazy
 
 class ProductMixin():
 
@@ -29,9 +30,9 @@ class ProductMixin():
 
 class BreadcrumbsMixin():
     slug_list = None
-    category = 'category'
-    series = 'series'
-    product = 'product'
+    category = reverse_lazy('shop:category')
+    series = reverse_lazy('shop:series')
+    product = reverse_lazy('shop:product')
 
     def _get_slugs(self, **kwargs):
         url = self.request.get_full_path()[1:-1]
@@ -48,7 +49,7 @@ class BreadcrumbsMixin():
             },
             {
                 'title': 'Каталог',
-                'full_slug': '/' + self.slug_list[0] + '/' + self.category + '/',
+                'full_slug': self.category,
             },
         ]
         return breadcrumbs_list
@@ -62,7 +63,7 @@ class BreadcrumbsMixin():
                 pass
             categories.append({
                 'title': cat.title,
-                'full_slug': '/' + self.slug_list[0] + '/' + self.category + '/' + cat.full_slug + '/',
+                'full_slug': self.category + cat.full_slug + '/',
             })
 
         return categories
@@ -71,14 +72,14 @@ class BreadcrumbsMixin():
         item = Series.objects.get(slug=kwargs)
         return [{
             'title': item.title,
-            'full_slug': '/' + self.slug_list[0] + '/' + self.series + '/' + item.full_slug + '/',
+            'full_slug': self.series + item.full_slug + '/',
         }]
     
     def _breadcrumbs_product(self, kwargs):
         item = Products.objects.get(slug=kwargs)
         return [{
             'title': item.title,
-            'full_slug': '/' + self.slug_list[0] + '/' + self.product + '/' + item.full_slug + '/',
+            'full_slug': self.product + item.full_slug + '/',
         }]
     
 

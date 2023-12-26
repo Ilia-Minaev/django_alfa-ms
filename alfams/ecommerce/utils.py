@@ -6,14 +6,14 @@ def get_table_by_order(session):
     price_list_real = []
     price_list_fake = []
     
-    html_table = ('''
+    html_table = (f'''
     <table class="table table-borderless table-striped table-hover">
         <thead>
             <tr>
                 <th scope="col">Наименование</th>
                 <th scope="col">Количество</th>
-                <th scope="col">Цена с НДС</th>
                 <th scope="col">Скидка</th>
+                <th scope="col">Цена с НДС</th>
                 <th scope="col">Цена с учетом скидки</th>
                 <th scope="col">Итого</th>
             </tr>
@@ -33,14 +33,20 @@ def get_table_by_order(session):
         total_fake = qty * fake
         discount = price['discount']
 
-        html_table += f'<tr>'
-        html_table += f'<td><a href="{url}">{obj.title}</a></td>'
-        html_table += f'<td>{qty}</td>'
-        html_table += f'<td>{discount}</td>'
-        html_table += f'<td>{real}</td>'
-        html_table += f'<td>{fake}</td>'
-        html_table += f'<td>{total_real}</td>'
-        html_table += f'</tr>'
+        html_table += (f'''
+            <tr>
+                <td>
+                    <div><a href="{url}">{obj.title}</a></div>
+                    <div>Код товара: { obj.product_code }</div>
+                    <div>Цвет: { obj.product_color.title }</div>
+                </td>
+                <td>{qty}</td>
+                <td>{discount} %</td>
+                <td>{fake} ₽</td>
+                <td>{real} ₽</td>
+                <td>{total_real} ₽</td>
+            </tr>
+        ''')
 
         price_list_real.append(total_real)
         price_list_fake.append(total_fake)
@@ -48,21 +54,19 @@ def get_table_by_order(session):
     price_list_real = sum(price_list_real)
     price_list_fake = sum(price_list_fake) - price_list_real
 
-    html_table += '<tr>'
-    html_table += f'<td colspan="5" style="text-align: end;"><b>Итого с НДС:</b></td>'
-    html_table += f'<td>{price_list_real}</td>'
-    html_table += '</tr>'
+    html_table += (f'''
+                <tr>
+                    <td colspan="5" style="text-align: end;"><b>Итого с НДС:</b></td>
+                    <td>{price_list_real} ₽</td>
+                </tr>
 
-    html_table += '<tr>'
-    html_table += f'<td colspan="5" style="text-align: end;"><b>Сумма скидки:</b></td>'
-    html_table += f'<td>{price_list_fake}</td>'
-    html_table += '</tr>'
-
-    html_table += ('''
-        </tbody>
-    </table>
+                <tr>
+                    <td colspan="5" style="text-align: end;"><b>Сумма скидки:</b></td>
+                    <td>{price_list_fake} ₽</td>
+                </tr>
+            </tbody>
+        </table>
     ''')
-
 
     return html_table
 
