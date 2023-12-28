@@ -18,13 +18,13 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
                             <div class="text-success">В наличии</div>
+
+
                             <ul class="list-group list-group-horizontal">
-                                <li class="list-group-item border-0 ps-0" style="background-color: #F4F4F4;">
-                                    <a class="" href="#">
-                                        <i class="fa-solid fa-heart"></i>
-                                    </a>
+                                <li class="list-group-item border-0 p-0 me-3" style="background-color: #F4F4F4;">
+                                    {% check_favorites request.session.favorites series 'series' %}
                                 </li>
-                                <li class="list-group-item border-0" style="background-color: #F4F4F4;">
+                                <li class="list-group-item border-0 p-0" style="background-color: #F4F4F4;">
                                     <a class="" href="#">
                                         <i class="fa-solid fa-chart-simple"></i>
                                     </a>
@@ -121,7 +121,7 @@
         
         {% if products %}        
         <div class="row mb-3">
-            {% show_products products series.get_full_url %}
+            {% show_products products series.get_full_url request.session.favorites %}
         </div>
         {% endif %}
     </div>

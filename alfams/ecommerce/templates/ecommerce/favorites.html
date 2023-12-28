@@ -1,0 +1,16 @@
+{% extends './base_cart.html' %}
+{% load menu_category %}
+
+
+{% block main_sidebar %}
+    {% show_sidebar_menu %}
+    {% include 'website/inc/_banners.html' %}
+{% endblock main_sidebar %}
+
+{% block content %}
+{{ favorites }}
+<br>
+<br>
+{{ cart }}
+{% if  favorites %}{% endif %}
+{% endblock content %}

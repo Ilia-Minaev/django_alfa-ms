@@ -273,6 +273,8 @@ class Series(ProductBaseModel):
             return True
         else:
             return False
+    def check_session(self, *args):
+        return self
 
     def save(self, *args, **kwargs):
         if self.parent:

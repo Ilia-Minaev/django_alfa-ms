@@ -4,15 +4,37 @@
 {% block breadcrumbs %}
 {% breadcrumb_start %}
 
-    {% url 'cart:cart' as cart %}
+    {% url 'cart:favorites' as favorites %}
 
     {% breadcrumb_home '/' 'Главная' %}
-    {% breadcrumb_active cart 'Корзина' 1 %}
+    {% breadcrumb_active favorites 'Избранное' 1 %}
 
 {% breadcrumb_end %}
 {% endblock breadcrumbs %}
 
 
 {% block main %}
-
+<section class="section mb-5">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                {% block main_sidebar %}{% endblock main_sidebar %}
+            </div>
+            <div class="col-md-9">
+                {% block main_content %}
+                    {% block title %}
+                        <div class="row mb-4">
+                            <div class="col">
+                                <div class="h1-title mb-5">
+                                    <h1 class="fs-1 text-uppercase">{{ title }}</h1>
+                                </div>
+                            </div>
+                        </div>
+                    {% endblock title %}
+                    {% block content %}{% endblock content %}
+                {% endblock main_content %}
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock main %}

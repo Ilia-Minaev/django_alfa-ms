@@ -1,0 +1,17 @@
+
+
+
+<form action="{% url 'cart:favorites_action' id=object.pk %}" method="POST">
+    {% csrf_token %}
+    
+    <input type="hidden" name="id" value="{{ object.pk }}">
+    <input type="hidden" name="url_from" value="{% if url_redirect %}{{ url_redirect }}{% else %}{{ object.get_full_url }}{% endif %}">
+    <input type="hidden" name="type" value="{{ model }}">
+    <button type="submit" class="border-0 p-0 bg-transparent" title="Добавить в избранное">
+        {% if icon %}
+        <i class="fa-solid fa-heart"></i>
+        {% else %}
+        <i class="fa-regular fa-heart"></i>
+        {% endif %}
+    </button>
+</form>

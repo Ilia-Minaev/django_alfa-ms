@@ -1,4 +1,4 @@
-
+{% load series_tags %}
 {% regroup products by product_code_color as products_list %}
 
 {% for product in products_list %}
@@ -10,9 +10,7 @@
                 <div class="text-success">В наличии</div>
                 <ul class="list-group list-group-horizontal">
                     <li class="list-group-item border-0 p-0 me-3" style="background-color: #F4F4F4;">
-                        <a class="" href="#">
-                            <i class="fa-solid fa-heart"></i>
-                        </a>
+                        {% check_favorites session product.list.0 'product' series_url %}
                     </li>
                     <li class="list-group-item border-0 p-0" style="background-color: #F4F4F4;">
                         <a class="" href="#">

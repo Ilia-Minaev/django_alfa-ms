@@ -6,11 +6,9 @@ class ProductMixin():
     obj = None
 
     def get_category(self, **kwargs):
-        #print(self.kwargs['slug'])
         if self.obj:
             return self.obj
         else:
-            #url = self.request.get_full_path()[1:-1].split('/')[-1]
             url = self.kwargs['slug']
             self.obj = super().get_queryset().get(slug=url)
             return self.obj

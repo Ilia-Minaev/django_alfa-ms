@@ -7,11 +7,6 @@ register = template.Library()
 
 @register.inclusion_tag('product/tags/tabs-colors.html', takes_context=True)
 def show_tabs_colors(context, *args, **kwargs):
-    #tabs_items = args[0]
-    #tabs_nav = set()
-    
-    #item = Series.objects.get(pk=1)
-
     items = Products.objects.filter(parent=args[0])
 
     tabs_items = set()
@@ -20,11 +15,6 @@ def show_tabs_colors(context, *args, **kwargs):
     for item in items:
         tabs_items.add(item.product_color)
         tabs_nav.add(item.product_color.parent)
-    #print(t_nav)
-
-    #for item in tabs:
-    #    with transaction.atomic():
-    #        tabs_nav.add(item.parent)
     
     return {'tabs_nav': tabs_nav, 'tabs_items': tabs_items}
 
@@ -49,5 +39,28 @@ def show_products(context, *args, **kwargs):
         products_color.append(code)
 
     products_color = list(set(products_color))
-        
-    return {'products': products, 'products_color': products_color, 'series_url': args[1]}
+
+    return {'products': products, 'products_color': products_color, 'series_url': args[1], 'session': args[2]}
+
+@register.inclusion_tag('product/tags/favorites-heart.html', takes_context=False)
+def check_favorites(*args, **kwargs):
+    
+    session = args[0]
+    object = args[1]
+    model = args[2]
+    try:
+        url_redirect = args[3]
+    except:
+        url_redirect = False
+    icon = None
+
+    if session:
+        for item in session:
+            if item['id'] == object.id and item['type'] == model:
+                icon = True
+                break
+            icon = False
+    else:
+        icon = False
+
+    return {'icon': icon, 'object': object, 'model': model, 'url_redirect': url_redirect}

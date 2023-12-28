@@ -107,7 +107,6 @@ class CategoryView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, ListView):
     context_object_name = 'categories'
     
     def get_queryset(self):
-        #print(self.kwargs['slug'])
         if not self.kwargs.get('slug'):
             return super().get_queryset().filter(parent=None).filter(is_published=True)
         else:

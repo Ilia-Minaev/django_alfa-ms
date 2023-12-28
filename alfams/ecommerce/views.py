@@ -116,23 +116,101 @@ class RemoveFromCart(View):
             return redirect(url)
 
         for item in cart:
-            if item['id'] == id: #GHJDTHBNM!
+            if item['id'] == id:
                 item.clear()
 
-        while {} in cart:
-            cart.remove({})
+        request.session['cart'] = list(filter(None, cart))
 
         if not cart:
-            del cart
+            del request.session['cart']
 
         request.session.modified = True
         
         return redirect(url)
-        #return super().post(request, *args, **kwargs)
     
 class DeleteCart(View):
     def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
         if request.session.get('cart'):
             del request.session['cart']
         return redirect(reverse_lazy('cart:cart'))
-        #return redirect('/cart/')
+    
+
+class FavoritesView(ConstantsMixin, TemplateView):
+    template_name = 'ecommerce/favorites.html'
+    #model = ''
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        context_page = {}
+        context_page['title'] = 'Избранное'
+        context_page['description'] = 'Избранное'
+        context_page['meta_title'] = 'Избранное'
+        context_page['meta_description'] = 'Избранное'
+        context_page['meta_keywords'] = 'Избранное'
+        
+        context_constants = self.get_constants()
+
+        context = context | context_page | context_constants
+        
+        context['favorites'] = self.request.session.get('favorites')
+        context['cart'] = self.request.session.get('cart')
+
+        return context
+    
+
+class FavoritesAddRemove(View):
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        
+        id = int(request.POST['id'])
+        url = request.POST['url_from']
+        model = request.POST['type']
+        favorites = request.session.get('favorites')
+
+        if favorites:
+            favorites = list(favorites)
+        else:
+            request.session['favorites'] = list()
+            favorites = request.session['favorites']
+        
+        if model == 'series':
+            item_exist = False
+            for item in favorites:
+                if item.get('id') == id and item.get('type') == model:
+                    item.clear()
+                    item_exist = True
+
+            if not item_exist:
+                add_data = {
+                    'id': id,
+                    'type': model,
+                }
+                favorites.append(add_data)
+        
+        if model == 'product':
+            from product.models import Products
+            ids = Products.objects.get(pk=id).product_code_color
+            ids = Products.objects.filter(product_code_color=ids).values_list('id')
+            ids = list(ids)
+            from itertools import chain
+            ids = list(chain(*ids))
+
+            item_exist = False
+            for item in favorites:
+                for item_id in ids:
+                    if item.get('id') == item_id and item.get('type') == model:
+                        item.clear()
+                        item_exist = True
+            
+            if not item_exist:
+                for item_id in ids:
+                    add_data = {
+                        'id': item_id,
+                        'type': model,
+                    }
+                    favorites.append(add_data)
+
+        request.session['favorites'] = list(filter(None, favorites))
+        request.session.modified = True
+
+        return redirect(url)
