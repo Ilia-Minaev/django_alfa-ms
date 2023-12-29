@@ -1,4 +1,31 @@
 from product.models import Categories, Series, Products
+from ecommerce.models import Course
+
+
+class EcommerceMixin():
+    def filter_objects(self, *args):
+        object = args[0]
+        model = args[1]
+
+        session = self.request.session.get('favorites')
+        items_ids = []
+        items = []
+
+        for item in session:
+            if item['type'] == model:
+                items_ids.append(item['id'])
+
+        for id in items_ids:
+            obj = object.objects.get(pk=id)
+            items.append(obj)
+        return items
+
+
+    def get_favorites_series(self):
+        return self.filter_objects(Series, 'series')
+
+    def get_favorites_products(self):
+        return self.filter_objects(Products, 'product')
 
 
 def get_table_by_order(session):
@@ -81,7 +108,6 @@ def get_products_by_order(session):
 
 
 def get_price(obj):
-    from ecommerce.models import Course
     course = Course.objects.filter(parent_brand=obj.product_brand).filter(parent_series=obj.parent)[0]
 
     real = obj.product_price - (obj.product_price / 100 * course.discount_real)

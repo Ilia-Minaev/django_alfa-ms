@@ -31,16 +31,7 @@ def show_tabs_colors_product(context, *args, **kwargs):
 
 @register.inclusion_tag('product/tags/products.html', takes_context=True)
 def show_products(context, *args, **kwargs):
-    products = args[0]
-    products_color = []
-
-    for item in products:
-        code = item.product_code.split('_')[0]
-        products_color.append(code)
-
-    products_color = list(set(products_color))
-
-    return {'products': products, 'products_color': products_color, 'series_url': args[1], 'session': args[2]}
+    return {'products': args[0], 'series_url': args[1], 'session': args[2], 'col': args[3]}
 
 @register.inclusion_tag('product/tags/favorites-heart.html', takes_context=False)
 def check_favorites(*args, **kwargs):

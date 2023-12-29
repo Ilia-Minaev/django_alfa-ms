@@ -8,10 +8,11 @@ from django.urls import reverse_lazy
 
 from django.db.models.query import QuerySet
 from django.views.generic import ListView, DetailView, TemplateView, RedirectView, FormView
+from django.views.generic.base import View
 
 from constants.utils import ConstantsMixin
 from ecommerce.models import Order
-from django.views.generic.base import View
+from ecommerce.utils import EcommerceMixin
 
 
 class CartView(ConstantsMixin, TemplateView):
@@ -135,7 +136,7 @@ class DeleteCart(View):
         return redirect(reverse_lazy('cart:cart'))
     
 
-class FavoritesView(ConstantsMixin, TemplateView):
+class FavoritesView(ConstantsMixin, EcommerceMixin, TemplateView):
     template_name = 'ecommerce/favorites.html'
     #model = ''
 
@@ -153,8 +154,8 @@ class FavoritesView(ConstantsMixin, TemplateView):
 
         context = context | context_page | context_constants
         
-        context['favorites'] = self.request.session.get('favorites')
-        context['cart'] = self.request.session.get('cart')
+        context['series'] = self.get_favorites_series()
+        context['products'] = self.get_favorites_products()
 
         return context
     
@@ -166,6 +167,7 @@ class FavoritesAddRemove(View):
         url = request.POST['url_from']
         model = request.POST['type']
         favorites = request.session.get('favorites')
+        item_exist = False
 
         if favorites:
             favorites = list(favorites)
@@ -174,7 +176,6 @@ class FavoritesAddRemove(View):
             favorites = request.session['favorites']
         
         if model == 'series':
-            item_exist = False
             for item in favorites:
                 if item.get('id') == id and item.get('type') == model:
                     item.clear()
@@ -189,13 +190,13 @@ class FavoritesAddRemove(View):
         
         if model == 'product':
             from product.models import Products
+            from itertools import chain
+
             ids = Products.objects.get(pk=id).product_code_color
             ids = Products.objects.filter(product_code_color=ids).values_list('id')
             ids = list(ids)
-            from itertools import chain
             ids = list(chain(*ids))
 
-            item_exist = False
             for item in favorites:
                 for item_id in ids:
                     if item.get('id') == item_id and item.get('type') == model:

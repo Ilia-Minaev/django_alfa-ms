@@ -1,5 +1,6 @@
 {% extends './base_cart.html' %}
 {% load menu_category %}
+{% load series_tags %}
 
 
 {% block main_sidebar %}
@@ -8,9 +9,42 @@
 {% endblock main_sidebar %}
 
 {% block content %}
-{{ favorites }}
-<br>
-<br>
-{{ cart }}
-{% if  favorites %}{% endif %}
+
+
+{% if request.session.favorites %}
+
+    {% if series %}
+    <div class="row mb-3" style="background-color: #F4F4F4;">
+        <div class="col py-3">
+            <h2>Избранные серии</h2>
+        </div>
+    </div>
+    <div class="row mb-3">
+        {% for item in series %}
+        {% include 'product/inc/_item-series.html' with item=item %}
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if products %}
+    <div class="row mb-3" style="background-color: #F4F4F4;">
+        <div class="col py-3">
+            <h2>Избранные товары</h2>
+        </div>
+    </div>
+    <div class="row mb-3">
+        {% url 'cart:favorites' as favorites %}
+        {% show_products products favorites request.session.favorites 'col-md-4' %}
+    </div>
+    {% endif %}
+
+{% else %}
+<div class="text-center">
+    <h2>В избранном пока нет товаров</h2>
+    <p>Добавьте товары в избранное, чтобы не потерять понравившиеся товары.</p>
+</div>
+{% endif %}
+
+
+
 {% endblock content %}

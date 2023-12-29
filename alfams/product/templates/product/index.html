@@ -35,54 +35,7 @@
 {% if series %}
 <div class="row">
     {% for item in series %}
-    <div class="col-md-4 mb-3">
-        <div class="card border-danger">
-            
-            <a href="{{ item.get_full_url }}" class="card border-0">
-                <div class="position-absolute top-0 end-0 d-grid mt-3 me-3 fs-6 fst-italic fw-semibold" style="z-index: 2;">
-                    {% if item.product_recommended %}
-                    <div class="text-wrap bg-info mb-1" style="--bs-bg-opacity: .7;">
-                        <span>Рекомендуем</span>
-                    </div>
-                    {% endif %}
-    
-                    {% if item.check_new_banner %}
-                    <div class="text-wrap bg-success mb-1" style="--bs-bg-opacity: .7;">
-                        <span>Новинка!</span>
-                    </div>
-                    {% endif %}
-                </div>
-    
-                {% if item.product_call_us %}
-                <div class="position-absolute top-0 start-0 d-grid mt-3 ms-3 fs-6 fst-italic fw-semibold" style="z-index: 2;">
-                    
-                    <div class="text-wrap bg-primary text-center mb-1" style="--bs-bg-opacity: .7;"> <!-- transform: rotateZ(-40deg); -->
-                        <span>Хотите дешевле? <br>Звоните!</span>
-                    </div>
-                </div>
-                {% endif %}
-                {% include 'product/inc/_card-slider.html' with slides=item.get_card_slider %}
-            </a>
-            <div class="card-body">
-                <a href="{{ item.get_full_url }}" class="mb-3">
-                    <h3 class="card-title">{{ item.title }}</h3>
-                </a>
-                <div class="card-text">
-                    <div class="text-success mb-3">
-                        {% for color in item.get_colors %}
-                            <img src="{{ color.image.url }}" alt="{{ color.title }}" width="50" class="p-1">
-                        {% endfor %}
-                    </div>
-                    <div class="mb-3">
-                        Цена: от {{ item.product_price }} рублей
-                    </div>
-                    <div class="text-success mb-5">В наличии</div>
-                </div>
-                <a href="{{ item.get_full_url }}" class="btn btn-danger d-block">Подробнее</a>
-
-            </div>
-        </div>
-    </div>
+    {% include 'product/inc/_item-series.html' with item=item %}
     {% endfor %}
 </div>
 {% endif %}
