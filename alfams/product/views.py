@@ -150,7 +150,7 @@ class SeriesSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVie
         try:
             return super().get(request, *args, **kwargs)
         except:
-            url = self.request.get_full_path().replace('series', 'category').replace(self.kwargs['slug'] + '/', '')
+            url = self.request.get_full_path().replace('series', 'category')
             return redirect(url)
 
 
@@ -179,7 +179,7 @@ class ProductSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVi
         try:
             return super().get(request, *args, **kwargs)
         except:
-            url = self.request.get_full_path().replace('product', 'series').replace(self.kwargs['slug'] + '/', '')
+            url = self.request.get_full_path().replace('product', 'series')
             return redirect(url)
 
     def get_queryset(self):

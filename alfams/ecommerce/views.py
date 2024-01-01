@@ -12,7 +12,7 @@ from django.views.generic.base import View
 
 from constants.utils import ConstantsMixin
 from ecommerce.models import Order
-from ecommerce.utils import EcommerceMixin
+from ecommerce.utils import EcommerceMixin, get_total_price, get_products_by_order
 
 
 class CartView(ConstantsMixin, TemplateView):
@@ -32,6 +32,7 @@ class CartView(ConstantsMixin, TemplateView):
         context_constants = self.get_constants()
 
         context = context | context_page | context_constants
+        context['total_price'] = get_total_price(get_products_by_order(self.request.session['cart']))
         
         return context
     
@@ -215,3 +216,27 @@ class FavoritesAddRemove(View):
         request.session.modified = True
 
         return redirect(url)
+    
+
+class PrintView(ConstantsMixin, TemplateView):
+    template_name = 'ecommerce/print.html'
+    #model = ''
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        context_page = {}
+        context_page['title'] = 'Корзина | Версия для печати'
+        context_page['description'] = 'Корзина | Версия для печати'
+        context_page['meta_title'] = 'Корзина | Версия для печати'
+        context_page['meta_description'] = 'Корзина | Версия для печати'
+        context_page['meta_keywords'] = 'Корзина | Версия для печати'
+        
+        context_constants = self.get_constants()
+
+        context = context | context_page | context_constants
+
+        context['cart'] = self.request.session['cart']
+
+        return context
+        

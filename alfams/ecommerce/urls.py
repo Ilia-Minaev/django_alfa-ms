@@ -2,7 +2,7 @@
 from django.urls import path, include, re_path
 
 from ecommerce.views import (
-    CartView, AddToCart, RemoveFromCart, DeleteCart, CartOrder,
+    CartView, AddToCart, RemoveFromCart, DeleteCart, CartOrder, PrintView,
     FavoritesView, FavoritesAddRemove)
 
 
@@ -16,6 +16,7 @@ urlpatterns = [
     path('<int:id>/remove/', RemoveFromCart.as_view(), name='cart_remove'),
     path('delete/', DeleteCart.as_view(), name='cart_delete'),
     path('order/', CartOrder.as_view(), name='cart_order'),
+    path('print/', PrintView.as_view(), name='cart_print'),
 
     path('favorites/', FavoritesView.as_view(), name='favorites'),
     path('favorites/<int:id>/action/', FavoritesAddRemove.as_view(), name='favorites_action'),

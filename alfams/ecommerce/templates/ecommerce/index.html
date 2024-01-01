@@ -14,12 +14,12 @@
             {% if request.session.cart %}
             <div class="col-md-6">
                 <div class="d-flex justify-content-end">
+                    <div class="btn btn-outline-danger me-3">Экспорт в эксель</div>
+                    <a href="{% url 'cart:cart_print' %}" class="btn btn-outline-danger me-3">Печать</a>
                     <form action="{% url 'cart:cart_delete' %}" method="POST">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-danger me-3">Очистить</button>
+                        <button type="submit" class="btn btn-danger">Очистить</button>
                     </form>
-                    <div class="btn btn-outline-danger me-3">Экспорт в эксель</div>
-                    <div class="btn btn-outline-danger">Печать</div>
                 </div>
             </div>
             {% endif %}
@@ -113,12 +113,12 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-around flex-nowrap">
                             <div class="">Итого с НДС</div>
-                            <div class="">13 728 ₽</div>
+                            <div class="">{{ total_price.total_real }} ₽</div>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-around flex-nowrap">
                             <div class="">Сумма скидки</div>
-                            <div class="">1 357 ₽</div>
+                            <div class="">{{ total_price.total_fake }} ₽</div>
                         </div>
                     </div>
                 </div>

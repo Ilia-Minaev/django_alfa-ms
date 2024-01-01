@@ -1,0 +1,52 @@
+
+
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Картинка</th>
+            <th scope="col">Наименование</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Цена с НДС</th>
+            <th scope="col">Скидка</th>
+            <th scope="col">Итого</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in products %}
+        <tr class="align-middle cart-item-js">
+            <th scope="row">
+                <a href="{% url 'shop:product' %}{{ item.obj.full_slug }}/" title="{{ item.obj.title }}">
+                    <img src="{{ item.obj.image.url }}" width="200" alt="{{ item.obj.title }}">
+                </a>
+            </th>
+            <td>
+                <div>
+                    <a href="{% url 'shop:product' %}{{ item.obj.full_slug }}/" title="{{ item.obj.title }}">
+                        <b>{{ item.obj.title }}</b>
+                    </a>
+                </div>
+                <div>Код товара: {{ item.obj.product_code }}</div>
+                <div>Цвет: <img src="{{ item.obj.product_color.image.url }}" width="30" class="ms-2"></div>
+            </td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.price.fake }} ₽</td>
+            <td>{{ item.price.discount }} %</td>
+            <td>
+                <div class="js-cart-item-price">
+                    {% widthratio item.qty 1 item.price.real %} ₽
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        <tr class="align-middle">
+            <td colspan="4" class="text-end"><b>Итого с НДС:</b></td>
+            <td colspan="2">{{ total_price.total_real }} ₽</td>
+        </tr>
+        <tr class="align-middle">
+            <td colspan="4" class="text-end"><b>Сумма скидки:</b></td>
+            <td colspan="2">{{ total_price.total_fake }} ₽</td>
+        </tr>
+    </tbody>
+</table>

@@ -119,3 +119,15 @@ def get_price(obj):
     fake = round(fake)
 
     return {'real': real, 'fake': fake, 'discount': course.discount_fake}
+
+def get_total_price(products):
+    real_list = []
+    fake_list = []
+    for item in products:
+        real_list.append(item['price']['real'] * item['qty'])
+        fake_list.append(item['price']['fake'] * item['qty'])
+
+    real_list = sum(real_list)
+    fake_list = sum(fake_list)
+    fake_list = fake_list - real_list
+    return {'total_real': real_list, 'total_fake': fake_list}
