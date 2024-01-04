@@ -178,7 +178,7 @@ class Categories(ProductBaseModel):
     #    }
     #    return reverse('product:category_1', kwargs=kwargs)
     
-    def get_full_url(self):
+    def get_absolute_url(self):
         return reverse_lazy('shop:category') + self.full_slug + '/'
 
 
@@ -214,7 +214,7 @@ class Series(ProductBaseModel):
 
     gallery = models.ForeignKey(Name, blank=True, null=True, related_name='series_gallery', verbose_name='series_gallery', on_delete=models.PROTECT)
 
-    def get_full_url(self):
+    def get_absolute_url(self):
         return reverse_lazy('shop:series') + self.full_slug + '/'
     
     def get_colors(self):
@@ -317,7 +317,7 @@ class Products(ProductBaseModel):
     product_diameter = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Диаметр, мм')
     product_weight = models.PositiveSmallIntegerField(default=0, blank=False, verbose_name='Вес, кг')
 
-    def get_full_url(self):
+    def get_absolute_url(self):
         return reverse_lazy('shop:product') + self.full_slug + '/'
     
     def get_colors(self):
@@ -347,19 +347,8 @@ class Products(ProductBaseModel):
     
     
     def get_price(self):
-        #from ecommerce.models import Course
         from ecommerce.utils import get_price as price_mixin
         return price_mixin(obj=self)
-        #course = Course.objects.filter(parent_brand=self.product_brand).filter(parent_series=self.parent)[0]
-
-        #res = self.product_price - (self.product_price / 100 * course.discount_real)
-        #res = res + (res / 100 * course.extra_charge)
-        #res = round(res)
-
-        #fake = 100 - course.discount_fake
-        #fake = res / fake * 100
-        #fake = round(fake)
-        #return {'real': res, 'fake': fake}
     
 
     def save(self, *args, **kwargs):
@@ -380,13 +369,13 @@ class Products(ProductBaseModel):
 
         return super(Products, self).save(*args, **kwargs)
 
-        print(self.product_country)
-        if not self.product_country == None:
-            obj = Products.objects.get(pk=self.pk)
-            for item in parent.product_country.all():
-                print(item.pk)
-                obj.product_country.add(item)
-            #obj.save()
+        #print(self.product_country)
+        #if not self.product_country == None:
+        #    obj = Products.objects.get(pk=self.pk)
+        #    for item in parent.product_country.all():
+        #        print(item.pk)
+        #        obj.product_country.add(item)
+        #    obj.save()
     
     class Meta:
         verbose_name = 'Товар'

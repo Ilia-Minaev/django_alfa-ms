@@ -64,15 +64,19 @@
                     </div>
                     <div class="col-md-8 mb-3">
                         <div class="search">
-                            <div class="input-group flex-nowrap">
-                                <input type="text"
+                            <form action="{% url 'shop:search' %}" method="get">
+                                <div class="input-group flex-nowrap">
+                                    <input type="text"
                                     class="form-control"
-                                    placeholder="Поиск"
                                     aria-label="Поиск"
-                                    aria-describedby="addon-wrapping">
-                                <button class="input-group-text" id="addon-wrapping">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                </button>
+                                    aria-describedby="addon-wrapping"
+                                    name="search"
+                                    placeholder="Поиск"
+                                    required>
+                                    <button class="input-group-text" id="addon-wrapping">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>

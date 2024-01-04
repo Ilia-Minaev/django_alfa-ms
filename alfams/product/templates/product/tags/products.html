@@ -23,11 +23,11 @@
                 {% for item in product.list %}
                 <div class="tab-pane fade {% if forloop.counter0 == 0 %}show active{% endif %}" id="nav-card-{{ item.pk }}" role="tabpanel" aria-labelledby="nav-card-{{ item.pk }}-tab">
                     <div class="mb-3">
-                        <a href="{{ item.get_full_url }}" title="{{ item.title }}" >
+                        <a href="{{ item.get_absolute_url }}" title="{{ item.title }}" >
                             <img src="{{ item.image.url }}" class="card-img-top rounded" alt="{{ item.title }}">
                         </a>
                     </div>
-                    <h4 class="mb-3"><a href="{{ item.get_full_url }}" title="{{ item.title }}">{{ item.title }}</a></h4>
+                    <h4 class="mb-3"><a href="{{ item.get_absolute_url }}" title="{{ item.title }}">{{ item.title }}</a></h4>
                     <div class="mb-3">
                         <div>Код товара: {{ item.product_code }}</div>
                         <div>Артикул: {{ item.product_article }}</div>
@@ -59,7 +59,7 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <a href="{{ item.get_full_url }}" class="btn btn-outline-danger d-block">Подробнее</a>
+                                <a href="{{ item.get_absolute_url }}" class="btn btn-outline-danger d-block">Подробнее</a>
                             </div>
                             <div class="col-md-6">
                                 <input type="hidden" name="id" value="{{ item.pk }}">

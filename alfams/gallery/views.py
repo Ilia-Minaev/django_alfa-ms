@@ -2,6 +2,7 @@
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
+from django.urls import reverse_lazy
 
 from gallery.models import Images
 from gallery.forms import GalltryForm
@@ -42,6 +43,17 @@ class GalleryView(LoginRequiredMixin, ConstantsMixin, CreateView):
         context['meta_title'] = 'Галерея'
         context['meta_description'] = 'Галерея'
         context['meta_keywords'] = 'Галерея'
+
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Галерея',
+                'full_slug': reverse_lazy('gallery:index'),
+            },
+        ]
         
         return context
     

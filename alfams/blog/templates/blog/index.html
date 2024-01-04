@@ -1,15 +1,5 @@
 {% extends "./base_blog.html" %}
 {% load static %}
-{% load breadcrumbs %}
-
-{% block breadcrumbs %}
-{% breadcrumb_start %}
-    {% breadcrumb_home '/' 'Главная' %}
-    {% url 'blog:blog' as url_blog %}
-    {% url 'blog:articles' as url_articles %}
-    {% breadcrumb_active url_blog 'Блог' 1 %}
-{% breadcrumb_end %}
-{% endblock breadcrumbs %}
 
 
 {% block content %}

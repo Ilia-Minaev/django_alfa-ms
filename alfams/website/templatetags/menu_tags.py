@@ -21,8 +21,7 @@ def show_header_menu(context):
             sub_items[item['parent_id']].append(item)
 
     for item in menu_items:
-        id = item['id']
-        if sub_items.get(id):
+        if sub_items.get(item['id']):
             item['childrens'] = sub_items[item['id']]
 
     article_last = Articles.objects.last()

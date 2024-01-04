@@ -31,7 +31,7 @@ class PagesBaseModel(models.Model):
 
 class Pages(PagesBaseModel):
     def get_absolute_url(self):
-        return reverse('title', kwargs={'slug': self.slug})
+        return reverse('pages:pages', kwargs={'page_slug': self.slug})
     
     class Meta:
         verbose_name = 'Страницы'
@@ -40,6 +40,9 @@ class Pages(PagesBaseModel):
 
 class SubPages(PagesBaseModel):
     parent = models.ForeignKey(Pages, blank=True, null=True, related_name='+', verbose_name='parent_category', on_delete=models.PROTECT)
+
+    def get_absolute_url(self):
+        return reverse('pages:pages_1', kwargs={'page_slug': self.slug, 'page_slug_1': self.parent.slug})
 
     class Meta:
         verbose_name = 'Доп.Страницы'

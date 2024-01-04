@@ -32,6 +32,18 @@ class CartView(ConstantsMixin, TemplateView):
         context_constants = self.get_constants()
 
         context = context | context_page | context_constants
+
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Корзина',
+                'full_slug': reverse_lazy('cart:cart'),
+            },
+        ]
+
         context['total_price'] = get_total_price(get_products_by_order(self.request.session['cart']))
         
         return context
@@ -62,8 +74,8 @@ class CartOrder(View):
         order_obj.save()
 
 
-        #if request.session.get('cart'):
-        #    del request.session['cart']
+        if request.session.get('cart'):
+            del request.session['cart']
 
         return redirect('/')
 
@@ -154,6 +166,17 @@ class FavoritesView(ConstantsMixin, EcommerceMixin, TemplateView):
         context_constants = self.get_constants()
 
         context = context | context_page | context_constants
+
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Избранное',
+                'full_slug': reverse_lazy('cart:favorites'),
+            },
+        ]
         
         context['series'] = self.get_favorites_series()
         context['products'] = self.get_favorites_products()

@@ -8,8 +8,8 @@
     {% include 'website/inc/_banners.html' %}
 {% endblock main_sidebar %}
 
-{% block content %}
 
+{% block content %}
 
 {% if request.session.favorites %}
 
@@ -44,7 +44,5 @@
     <p>Добавьте товары в избранное, чтобы не потерять понравившиеся товары.</p>
 </div>
 {% endif %}
-
-
 
 {% endblock content %}

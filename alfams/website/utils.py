@@ -1,4 +1,4 @@
-from website.models import PagesBaseModel, Pages
+from website.models import Pages
 
 class WebsiteMixin:
     obj = None
@@ -19,14 +19,14 @@ class WebsiteMixin:
             'full_slug': '/'
         })
         if self.kwargs.get('page_slug_1'):
-            parent = Pages.objects.get(slug=self.kwargs.get('page_slug_1'))
+            parent = page.parent
             breadcrumbs_list.append({
                 'title': parent.title,
-                'full_slug': f'/{parent.slug}/'
+                'full_slug': parent.get_absolute_url(),
             })
         breadcrumbs_list.append({
             'title': page.title,
-            'full_slug': f'/{parent.slug}/{page.slug}/' if parent else f'/{page.slug}/'
+            'full_slug': page.get_absolute_url(),
         })
         return breadcrumbs_list
 

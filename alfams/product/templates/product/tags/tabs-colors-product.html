@@ -18,7 +18,7 @@
                 {% if color.product_color.parent.title == tabs.title %}
                     <input type="radio" class="btn-check" name="options" id="btn-color-check-{{ forloop.counter0 }}" autocomplete="off" {% if item_active == color.pk %}checked{% endif %}>
                     <label class="btn p-1" for="btn-color-check-{{ forloop.counter0 }}">
-                        <a href="{% url 'shop:product' %}{{ color.full_slug }}/">
+                        <a href="{{ color.get_absolute_url }}">
                             <img src="{{ color.product_color.image.url }}" alt="{{ color.product_color.title }}" width="50" class="">
                         </a>
                     </label>

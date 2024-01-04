@@ -1,16 +1,5 @@
 {% extends "./base_blog.html" %}
-{% load breadcrumbs %}
 
-{% block breadcrumbs %}
-{% breadcrumb_start %}
-    {% breadcrumb_home '/' 'Главная' %}
-    {% url 'blog:blog' as url_blog %}
-    {% url 'blog:articles' as url_articles %}
-    {% breadcrumb_item url_blog 'Блог' 1 %}
-    {% breadcrumb_item url_articles 'Статьи' 2 %}
-    {% breadcrumb_active articles.get_absolute_url articles.title 3 %}
-{% breadcrumb_end %}
-{% endblock breadcrumbs %}
 
 {% block title %}{% endblock title %}
 

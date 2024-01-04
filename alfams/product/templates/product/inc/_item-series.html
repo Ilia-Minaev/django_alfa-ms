@@ -1,7 +1,7 @@
 <div class="col-md-4 mb-3">
     <div class="card border-danger">
         
-        <a href="{{ item.get_full_url }}" class="card border-0">
+        <a href="{{ item.get_absolute_url }}" class="card border-0">
             <div class="position-absolute top-0 end-0 d-grid mt-3 me-3 fs-6 fst-italic fw-semibold" style="z-index: 2;">
                 {% if item.product_recommended %}
                 <div class="text-wrap bg-info mb-1" style="--bs-bg-opacity: .7;">
@@ -27,7 +27,7 @@
             {% include 'product/inc/_card-slider.html' with slides=item.get_card_slider %}
         </a>
         <div class="card-body">
-            <a href="{{ item.get_full_url }}" class="mb-3">
+            <a href="{{ item.get_absolute_url }}" class="mb-3">
                 <h3 class="card-title">{{ item.title }}</h3>
             </a>
             <div class="card-text">
@@ -41,7 +41,7 @@
                 </div>
                 <div class="text-success mb-5">В наличии</div>
             </div>
-            <a href="{{ item.get_full_url }}" class="btn btn-danger d-block">Подробнее</a>
+            <a href="{{ item.get_absolute_url }}" class="btn btn-danger d-block">Подробнее</a>
 
         </div>
     </div>

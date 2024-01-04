@@ -28,9 +28,6 @@ class ProductMixin():
 
 class BreadcrumbsMixin():
     slug_list = None
-    category = reverse_lazy('shop:category')
-    series = reverse_lazy('shop:series')
-    product = reverse_lazy('shop:product')
 
     def _get_slugs(self, **kwargs):
         url = self.request.get_full_path()[1:-1]
@@ -39,7 +36,7 @@ class BreadcrumbsMixin():
 
         return slug_list
 
-    def _breadcrumbs_start(self, kwargs):
+    def _breadcrumbs_start(self, **kwargs):
         breadcrumbs_list = [
             {
                 'title': 'Главная',
@@ -47,7 +44,7 @@ class BreadcrumbsMixin():
             },
             {
                 'title': 'Каталог',
-                'full_slug': self.category,
+                'full_slug': reverse_lazy('shop:category'),
             },
         ]
         return breadcrumbs_list
@@ -58,10 +55,10 @@ class BreadcrumbsMixin():
             try:
                 cat = Categories.objects.get(slug=item)
             except:
-                pass
+                raise
             categories.append({
                 'title': cat.title,
-                'full_slug': self.category + cat.full_slug + '/',
+                'full_slug': cat.get_absolute_url(),
             })
 
         return categories
@@ -70,14 +67,14 @@ class BreadcrumbsMixin():
         item = Series.objects.get(slug=kwargs)
         return [{
             'title': item.title,
-            'full_slug': self.series + item.full_slug + '/',
+            'full_slug': item.get_absolute_url(),
         }]
     
     def _breadcrumbs_product(self, kwargs):
         item = Products.objects.get(slug=kwargs)
         return [{
             'title': item.title,
-            'full_slug': self.product + item.full_slug + '/',
+            'full_slug': item.get_absolute_url(),
         }]
     
 

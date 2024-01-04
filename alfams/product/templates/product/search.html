@@ -1,0 +1,32 @@
+{% extends "./index.html" %}
+{% load series_tags %}
+
+
+{% block content %}
+
+{% if series %}
+<div class="row mb-3" style="background-color: #F4F4F4;">
+    <div class="col py-3">
+        <h2>Найденные серии:</h2>
+    </div>
+</div>
+<div class="row mb-3">
+    {% for item in series %}
+    {% include 'product/inc/_item-series.html' with item=item %}
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if products %}
+<div class="row mb-3" style="background-color: #F4F4F4;">
+    <div class="col py-3">
+        <h2>Найденные товары:</h2>
+    </div>
+</div>
+<div class="row mb-3">
+    {% url 'cart:favorites' as favorites %}
+    {% show_products products favorites request.session.favorites 'col-md-4' %}
+</div>
+{% endif %}
+
+{% endblock content %}

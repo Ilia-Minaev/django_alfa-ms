@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 {% load static %}
 {% load cache %}
+{% load breadcrumbs %}
 <html lang="ru">
 <head>
     
@@ -37,7 +38,19 @@
             <div class="container-fluid">
                 <div class="row py-3">
                     <div class="col">
-                        {% block breadcrumbs %}{% endblock breadcrumbs %}
+                        {% block breadcrumbs %}
+                        {% breadcrumb_start %}
+                            {% for item in breadcrumbs %}
+                                {% if forloop.first %}
+                                    {% breadcrumb_home item.full_slug item.title %}
+                                {% elif forloop.last %}
+                                    {% breadcrumb_active item.full_slug item.title forloop.counter0 %}
+                                {% else %}
+                                    {% breadcrumb_item item.full_slug item.title forloop.counter0 %}
+                                {% endif %}
+                            {% endfor %}
+                        {% breadcrumb_end %}
+                        {% endblock breadcrumbs %}
                     </div>
                 </div>
             </div>

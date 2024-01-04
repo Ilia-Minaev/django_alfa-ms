@@ -1,16 +1,4 @@
 {% extends "base.html" %}
-{% load breadcrumbs %}
-
-{% block breadcrumbs %}
-{% breadcrumb_start %}
-
-    {% url 'cart:favorites' as favorites %}
-
-    {% breadcrumb_home '/' 'Главная' %}
-    {% breadcrumb_active favorites 'Избранное' 1 %}
-
-{% breadcrumb_end %}
-{% endblock breadcrumbs %}
 
 
 {% block main %}

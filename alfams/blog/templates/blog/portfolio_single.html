@@ -1,16 +1,5 @@
 {% extends "./base_blog.html" %}
-{% load breadcrumbs %}
 
-{% block breadcrumbs %}
-{% breadcrumb_start %}
-    {% breadcrumb_home '/' 'Главная' %}
-    {% url 'blog:blog' as url_blog %}
-    {% url 'blog:portfolio' as url_portfolio %}
-    {% breadcrumb_item url_blog 'Блог' 1 %}
-    {% breadcrumb_item url_portfolio 'Наши проекты' 2 %}
-    {% breadcrumb_active portfolio.get_absolute_url portfolio.title 2 %}
-{% breadcrumb_end %}
-{% endblock breadcrumbs %}
 
 {% block title %}{% endblock title %}
 

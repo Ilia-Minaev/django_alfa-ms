@@ -16,7 +16,7 @@
             <li><hr class="dropdown-divider"></li>
             {% for category in categories %}
                 {% if category.childs %}
-                    {% include 'product/tags/submenu.html' with categories=category.childs %}
+                    {% include 'product/tags/top-submenu.html' with categories=category.childs %}
                 {% else %}
                 <li class="">
                     <a class="dropdown-item" href="{% url 'shop:category' %}{{ category.full_slug }}/" title="{{ category.title }}">

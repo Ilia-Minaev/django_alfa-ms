@@ -2,7 +2,8 @@
 from django.urls import path, include, re_path
 
 from product.views import (
-    ShopRedirectView, CategoryView, SeriesSingleView, ProductSingleView, 
+    ShopRedirectView, CategoryView, SeriesSingleView, ProductSingleView,
+    SearchView
 )
 
 
@@ -26,6 +27,8 @@ urlpatterns = [
     re_path(r'^product/(?P<slug2>[\w-]+)/(?P<slug>[\w-]+)/$', ProductSingleView.as_view()),
     re_path(r'^product/(?P<slug3>[\w-]+)/(?P<slug2>[\w-]+)/(?P<slug>[\w-]+)/$', ProductSingleView.as_view()),
     re_path(r'^product/(?P<slug4>[\w-]+)/(?P<slug3>[\w-]+)/(?P<slug2>[\w-]+)/(?P<slug>[\w-]+)/$', ProductSingleView.as_view()),
+
+    path('search/', SearchView.as_view(), name='search'),
 
     #re_path(r'^(?P<slug>[\w-]+)/$', SingleSeries.as_view()),
     #re_path(r'^(?P<slug2>[\w-]+)/(?P<slug>[\w-]+)/$', SingleSeries.as_view()),

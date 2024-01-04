@@ -48,7 +48,6 @@ class PagesView(ConstantsMixin, WebsiteMixin, ListView):
         context_constants = self.get_constants()
         context = context | context_page | context_constants
 
-        #context['breadcrumbs'] = self.get_breadcrumbs_path()
         context['breadcrumbs'] = self.get_breadcrumbs()
 
         return context

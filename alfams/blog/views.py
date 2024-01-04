@@ -2,6 +2,7 @@ from typing import Any, Optional
 from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.views.generic import ListView
+from django.urls import reverse_lazy
 
 from blog.models import Articles, Portfolio
 from blog.utils import PostMixin
@@ -23,6 +24,17 @@ class BlogView(ConstantsMixin, PostMixin, ListView):
         context['meta_title'] = 'Блог'
         context['meta_description'] = 'Блог'
         context['meta_keywords'] = 'Блог'
+
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': context['title'],
+                'full_slug': reverse_lazy('blog:blog'),
+            },
+        ]
 
         return context
 
@@ -46,6 +58,21 @@ class ArticlesView(ConstantsMixin, PostMixin, ListView):
         context['meta_description'] = 'Статьи'
         context['meta_keywords'] = 'Статьи'
 
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Блог',
+                'full_slug': reverse_lazy('blog:blog'),
+            },
+            {
+                'title': context['title'],
+                'full_slug': reverse_lazy('blog:articles'),
+            },
+        ]
+
         return context
     
 class PortfolioView(ConstantsMixin, PostMixin, ListView):
@@ -68,6 +95,21 @@ class PortfolioView(ConstantsMixin, PostMixin, ListView):
         context['meta_description'] = 'Портфолио'
         context['meta_keywords'] = 'Портфолио'
 
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Блог',
+                'full_slug': reverse_lazy('blog:blog'),
+            },
+            {
+                'title': context['title'],
+                'full_slug': reverse_lazy('blog:portfolio'),
+            },
+        ]
+
         return context
     
 class ArticleSingleView(ConstantsMixin, PostMixin, ListView):
@@ -80,12 +122,30 @@ class ArticleSingleView(ConstantsMixin, PostMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj = self.get_post()
-        current_date_created = obj.date_created
+        current_date_created = self.get_post().date_created
         
         context_page = self.get_meta_post_single()
         context_constants = self.get_constants()
         context = context | context_page | context_constants
+
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Блог',
+                'full_slug': reverse_lazy('blog:blog'),
+            },
+            {
+                'title': 'Статьи',
+                'full_slug': reverse_lazy('blog:articles'),
+            },
+            {
+                'title': self.get_post().title,
+                'full_slug': self.get_post().get_absolute_url(),
+            },
+        ]
 
         context['next_object'] = self.get_next_object(current_date_created)
         context['previous_object'] = self.get_previous_object(current_date_created)
@@ -102,14 +162,32 @@ class PortfolioSingleView(ConstantsMixin, PostMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        obj = self.get_post()
-        current_date_created = obj.date_created
+        current_date_created = self.get_post().date_created
 
         context_page = self.get_meta_post_single()
         context_constants = self.get_constants()
         context = context | context_page | context_constants
 
         context['gallery'] = self.get_gallery()
+
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Блог',
+                'full_slug': reverse_lazy('blog:blog'),
+            },
+            {
+                'title': 'Портфолио',
+                'full_slug': reverse_lazy('blog:portfolio'),
+            },
+            {
+                'title': self.get_post().title,
+                'full_slug': self.get_post().get_absolute_url(),
+            },
+        ]
         
         context['next_object'] = self.get_next_object(current_date_created)
         context['previous_object'] = self.get_previous_object(current_date_created)

@@ -53,7 +53,7 @@ def get_table_by_order(session):
         price = get_price(obj)
 
         qty = item['qty']
-        url = obj.get_full_url()
+        url = obj.get_absolute_url()
         real = price['real']
         fake = price['fake']
         total_real = qty * real
