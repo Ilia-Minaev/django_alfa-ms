@@ -30,14 +30,16 @@
                                 <div class="card border-0 bg-danger shadow" >
                                     <a href="/{{ item.slug }}/{{ menu_sub.slug }}/" title="{{ menu_sub.title }}">
                                         {% if menu_sub.image %}
+                                        <!--
                                         <img src="/media/{{ menu_sub.image }}" class="card-img-top" alt="{{ menu_sub.title }}">
+                                        -->
                                         {% else %}
                                         <!--
                                         <img src="/media/uploads/pages/2023-10-30/chastye-voprosy_1.jpg" class="card-img-top" alt="{{ menu_sub.title }}">
                                         -->
                                         {% endif %}
                                         <div class="card-body ">
-                                            <div class="card-title">
+                                            <div class="card-title m-0">
                                                 {{ menu_sub.title }}
                                             </div>
                                         </div>

@@ -13,22 +13,7 @@
 
 {% if categories %}
 <div class="row">
-    {% for item in categories %}
-    <div class="col-md-3 mb-3">
-        <div class="card text-bg-dark border-0 w-100 h-100" style="background-color: #F4F4F4 !important;">
-            <a href="{{ item.get_absolute_url }}" class="" title="{{ item.title }}">
-                {% if item.image %}
-                    <img src="{{ item.image.url }}" class="card-img" alt="{{ item.title }}">
-                {% else %}
-                    <img src="{{ logo.url }}" class="card-img" alt="{{ item.title }}">
-                {% endif %}
-                <div class="card-img-overlay" style="background: #ffffff24;">
-                    <h3 class="card-title">{{ item.title }}</h3>
-                </div>
-            </a>
-        </div>
-    </div>
-    {% endfor %}
+    {% show_categories categories 'col-md-3' %}
 </div>
 {% endif %}
 

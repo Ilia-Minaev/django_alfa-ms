@@ -1,5 +1,6 @@
 {% extends "./base_website.html" %}
 {% load static %}
+{% load series_tags %}
 
 {% block breadcrumbs %}{% endblock breadcrumbs %}
 
@@ -11,22 +12,9 @@
             <h1 class="fs-1 text-uppercase">Офисная мебель в Москве</h1>
         </div>
         <div class="row">
-            {% for category in categories %}
-            <div class="col-md-2">
-                <div class="card text-bg-dark border-0 w-100 h-100" style="background-color: #F4F4F4 !important;">
-                    <a href="{{ category.get_absolute_url }}" class="" title="{{ category.title }}">
-                        {% if category.image %}
-                            <img src="{{ category.image.url }}" class="card-img" alt="{{ category.title }}">
-                        {% else %}
-                            <img src="{{ logo.url }}" class="card-img" alt="{{ category.title }}">
-                        {% endif %}
-                        <div class="card-img-overlay" style="background: #ffffff24;">
-                            <h3 class="card-title">{{ category.title }}</h3>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
+            {% show_categories categories 'col-md-2' %}
+
+
         </div>
     </div>
 </section>

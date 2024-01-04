@@ -33,6 +33,10 @@ def show_tabs_colors_product(context, *args, **kwargs):
 def show_products(context, *args, **kwargs):
     return {'products': args[0], 'series_url': args[1], 'session': args[2], 'col': args[3]}
 
+@register.inclusion_tag('product/tags/categories.html', takes_context=True)
+def show_categories(context, *args, **kwargs):
+    return {'categories': args[0], 'col': args[1]}
+
 @register.inclusion_tag('product/tags/favorites-heart.html', takes_context=False)
 def check_favorites(*args, **kwargs):
     
