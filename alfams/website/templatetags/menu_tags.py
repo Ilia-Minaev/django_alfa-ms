@@ -6,8 +6,8 @@ from blog.models import Articles, Portfolio
 register = template.Library()
 
 
-@register.inclusion_tag('website/tags/header_menu.html', takes_context=True)
-def show_header_menu(context):
+@register.inclusion_tag('website/tags/header_menu.html', takes_context=False)
+def show_header_menu(*args, **kwargs):
     menu_items = Pages.objects.filter(is_published=True).filter(is_header=True).values()
 
     sub_pages = SubPages.objects.filter(is_published=True).values()
@@ -29,7 +29,7 @@ def show_header_menu(context):
     
     return {"menu_items": menu_items, 'article_last': article_last, 'portfolio_last': portfolio_last}
 
-@register.inclusion_tag('website/tags/footer_menu.html', takes_context=True)
-def show_footer_menu(context):
+@register.inclusion_tag('website/tags/footer_menu.html', takes_context=False)
+def show_footer_menu(*args, **kwargs):
     menu_items = Pages.objects.filter(is_published=True).filter(is_footer=True)
     return {"menu_items": menu_items,}

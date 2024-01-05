@@ -5,8 +5,8 @@ from product.models import Series, Products
 register = template.Library()
 
 
-@register.inclusion_tag('product/tags/tabs-colors.html', takes_context=True)
-def show_tabs_colors(context, *args, **kwargs):
+@register.inclusion_tag('product/tags/tabs-colors.html', takes_context=False)
+def show_tabs_colors(*args, **kwargs):
     items = Products.objects.filter(parent=args[0])
 
     tabs_items = set()
@@ -18,8 +18,8 @@ def show_tabs_colors(context, *args, **kwargs):
     
     return {'tabs_nav': tabs_nav, 'tabs_items': tabs_items}
 
-@register.inclusion_tag('product/tags/tabs-colors-product.html', takes_context=True)
-def show_tabs_colors_product(context, *args, **kwargs):
+@register.inclusion_tag('product/tags/tabs-colors-product.html', takes_context=False)
+def show_tabs_colors_product(*args, **kwargs):
     tabs_items = args[0]
     tabs_nav = set()
 
@@ -29,17 +29,16 @@ def show_tabs_colors_product(context, *args, **kwargs):
         
     return {'tabs_nav': tabs_nav, 'tabs_items': tabs_items, 'item_active': args[1]}
 
-@register.inclusion_tag('product/tags/products.html', takes_context=True)
-def show_products(context, *args, **kwargs):
+@register.inclusion_tag('product/tags/products.html', takes_context=False)
+def show_products(*args, **kwargs):
     return {'products': args[0], 'series_url': args[1], 'session': args[2], 'col': args[3]}
 
-@register.inclusion_tag('product/tags/categories.html', takes_context=True)
-def show_categories(context, *args, **kwargs):
+@register.inclusion_tag('product/tags/categories.html', takes_context=False)
+def show_categories(*args, **kwargs):
     return {'categories': args[0], 'col': args[1]}
 
 @register.inclusion_tag('product/tags/favorites-heart.html', takes_context=False)
 def check_favorites(*args, **kwargs):
-    
     session = args[0]
     object = args[1]
     model = args[2]

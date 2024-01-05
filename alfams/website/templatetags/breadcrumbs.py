@@ -20,23 +20,25 @@ def show_breadcrumbs(context):
     return {"path_items": context,}
 
 
-## test
+
 @register.inclusion_tag('website/tags/breadcrumbs/_start.html')
 def breadcrumb_start():
     pass
+
+
 @register.inclusion_tag('website/tags/breadcrumbs/_end.html')
 def breadcrumb_end():
-    pass
+    pass 
  
- 
+
 @register.inclusion_tag('website/tags/breadcrumbs/_home.html')
-def breadcrumb_home(url='/', title=''):
+def breadcrumb_home(url='/', title='Главная'):
     return {
         'url': url,
         'title': title
     }
  
- 
+
 @register.inclusion_tag('website/tags/breadcrumbs/_item.html')
 def breadcrumb_item(url, title, position):
     return {
@@ -44,8 +46,8 @@ def breadcrumb_item(url, title, position):
         'title': title,
         'position': position
     }
- 
- 
+
+
 @register.inclusion_tag('website/tags/breadcrumbs/_active.html')
 def breadcrumb_active(url, title, position):
     return {
