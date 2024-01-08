@@ -42,7 +42,7 @@
                         {% breadcrumb_start %}
                             {% for item in breadcrumbs %}
                                 {% if forloop.first %}
-                                    {% breadcrumb_home item.full_slug item.title %}
+                                    {% breadcrumb_home item.full_slug item.title forloop.counter0 %}
                                 {% elif forloop.last %}
                                     {% breadcrumb_active item.full_slug item.title forloop.counter0 %}
                                 {% else %}
@@ -84,8 +84,9 @@
         {% endcache footer %}
     </footer>
 
-    {% include 'inc/_modal-callback.html' %}
-    {% include 'inc/_modal-consultation.html' %}
+    {% load ecommerce_tags %}
+    {% show_modal_callback request.path %}
+    {% show_modal_consultation request.path %}
 
     <!-- bootstrap js -->
     <!--

@@ -1,5 +1,5 @@
 {% extends './base_cart.html' %}
-{% load cart_product %}
+{% load ecommerce_tags %}
 
 
 {% block main %}
@@ -104,6 +104,7 @@
                         </div>
                     </div>
                     <div class="col-12">
+                        <input type="hidden" class="form-control" name="order_type" value="1">
                         <button type="submit" class="btn btn-primary">Сделать заказ!</button>
                     </div>
                 </form></div></div>

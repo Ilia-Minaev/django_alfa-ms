@@ -12,7 +12,7 @@ from django.views.generic.base import View
 
 from constants.utils import ConstantsMixin
 from ecommerce.models import Order
-from ecommerce.utils import EcommerceMixin, get_total_price, get_products_by_order
+from ecommerce.utils import EcommerceMixin, get_total_price, get_products_by_order, get_table_by_order
 
 
 class CartView(ConstantsMixin, TemplateView):
@@ -58,7 +58,7 @@ class CartOrder(View):
         city = request.POST['city']
         payment_method = request.POST['payment_method']
         comment = request.POST['comment']
-        from ecommerce.utils import get_table_by_order
+        
 
         order = get_table_by_order(request.session['cart'])
 
@@ -71,6 +71,7 @@ class CartOrder(View):
         order_obj.payment_method = payment_method
         order_obj.comment = comment
         order_obj.order = order
+        order_obj.order_type = 1
         order_obj.save()
 
 
@@ -263,3 +264,31 @@ class PrintView(ConstantsMixin, TemplateView):
 
         return context
         
+
+class CallbackOrder(View):
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        
+        name = request.POST['name']
+        email = '####'
+        phone = request.POST['phone']
+        street = '####'
+        city = '####'
+        payment_method = 1
+        comment = '####'
+        order = '####'
+
+        url = request.POST['url_from']
+
+        order_obj = Order()
+        order_obj.name = name
+        order_obj.email = email
+        order_obj.phone = phone
+        order_obj.street = street
+        order_obj.city = city
+        order_obj.payment_method = payment_method
+        order_obj.comment = comment
+        order_obj.order = order
+        order_obj.order_type = request.POST['order_type']
+        order_obj.save()
+
+        return redirect(url)

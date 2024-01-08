@@ -24,10 +24,12 @@ class CourseAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     form = OrderAdminForm
     
-    list_display = ('id', 'name', 'email', 'phone', 'date_created',)
-    list_display_links = ('id', 'name',)
-    fields = ('id', 'name', 'email', 'phone', 'street', 'city', 'payment_method', 'comment', 'order', 'date_created', 'date_updated',)
-    readonly_fields = ('id', 'date_created', 'date_updated')
+    list_display = ('id', 'order_type', 'name', 'email', 'phone', 'date_created',)
+    list_display_links = ('id', 'order_type', 'name',)
+    fields = ('id', 'name', 'email', 'phone', 'street', 'city', 'payment_method', 'comment', 'order', 'order_type', 'date_created', 'date_updated',)
+    readonly_fields = ('id', 'order_type', 'date_created', 'date_updated')
+
+    list_filter = ('order_type',)
 
 
 admin.site.register(CurrencyRates, CurrencyRatesAdmin)

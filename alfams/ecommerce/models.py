@@ -45,6 +45,12 @@ class Order(models.Model):
         ('3', 'Яндекс-деньги'),
         ('4', 'Webmoney'),
     ]
+    ORDER_VALUES = [
+        ('1', 'Заказ из корзины'),
+        ('2', 'Купить в 1 клик'),
+        ('3', 'Обратный звонок'),
+        ('4', 'Консультация'),
+    ]
 
     name = models.CharField(max_length=127, blank=False, verbose_name='Имя клиента')
     email = models.EmailField(max_length=47, blank=False, verbose_name='email клиента')
@@ -54,6 +60,7 @@ class Order(models.Model):
     payment_method = models.CharField(max_length=127, blank=False, choices=PAYMENT_VALUES, default=PAYMENT_VALUES[0][0], verbose_name='Способ оплаты')
     comment = models.TextField(max_length=511, blank=False, verbose_name='Комментарий клиента')
     order = models.TextField(blank=False, verbose_name='Заказ')
+    order_type = models.CharField(max_length=127, blank=False, choices=ORDER_VALUES, default=ORDER_VALUES[0][0], verbose_name='Тип заказа')
     
     date_created = models.DateTimeField(auto_now_add=True, verbose_name='Create date')
     date_updated = models.DateTimeField(auto_now=True, verbose_name='Update date')
