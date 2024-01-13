@@ -32,10 +32,11 @@ def breadcrumb_end():
  
 
 @register.inclusion_tag('website/tags/breadcrumbs/_home.html')
-def breadcrumb_home(url='/', title='Главная'):
+def breadcrumb_home(url='/', title='Главная', position=0):
     return {
         'url': url,
-        'title': title
+        'title': title,
+        'position': position,
     }
  
 
@@ -44,7 +45,7 @@ def breadcrumb_item(url, title, position):
     return {
         'url': url,
         'title': title,
-        'position': position
+        'position': position,
     }
 
 
@@ -53,5 +54,5 @@ def breadcrumb_active(url, title, position):
     return {
         'url': url,
         'title': title,
-        'position': position
+        'position': position,
     }
