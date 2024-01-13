@@ -11,6 +11,7 @@ cache_time = 60*60*24
 urlpatterns = [
     path('', cache_page(cache_time)(HomeView.as_view()), name='home'),
     path('home/', HomeRedirectView.as_view(), name='home_redirect'),
+    path('politika-konfidencialnosti/', cache_page(cache_time)(PagesView.as_view()), name='pages_privacy_policy'),
     path('<slug:page_slug>/', cache_page(cache_time)(PagesView.as_view()), name='pages'),
     path('<slug:page_slug_1>/<slug:page_slug>/', cache_page(cache_time)(SubPagesView.as_view()), name='pages_1'),
 ]
