@@ -1,5 +1,6 @@
 {% extends "./base_category.html" %}
-{% load series_tags %}
+{% load product_tags %}
+{% load ecommerce_tags %}
 
 
 {% block main %}
@@ -26,12 +27,10 @@
                             <div class="text-success">В наличии</div>
                             <ul class="list-group list-group-horizontal">
                                 <li class="list-group-item border-0 p-0 me-3" style="background-color: #F4F4F4;">
-                                    {% check_favorites request.session.favorites product 'product' %}
+                                    {% check_favorites request.session product 'product' %}
                                 </li>
                                 <li class="list-group-item border-0 p-0" style="background-color: #F4F4F4;">
-                                    <a class="" href="#">
-                                        <i class="fa-solid fa-chart-simple"></i>
-                                    </a>
+                                    {% check_comparison request.session product 'product' %}
                                 </li>
                             </ul>
                         </div>
@@ -44,17 +43,16 @@
                                     {% csrf_token %}
                                     
                                     {% with price=product.get_price %}
-                                    <div class="col-xl-4 d-flex flex-nowrap align-items-center mb-3">
-                                        <div class="me-3"><b>Цена:</b></div>
+                                    <div class="col-xl-4 mb-3">
                                         <div>
-                                            <div class="text-decoration-line-through fs-5"> {{ price.fake }} ₽</div> 
-                                            <div class="text-danger fs-4">{{ price.real }} ₽</div>
+                                            <span class="me-3"><b>Цена:</b></span>
+                                            <span class="text-danger fs-4 me-3">{{ price.real }} ₽</span>
+                                            <span class="text-decoration-line-through fs-5"> {{ price.fake }} ₽</span> 
                                         </div>
                                     </div>
                                     {% endwith %}
 
                                     <div class="col-xl-8 d-flex align-items-center mb-3">
-
                                         <input type="hidden" name="id" value="{{ product.pk }}">
                                         <div class="input-group" style="width: 120px;">
                                             <button class="btn btn-outline-danger button-minus" type="button" id="button-minus"><span class="text-dark">-</span></button>
@@ -62,9 +60,7 @@
                                             <button class="btn btn-outline-danger button-plus" type="button" id="button-plus"><span class="text-dark">+</span></button>
                                         </div>
                                         <input type="hidden" name="url_from" value="{{ product.get_absolute_url }}">
-
                                     </div>
-
 
                                     <div class="col-xl-4 mb-3" style="height: 50px;">
                                         <button type="submit" class="btn btn-danger h-100 w-100">В корзину</button>

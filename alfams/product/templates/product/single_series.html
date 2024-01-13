@@ -1,6 +1,6 @@
 {% extends "./base_category.html" %}
-{% load series_tags %}
-
+{% load product_tags %}
+{% load ecommerce_tags %}
 
 {% block main %}
 
@@ -22,12 +22,10 @@
 
                             <ul class="list-group list-group-horizontal">
                                 <li class="list-group-item border-0 p-0 me-3" style="background-color: #F4F4F4;">
-                                    {% check_favorites request.session.favorites series 'series' %}
+                                    {% check_favorites request.session series 'series' %}
                                 </li>
                                 <li class="list-group-item border-0 p-0" style="background-color: #F4F4F4;">
-                                    <a class="" href="#">
-                                        <i class="fa-solid fa-chart-simple"></i>
-                                    </a>
+                                    {% check_comparison request.session series 'series' %}
                                 </li>
                             </ul>
                         </div>
@@ -35,7 +33,10 @@
                         {% show_tabs_colors series.pk %}
 
                         <div class="row">
-                            <div class="col-12 mb-3"> Цена: от {{ series.product_price }}</div>
+                            <div class="col-12 mb-3">
+                                <span class="me-3"><b>Цена от:</b></span>
+                                <span class="text-danger fs-4">{{ series.product_price }} ₽</span>
+                            </div>
                             <div class="col-xl-4 mb-3" style="height: 50px;">
                                 <a href="/klientam/vyzov-menedzhera/" class="btn btn-danger h-100 w-100 d-flex justify-content-center align-items-center">Купить в 1 клик</a>
                             </div>
@@ -124,7 +125,7 @@
         
         {% if products %}        
         <div class="row mb-3">
-            {% show_products products series.get_absolute_url request.session.favorites 'col-md-3' %}
+            {% show_products products series.get_absolute_url request.session 'col-md-3' %}
         </div>
         {% endif %}
     </div>

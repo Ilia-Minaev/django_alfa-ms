@@ -1,6 +1,6 @@
 {% extends './base_cart.html' %}
 {% load product_menu_tags %}
-{% load product_tags %}
+{% load ecommerce_tags %}
 
 
 {% block main_sidebar %}
@@ -11,37 +11,35 @@
 
 {% block content %}
 
-{% if request.session.favorites %}
+{% if request.session.comparison %}
 
     {% if series %}
     <div class="row mb-3" style="background-color: #F4F4F4;">
         <div class="col py-3">
-            <h2>Избранные серии</h2>
+            <h2>Сравнение серий</h2>
         </div>
     </div>
     <div class="row mb-3">
-        {% for item in series %}
-        {% include 'product/inc/_item-series.html' with item=item %}
-        {% endfor %}
+
+        {% show_comparison_series series request.path request.session %}
     </div>
     {% endif %}
     
     {% if products %}
     <div class="row mb-3" style="background-color: #F4F4F4;">
         <div class="col py-3">
-            <h2>Избранные товары</h2>
+            <h2>Сравнение товаров</h2>
         </div>
     </div>
     <div class="row mb-3">
-        {% url 'cart:favorites' as favorites %}
-        {% show_products products favorites request.session 'col-md-4' %}
+        {% show_comparison_products products request.path request.session %}
     </div>
     {% endif %}
 
 {% else %}
 <div class="text-center">
-    <h2>В избранном пока нет товаров</h2>
-    <p>Добавьте товары в избранное, чтобы не потерять понравившиеся товары.</p>
+    <h2>Нет товаров для сравнения</h2>
+    <p>Выберете товары, которые Вы хотите сравнить.</p>
 </div>
 {% endif %}
 

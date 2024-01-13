@@ -1,0 +1,14 @@
+<form action="{% url 'cart:comparison_action' id=object.pk %}" method="POST">
+    {% csrf_token %}
+    
+    <input type="hidden" name="id" value="{{ object.pk }}">
+    <input type="hidden" name="url_from" value="{% if url_redirect %}{{ url_redirect }}{% else %}{{ object.get_absolute_url }}{% endif %}">
+    <input type="hidden" name="type" value="{{ model }}">
+    <button type="submit" class="border-0 p-0 bg-transparent" title="Сравнение товаров">
+        {% if icon %}
+        <i class="fa-solid fa-chart-simple"></i>
+        {% else %}
+        <i class="fa-solid fa-chart-simple" style="color: #747474;"></i>
+        {% endif %}
+    </button>
+</form>

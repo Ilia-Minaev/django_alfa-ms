@@ -1,5 +1,7 @@
 import types
 from typing import Any, Optional
+from itertools import chain
+
 from django import http
 from django.db import models
 from django.http import HttpRequest, HttpResponse, Http404
@@ -13,6 +15,8 @@ from django.views.generic.base import View
 from constants.utils import ConstantsMixin
 from ecommerce.models import Order
 from ecommerce.utils import EcommerceMixin, get_total_price, get_products_by_order, get_table_by_order
+from product.models import Products
+
 
 
 class CartView(ConstantsMixin, TemplateView):
@@ -214,9 +218,6 @@ class FavoritesAddRemove(View):
                 favorites.append(add_data)
         
         if model == 'product':
-            from product.models import Products
-            from itertools import chain
-
             ids = Products.objects.get(pk=id).product_code_color
             ids = Products.objects.filter(product_code_color=ids).values_list('id')
             ids = list(ids)
@@ -237,6 +238,108 @@ class FavoritesAddRemove(View):
                     favorites.append(add_data)
 
         request.session['favorites'] = list(filter(None, favorites))
+        request.session.modified = True
+
+        return redirect(url)
+    
+
+class ComparisonView(ConstantsMixin, EcommerceMixin, TemplateView):
+    template_name = 'ecommerce/comparison.html'
+    #model = ''
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+
+        context_page = {}
+        context_page['title'] = 'Сравнение товаров'
+        context_page['description'] = 'Сравнение товаров'
+        context_page['meta_title'] = 'Сравнение товаров'
+        context_page['meta_description'] = 'Сравнение товаров'
+        context_page['meta_keywords'] = 'Сравнение товаров'
+        
+        context_constants = self.get_constants()
+
+        context = context | context_page | context_constants
+
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Сравнение товаров',
+                'full_slug': reverse_lazy('cart:comparison'),
+            },
+        ]
+        
+        context['series'] = self.get_comparison_series()
+        context['products'] = self.get_comparison_products()
+
+        return context
+    
+
+class ComparisonAddRemove(View):
+    def post(self, request: HttpRequest, *args: str, **kwargs: Any) -> HttpResponse:
+        
+        id = int(request.POST['id'])
+        url = request.POST['url_from']
+        model = request.POST['type']
+        comparison = request.session.get('comparison')
+        item_exist = False
+
+        if comparison:
+            comparison = list(comparison)
+        else:
+            request.session['comparison'] = list()
+            comparison = request.session['comparison']
+        
+        if model == 'series':
+            for item in comparison:
+                if item.get('id') == id and item.get('type') == model:
+                    item.clear()
+                    item_exist = True
+
+            if not item_exist:
+                add_data = {
+                    'id': id,
+                    'type': model,
+                }
+                comparison.append(add_data)
+        
+        if model == 'product':
+            ids = Products.objects.get(pk=id).product_code_color
+            ids = Products.objects.filter(product_code_color=ids).values_list('id')
+            ids = list(ids)
+            ids = list(chain(*ids))
+
+            for item in comparison:
+                for item_id in ids:
+                    if item.get('id') == item_id and item.get('type') == model:
+                        item.clear()
+                        item_exist = True
+
+            # check for length
+            exists_code_list = []
+            for item in comparison:
+                if item.get('type') == model:
+                    print(item, item['id'])
+                    product_code_color = Products.objects.get(pk=item['id']).product_code_color
+                    exists_code_list.append(product_code_color)
+            exists_code_list = list(set(exists_code_list))
+
+            if len(exists_code_list) > 2:
+                return redirect(url)
+            # end check for length
+
+            if not item_exist:
+                for item_id in ids:
+                    add_data = {
+                        'id': item_id,
+                        'type': model,
+                    }
+                    comparison.append(add_data)
+
+        request.session['comparison'] = list(filter(None, comparison))
         request.session.modified = True
 
         return redirect(url)

@@ -49,14 +49,12 @@ class SeriesAdmin(admin.ModelAdmin):
 class ProductsAdmin(admin.ModelAdmin):
     form = CategoriesAdminForm
 
-    list_display = ('is_published', 'product_code', 'product_code_color', 'title', 'parent', 'product_brand', 'product_color', 'show_img')
-    list_display_links = ('title',)
+    list_display = ('is_published', 'product_code', 'product_code_color', 'title', 'parent', 'product_brand', 'get_product_material_color', 'show_img')
+    list_display_links = ('product_code', 'product_code_color', 'title', )
     list_filter = ('parent',)
     fields = (
         'is_published', 'title', 'slug', 'full_slug', 
         'show_img', 'image', 'description',
-
-
 
         'product_price',
 
@@ -66,14 +64,15 @@ class ProductsAdmin(admin.ModelAdmin):
         
         'parent', 'product_brand', 'product_class', 'product_furniture',
         
-        'product_country', 'product_color',
+        'product_country', 'get_product_material_color',
 
         'product_height', 'product_width', 'product_length',
 
         'gallery',
               
         'meta_title', 'meta_keywords', 'meta_description', 'date_created', 'date_updated')
-    readonly_fields = ('full_slug', 'show_img', 'date_created', 'date_updated')
+    
+    readonly_fields = ('full_slug', 'show_img', 'date_created', 'date_updated', 'product_code_color', 'get_product_material_color',)
     
     prepopulated_fields = {'slug': ('product_code',)}
     ordering = ('product_brand', 'product_code')

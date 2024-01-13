@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse, reverse_lazy
 from django.utils.safestring import mark_safe
+from django.contrib import admin
+
 from datetime import datetime, date
 
 from gallery.models import Name, Images
@@ -320,8 +322,12 @@ class Products(ProductBaseModel):
     def get_absolute_url(self):
         return reverse_lazy('shop:product') + self.full_slug + '/'
     
-    def get_colors(self):
-        return self.product_color.all()
+    #def get_colors(self):
+        #return self.product_color.all()
+    
+    @admin.display(description="Материал: Цвет")
+    def get_product_material_color(self):
+        return f'{self.product_color.parent.title}: {self.product_color.title}'
     
     def get_card_slider(self):
         if self.gallery:
@@ -333,7 +339,6 @@ class Products(ProductBaseModel):
             return [self] + list(card_slider)
         else:
             return card_slider
-
     
     def get_country(self):
         country_all = self.product_country.all()
@@ -345,17 +350,15 @@ class Products(ProductBaseModel):
         country_list = '-'.join(country_list)
         return country_list
     
-    
     def get_price(self):
         from ecommerce.utils import get_price as price_mixin
         return price_mixin(obj=self)
-    
 
     def save(self, *args, **kwargs):
         parent = Series.objects.get(pk=self.parent.pk)
+        
         if self.parent:
             self.full_slug = parent.full_slug + '/' + self.slug
-
         if not self.slug:
             self.slug = self.product_code
         if not self.product_code_color:

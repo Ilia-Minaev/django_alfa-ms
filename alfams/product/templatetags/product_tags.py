@@ -31,30 +31,9 @@ def show_tabs_colors_product(*args, **kwargs):
 
 @register.inclusion_tag('product/tags/products.html', takes_context=False)
 def show_products(*args, **kwargs):
-    return {'products': args[0], 'series_url': args[1], 'session': args[2], 'col': args[3]}
+    return {'products': args[0], 'from_url': args[1], 'session': args[2], 'col': args[3]}
 
 @register.inclusion_tag('product/tags/categories.html', takes_context=False)
 def show_categories(*args, **kwargs):
     return {'categories': args[0], 'col': args[1]}
 
-@register.inclusion_tag('product/tags/favorites-heart.html', takes_context=False)
-def check_favorites(*args, **kwargs):
-    session = args[0]
-    object = args[1]
-    model = args[2]
-    try:
-        url_redirect = args[3]
-    except:
-        url_redirect = False
-    icon = None
-
-    if session:
-        for item in session:
-            if item['id'] == object.id and item['type'] == model:
-                icon = True
-                break
-            icon = False
-    else:
-        icon = False
-
-    return {'icon': icon, 'object': object, 'model': model, 'url_redirect': url_redirect}

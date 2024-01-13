@@ -1,0 +1,51 @@
+{% load product_tags %}
+{% load ecommerce_tags %}
+
+
+
+
+<div class="row">
+    <ul class="list-group list-group-flush col-md-3">
+        <li class="list-group-item border-0" style="min-height:250px"></li>
+        <li class="list-group-item" style="min-height:54px"></li>
+        <li class="list-group-item" style="min-height:44px">Цена:</li>
+        <li class="list-group-item" style="min-height:44px">Артикул:</li>
+        <li class="list-group-item" style="min-height:44px">Код товара:</li>
+        <li class="list-group-item" style="min-height:44px">Гарантия:</li>
+        <li class="list-group-item" style="min-height:44px">Толщина столешницы:</li>
+        <li class="list-group-item" style="min-height:44px">Время производства:</li>
+        <li class="list-group-item" style="min-height:44px">Время доставки:</li>
+        <li class="list-group-item" style="min-height:44px">Производитель:</li>
+        <li class="list-group-item" style="min-height:44px">Класс товара:</li>
+        <li class="list-group-item" style="min-height:44px">Тип товара:</li>
+        <li class="list-group-item" style="min-height:44px">Страна-производитель:</li>
+    </ul>
+
+    {% for item in series %}
+
+
+    <ul class="list-group list-group-flush col-md-3">
+        <li class="list-group-item" style="min-height:250px">
+          {% include 'ecommerce/inc/_series-slider.html' with slides=item.get_card_slider %}
+        </li>
+        <li class="list-group-item d-flex justify-content-evenly align-items-center" style="min-height:44px;">
+            <a href="{{ item.get_absolute_url }}" class="btn btn-outline-danger">Подробнее</a>
+            {% check_favorites session item 'series' from_url %}
+            {% check_comparison session item 'series' from_url %}
+        </li>
+        <li class="list-group-item" style="min-height:44px">от {{ item.product_price }} ₽</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_article }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_code }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_guarantee }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_top_table }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_production_time }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_delivery_time }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_brand }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_class }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.product_furniture }}</li>
+        <li class="list-group-item" style="min-height:44px">{{ item.get_country }}</li>
+    </ul>
+
+
+    {% endfor %}
+</div>

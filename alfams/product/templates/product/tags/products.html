@@ -1,4 +1,5 @@
-{% load series_tags %}
+{% load product_tags %}
+{% load ecommerce_tags %}
 {% regroup products by product_code_color as products_list %}
 
 {% for product in products_list %}
@@ -10,12 +11,10 @@
                 <div class="text-success">В наличии</div>
                 <ul class="list-group list-group-horizontal">
                     <li class="list-group-item border-0 p-0 me-3" style="background-color: #F4F4F4;">
-                        {% check_favorites session product.list.0 'product' series_url %}
+                        {% check_favorites session product.list.0 'product' from_url %}
                     </li>
                     <li class="list-group-item border-0 p-0" style="background-color: #F4F4F4;">
-                        <a class="" href="#">
-                            <i class="fa-solid fa-chart-simple"></i>
-                        </a>
+                        {% check_comparison session product.list.0 'product' from_url %}
                     </li>
                 </ul>
             </div>

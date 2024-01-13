@@ -1,6 +1,3 @@
-
-
-
 <form action="{% url 'cart:favorites_action' id=object.pk %}" method="POST">
     {% csrf_token %}
     
@@ -9,9 +6,12 @@
     <input type="hidden" name="type" value="{{ model }}">
     <button type="submit" class="border-0 p-0 bg-transparent" title="Добавить в избранное">
         {% if icon %}
-        <i class="fa-solid fa-heart"></i>
+        <!--<i class="fa-solid fa-heart"></i>-->
+        <i class="fa-solid fa-heart-circle-plus"></i>
         {% else %}
-        <i class="fa-regular fa-heart"></i>
+        <!--<i class="fa-regular fa-heart"></i>-->
+        <i class="fa-solid fa-heart-circle-minus" style="color: #747474;"></i>
+        <!--<i class="fa-regular fa-heart-circle-minus"></i>-->
         {% endif %}
     </button>
 </form>

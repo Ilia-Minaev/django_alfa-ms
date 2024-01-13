@@ -5,3 +5,4 @@ alfams/cache
 *.pyc
 *.zip
 __pycache__
+migrations

@@ -6,11 +6,15 @@ class EcommerceMixin():
     def filter_objects(self, *args):
         object = args[0]
         model = args[1]
+        session = args[2]
 
-        session = self.request.session.get('favorites')
+        session = self.request.session.get(session)
         items_ids = []
         items = []
 
+        if not session:
+            return False
+        
         for item in session:
             if item['type'] == model:
                 items_ids.append(item['id'])
@@ -18,14 +22,21 @@ class EcommerceMixin():
         for id in items_ids:
             obj = object.objects.get(pk=id)
             items.append(obj)
+            
         return items
 
 
     def get_favorites_series(self):
-        return self.filter_objects(Series, 'series')
+        return self.filter_objects(Series, 'series', 'favorites')
 
     def get_favorites_products(self):
-        return self.filter_objects(Products, 'product')
+        return self.filter_objects(Products, 'product', 'favorites')
+    
+    def get_comparison_series(self):
+        return self.filter_objects(Series, 'series', 'comparison')
+
+    def get_comparison_products(self):
+        return self.filter_objects(Products, 'product', 'comparison')
 
 
 def get_table_by_order(session):

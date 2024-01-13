@@ -1,0 +1,32 @@
+{% with idx=forloop.counter0 %}
+
+    <div id="carouselCardSeries{{idx}}" class="carousel carousel-dark slide" data-bs-ride="carousel" data-bs-interval="3000">
+
+        <div class="carousel-inner">
+            {% for slide in slides %}
+                <div class="carousel-item {% if forloop.counter0 == 0 %}active{% endif %}">
+                    <a href="{{ slide.get_absolute_url }}">
+                    <img src="{{ slide.image.url }}" class="d-block" alt="{{ title }}" style="max-height: 250px;">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div><b>Цвета:</b></div>
+        <div class="carousel-indicators position-relative w-100 m-0 d-flex flex-wrap">
+            {% for slide in slides %}
+                {% if forloop.counter0 == 0 %}
+                <a type="button" data-bs-target="#carouselCardSeries{{idx}}" data-bs-slide-to="{{ forloop.counter0 }}" class="border active"
+                aria-current="true" aria-label="Slide {{ forloop.counter0 }}" style="min-width:10px;height:auto;">
+                    <img src="{{ slide.product_color.image.url }}" class="d-block w-100" alt="{{ title }}">
+                </a>
+                {% else %}
+                <a type="button" data-bs-target="#carouselCardSeries{{idx}}" data-bs-slide-to="{{ forloop.counter0 }}" class="border"
+                aria-label="Slide {{ forloop.counter0 }}" style="min-width:10px;height:auto;">
+                    <img src="{{ slide.product_color.image.url }}" class="d-block w-100" alt="{{ title }}">
+                </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% endwith %}
