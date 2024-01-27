@@ -1,0 +1,26 @@
+{% extends "./base_website.html" %}
+{% load static %}
+{% load product_menu_tags %}
+
+
+{% block main_sidebar %}
+    {% include 'website/inc/_banners.html' %}
+{% endblock main_sidebar %}
+
+{% block title %}
+<div class="container-fluid pt-4 pb-4">
+    {% include 'inc/_h1-title.html' with title=title %}
+</div>
+{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            {% get_sitemap %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -20,7 +20,7 @@ class BlogView(ConstantsMixin, PostMixin, ListView):
         context = context | context_constants
 
         context['title'] = 'Блог'
-        context['description'] = 'Блог'
+        #context['description'] = 'Блог'
         context['meta_title'] = 'Блог'
         context['meta_description'] = 'Блог'
         context['meta_keywords'] = 'Блог'
@@ -53,7 +53,7 @@ class ArticlesView(ConstantsMixin, PostMixin, ListView):
         context = context | context_constants
 
         context['title'] = 'Статьи'
-        context['description'] = 'Статьи'
+        #context['description'] = 'Статьи'
         context['meta_title'] = 'Статьи'
         context['meta_description'] = 'Статьи'
         context['meta_keywords'] = 'Статьи'
@@ -90,7 +90,7 @@ class PortfolioView(ConstantsMixin, PostMixin, ListView):
         context = context | context_constants
 
         context['title'] = 'Портфолио'
-        context['description'] = 'Портфолио'
+        #context['description'] = 'Портфолио'
         context['meta_title'] = 'Портфолио'
         context['meta_description'] = 'Портфолио'
         context['meta_keywords'] = 'Портфолио'

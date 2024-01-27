@@ -8,9 +8,9 @@ register = template.Library()
 
 @register.inclusion_tag('website/tags/header_menu.html', takes_context=False)
 def show_header_menu(*args, **kwargs):
-    menu_items = Pages.objects.filter(is_published=True).filter(is_header=True).values()
+    menu_items = Pages.objects.filter(is_published=True).filter(is_header=True).values('id', 'title', 'slug')
 
-    sub_pages = SubPages.objects.filter(is_published=True).values()
+    sub_pages = SubPages.objects.filter(is_published=True).values('id', 'title', 'slug', 'parent_id')
     sub_items = {}
 
     for item in sub_pages:

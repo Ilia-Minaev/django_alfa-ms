@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse, Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, RedirectView
+from django.views.generic import ListView, RedirectView, TemplateView
 
 from website.models import Pages, SubPages
 from product.models import Categories
@@ -77,5 +77,35 @@ class SubPagesView(ConstantsMixin, WebsiteMixin, ListView):
 
         #context['breadcrumbs'] = self.get_breadcrumbs_path()
         context['breadcrumbs'] = self.get_breadcrumbs()
+        
+        return context
+
+class SitemapView(ConstantsMixin, WebsiteMixin, TemplateView):
+    #model = SubPages
+    template_name = 'website/sitemap.html'
+    #context_object_name = 'pages'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        #context_page = self.get_page_context()
+        context_constants = self.get_constants()
+        context = context | context_constants
+
+        context['title'] = 'Карта сайта'
+        #context['description'] = 'Карта сайта'
+        context['meta_title'] = 'Карта сайта'
+        context['meta_description'] = 'Карта сайта'
+        context['meta_keywords'] = 'Карта сайта'
+
+        context['breadcrumbs'] = [
+            {
+                'title': 'Главная',
+                'full_slug': '/',
+            },
+            {
+                'title': 'Карта сайта',
+                'full_slug': reverse_lazy('pages:sitemap'),
+            },
+        ]
         
         return context

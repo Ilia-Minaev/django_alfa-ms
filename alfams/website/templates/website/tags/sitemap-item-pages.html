@@ -1,0 +1,14 @@
+{% if item.childs %}
+<li>
+    <a title="{{ item.title }}" href="/{{ item.slug }}/">{{ item.title }}</a>
+    <ul>
+        {% for child in item.childs %}
+        <li><a title="{{ child.title }}" href="/{{ item.slug }}/{{ child.slug }}/">{{ child.title }}</a></li>
+        {% endfor %}
+    </ul>
+</li>
+{% elif item.slug == 'home' %}
+<li><a title="{{ item.title }}" href="/">{{ item.title }}</a></li>
+{% else %}
+<li><a title="{{ item.title }}" href="/{{ item.slug }}/">{{ item.title }}</a></li>
+{% endif %}

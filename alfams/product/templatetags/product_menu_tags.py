@@ -17,6 +17,27 @@ class Menu():
     def show_sidebar_menu():
         categories = Menu.get_tree()
         return {'categories_sidebar': categories}
+    
+    @register.inclusion_tag('website/tags/sitemap.html')
+    def get_sitemap():
+        from website.models import Pages, SubPages
+        menu_items = Pages.objects.filter(is_published=True).values('id', 'title', 'slug')
+        sub_pages = SubPages.objects.filter(is_published=True).values('id', 'title', 'slug', 'parent_id')
+        sub_items = {}
+
+        for item in sub_pages:
+            if sub_items.get(item['parent_id']):
+                sub_items[item['parent_id']].append(item)
+            else:
+                sub_items[item['parent_id']] = []
+                sub_items[item['parent_id']].append(item)
+
+        for item in menu_items:
+            if sub_items.get(item['id']):
+                item['childs'] = sub_items[item['id']]
+
+        categories = Menu.get_tree()
+        return {'pages': menu_items, 'categories': categories}
 
     def get_tree():
         if Menu.categories:

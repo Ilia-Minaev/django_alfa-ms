@@ -1,0 +1,12 @@
+{% if item.childs %}
+<li>
+    <a title="{{ item.title }}" href="/shop/category/{{ item.full_slug }}/">{{ item.title }}</a>
+    <ul>
+        {% for child in item.childs %}
+        {% include 'website/tags/sitemap-item-categories.html' with item=child %}
+        {% endfor %}
+    </ul>
+</li>
+{% else %}
+<li><a title="{{ item.title }}" href="/shop/category/{{ item.full_slug }}/">{{ item.title }}</a></li>
+{% endif %}

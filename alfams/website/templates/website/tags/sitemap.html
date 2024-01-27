@@ -1,0 +1,18 @@
+<ul>
+    {% for item in pages %}
+    {% include 'website/tags/sitemap-item-pages.html' with item=item %}
+    {% endfor %}
+
+    <li>
+        <a title="Каталог" href="{% url 'shop:category' %}">Каталог</a>
+        <ul>
+            {% for item in categories %}
+            {% include 'website/tags/sitemap-item-categories.html' with item=item %}
+            {% endfor %}
+        </ul>
+    </li>
+    
+    <li><a title="Корзина" href="{% url 'cart:cart' %}">Корзина</a></li>
+    <li><a title="Избранное" href="{% url 'cart:favorites' %}">Избранное</a></li>
+    <li><a title="Сравнение товаров" href="{% url 'cart:comparison' %}">Сравнение товаров</a></li>
+</ul>
