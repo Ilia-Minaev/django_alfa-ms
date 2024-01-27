@@ -1,158 +1,169 @@
 {% extends "./base_category.html" %}
-{% load product_tags %}
-{% load ecommerce_tags %}
 
+{% load product_tags %} 
+{% load ecommerce_tags %}
 
 {% block main %}
 
 <section class="section mb-5">
-    <div class="container-fluid">
-        <div class="row mb-3">
-            <div class="col-md-6">
-
-                {% with slider=product.get_card_slider %}
-                    {% if slider %}
-                        {% include 'product/inc/_series-slider.html' with slides=slider %}
-                    {% endif %}
-                {% endwith %}
-
-                {% include 'product/inc/_tabs-card.html' with items=product %}
-
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        {% with slider=product.get_card_slider %}
+        {% if slider %}
+          {% include 'product/inc/_series-slider.html' with slides=slider %}
+        {% endif %} 
+        {% endwith %} 
+        {% include 'product/inc/_tabs-card.html' with items=product %}
+      </div>
+      <div class="col-md-6">
+        {% include 'inc/_h1-title.html' with title=product.title %}
+        <div class="card border-0" style="background-color: #f4f4f4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between mb-3">
+              <div class="text-success">В наличии</div>
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item border-0 p-0 me-3" style="background-color: #f4f4f4">
+                  {% check_favorites request.session product 'product' %}
+                </li>
+                <li class="list-group-item border-0 p-0" style="background-color: #f4f4f4">
+                  {% check_comparison request.session product 'product' %}
+                </li>
+              </ul>
             </div>
-            <div class="col-md-6">
-                <h1 class="h1-title mb-5">{{ product.title }}</h1>
-                <div class="card border-0" style="background-color: #F4F4F4;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="text-success">В наличии</div>
-                            <ul class="list-group list-group-horizontal">
-                                <li class="list-group-item border-0 p-0 me-3" style="background-color: #F4F4F4;">
-                                    {% check_favorites request.session product 'product' %}
-                                </li>
-                                <li class="list-group-item border-0 p-0" style="background-color: #F4F4F4;">
-                                    {% check_comparison request.session product 'product' %}
-                                </li>
-                            </ul>
-                        </div>
 
-                        {% show_tabs_colors_product products_colors product.pk %}
+            {% show_tabs_colors_product products_colors product.pk %}
 
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <form action="{% url 'cart:cart_add' id=product.pk %}" method="POST" class="row" >
-                                    {% csrf_token %}
-                                    
-                                    {% with price=product.get_price %}
-                                    <div class="col-xl-4 mb-3">
-                                        <div>
-                                            <span class="me-3"><b>Цена:</b></span>
-                                            <span class="text-danger fs-4 me-3">{{ price.real }} ₽</span>
-                                            <span class="text-decoration-line-through fs-5"> {{ price.fake }} ₽</span> 
-                                        </div>
-                                    </div>
-                                    {% endwith %}
-
-                                    <div class="col-xl-8 d-flex align-items-center mb-3">
-                                        <input type="hidden" name="id" value="{{ product.pk }}">
-                                        <div class="input-group" style="width: 120px;">
-                                            <button class="btn btn-outline-danger button-minus" type="button" id="button-minus"><span class="text-dark">-</span></button>
-                                            <input class="form-control border-danger bg-transparent text-center calc" type="text" id="calc" value="1" name="qty">
-                                            <button class="btn btn-outline-danger button-plus" type="button" id="button-plus"><span class="text-dark">+</span></button>
-                                        </div>
-                                        <input type="hidden" name="url_from" value="{{ product.get_absolute_url }}">
-                                    </div>
-
-                                    <div class="col-xl-4 mb-3" style="height: 50px;">
-                                        <button type="submit" class="btn btn-danger h-100 w-100">В корзину</button>
-                                    </div>
-                                    <div class="col-xl-4 mb-3" style="height: 50px;">
-                                        <a href="/klientam/vyzov-menedzhera/" class="btn btn-outline-danger h-100 w-100 d-flex justify-content-center align-items-center">Купить в 1 клик</a>
-                                    </div>
-                                    <div class="col-xl-4 mb-3" style="height: 50px;">
-                                        {% load ecommerce_tags %}
-                                        {% show_modal_consultation_btn %}
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div>
-
-                        <table class="table table-borderless table-striped mb-3">
-                            <tr>
-                                <td>Страна-производитель:</td>
-                                <td>{{ product.get_country }}</td>
-                            </tr>
-                            <tr>
-                                <td>Срок доставки:</td>
-                                <td>{{ product.product_delivery_time }}</td>
-                            </tr>
-                            <tr>
-                                <td>Класс:</td>
-                                <td>{{ product.product_class }}</td>
-                            </tr>
-                            <tr>
-                                <td>Код товара:</td>
-                                <td>{{ product.product_code }}</td>
-                            </tr>
-                            <tr>
-                                <td>Гарантия:</td>
-                                <td>{{ product.product_guarantee }}</td>
-                            </tr>
-                            <tr>
-                                <td>Артикул:</td>
-                                <td>{{ product.product_article }}</td>
-                            </tr>
-                            <tr>
-                                <td>Срок производства:</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Материал столешницы:</td>
-                                <td>пока нет</td>
-                            </tr>
-                            <tr>
-                                <td>Толщина столешницы, мм:</td>
-                                <td>{{ product.product_top_table }}</td>
-                            </tr>
-                        </table>
-
-                        <div class="mb-3">
-                            <p><b>Доставка</b></p>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item" style="background-color: #F4F4F4;">при заказе свыше 100 000
-                                    руб. БЕСПЛАТНО! в пределах МКАД;</li>
-                                <li class="list-group-item" style="background-color: #F4F4F4;">при заказе на сумму менее
-                                    100 000 руб. стоимость доставки в пределах МКАД составит 1 990 руб.;</li>
-                                <li class="list-group-item" style="background-color: #F4F4F4;">доставка мебели за
-                                    пределы МКАД осуществляется из расчета 90 руб. за 1 км пути от МКАД;</li>
-                                <li class="list-group-item" style="background-color: #F4F4F4;">при заказе услуги
-                                    выгрузки и подъёма мебели в офис, стоимость данной услуги рассчитывается
-                                    индивидуально вашим персональным менеджером и зависит от объёма и веса груза.</li>
-                            </ul>
-                        </div>
-
-                        <div class="mb-3">
-                            <p><b>Гарантия</b></p>
-                            <p>Срок на протяжении которого продукция работает идеально. Столы, кресла, шкафы не
-                                коробятся, наполнитель не теряет эластичность, механизмы не заклинивают. Более того, в
-                                этот период мебель сохраняет идеальный вид. В зависимости от линейки и изготовителя.</p>
-                        </div>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <form action="{% url 'cart:cart_add' id=product.pk %}" method="POST" class="row">
+                  {% csrf_token %} {% with price=product.get_price %}
+                  <div class="col-xl-4 mb-3">
+                    <div>
+                      <span class="me-3"><b>Цена:</b></span>
+                      <span class="text-danger fs-4 me-3">{{ price.real }} ₽</span>
+                      <span class="text-decoration-line-through fs-5">
+                        {{ price.fake }} ₽</span>
                     </div>
-                </div>
+                  </div>
+                  {% endwith %}
+
+                  <div class="col-xl-8 d-flex align-items-center mb-3">
+                    <input type="hidden" name="id" value="{{ product.pk }}" />
+                    <div class="input-group" style="width: 120px">
+                      <button class="btn btn-outline-danger button-minus" type="button" id="button-minus">
+                        <span class="text-dark">-</span>
+                      </button>
+                      <input class="form-control border-danger bg-transparent text-center calc" type="text" id="calc"
+                        value="1" name="qty" />
+                      <button class="btn btn-outline-danger button-plus" type="button" id="button-plus">
+                        <span class="text-dark">+</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="col-xl-4 mb-3" style="height: 50px">
+                    <input type="hidden" name="url_from" value="{{ product.get_absolute_url }}" />
+                    <button type="submit" class="btn btn-danger h-100 w-100">
+                      В корзину
+                    </button>
+                  </div>
+                  <div class="col-xl-4 mb-3" style="height: 50px">
+                    <a href="/klientam/vyzov-menedzhera/"
+                      class="btn btn-outline-danger h-100 w-100 d-flex justify-content-center align-items-center">Купить
+                      в 1 клик</a>
+                  </div>
+                  <div class="col-xl-4 mb-3" style="height: 50px">
+                    {% load ecommerce_tags %}
+                    {% show_modal_consultation_btn %}
+                  </div>
+                </form>
+              </div>
             </div>
+
+            <table class="table table-borderless table-striped mb-3">
+              <tr>
+                <td>Страна-производитель:</td>
+                <td>{{ product.get_country }}</td>
+              </tr>
+              <tr>
+                <td>Срок доставки:</td>
+                <td>{{ product.product_delivery_time }}</td>
+              </tr>
+              <tr>
+                <td>Класс:</td>
+                <td>{{ product.product_class }}</td>
+              </tr>
+              <tr>
+                <td>Код товара:</td>
+                <td>{{ product.product_code }}</td>
+              </tr>
+              <tr>
+                <td>Гарантия:</td>
+                <td>{{ product.product_guarantee }}</td>
+              </tr>
+              <tr>
+                <td>Артикул:</td>
+                <td>{{ product.product_article }}</td>
+              </tr>
+              <tr>
+                <td>Срок производства:</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Материал столешницы:</td>
+                <td>пока нет</td>
+              </tr>
+              <tr>
+                <td>Толщина столешницы, мм:</td>
+                <td>{{ product.product_top_table }}</td>
+              </tr>
+            </table>
+
+            <div class="mb-3">
+              <p><b>Доставка</b></p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" style="background-color: #f4f4f4">
+                  при заказе свыше 100 000 руб. БЕСПЛАТНО! в пределах МКАД;
+                </li>
+                <li class="list-group-item" style="background-color: #f4f4f4">
+                  при заказе на сумму менее 100 000 руб. стоимость доставки в
+                  пределах МКАД составит 1 990 руб.;
+                </li>
+                <li class="list-group-item" style="background-color: #f4f4f4">
+                  доставка мебели за пределы МКАД осуществляется из расчета 90
+                  руб. за 1 км пути от МКАД;
+                </li>
+                <li class="list-group-item" style="background-color: #f4f4f4">
+                  при заказе услуги выгрузки и подъёма мебели в офис, стоимость
+                  данной услуги рассчитывается индивидуально вашим персональным
+                  менеджером и зависит от объёма и веса груза.
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-3">
+              <p><b>Гарантия</b></p>
+              <p>
+                Срок на протяжении которого продукция работает идеально. Столы,
+                кресла, шкафы не коробятся, наполнитель не теряет эластичность,
+                механизмы не заклинивают. Более того, в этот период мебель
+                сохраняет идеальный вид. В зависимости от линейки и
+                изготовителя.
+              </p>
+            </div>
+          </div>
         </div>
-<!--
+      </div>
+    </div>
+    <!--
         <div class="row mb-3" style="background-color: #F4F4F4;">
             <div class="col py-3">
                 <h2>Элементы серии {{ product.product_article }}</h2>
             </div>
         </div>
--->    
-
-
-    </div>
+-->
+  </div>
 </section>
-
-
 
 {% endblock main %}

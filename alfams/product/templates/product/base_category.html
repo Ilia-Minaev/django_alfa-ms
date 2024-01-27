@@ -10,13 +10,7 @@
             <div class="col-md-9">
                 {% block main_content %}
                     {% block title %}
-                        <div class="row mb-4">
-                            <div class="col">
-                                <div class="h1-title mb-5">
-                                    <h1 class="fs-1 text-uppercase">{{ title }}</h1>
-                                </div>
-                            </div>
-                        </div>
+                        {% include 'inc/_h1-title.html' with title=title %}
                     {% endblock title %}
                     {% block content %}{% endblock content %}
                 {% endblock main_content %}

@@ -13,7 +13,7 @@
 
             </div>
             <div class="col-md-6">
-                <h1 class="h1-title mb-5">{{ series.title }}</h1>
+                {% include 'inc/_h1-title.html' with title=series.title %}
                 <div class="card border-0" style="background-color: #F4F4F4;">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-3">
