@@ -1,5 +1,6 @@
 from django.contrib import admin
-
+from django.urls import path
+from django.shortcuts import render
 from product.models import Categories, Series, Products
 from product.forms import CategoriesAdminForm
 
@@ -17,8 +18,10 @@ class CategoriesAdmin(admin.ModelAdmin):
     readonly_fields = ('level', 'children', 'full_slug', 'show_icon', 'show_img', 'date_created', 'date_updated')
 
     prepopulated_fields = {'slug': ('title',)}
-
+from product.utils import Import_Upload
 class SeriesAdmin(admin.ModelAdmin):
+    #change_list_template = "templates/admin/monitor_change_list.html"
+
     form = CategoriesAdminForm
 
     list_display = ('is_published', 'title', 'show_img')
@@ -35,16 +38,39 @@ class SeriesAdmin(admin.ModelAdmin):
         'product_guarantee', 'product_top_table',
         'product_production_time', 'product_delivery_time',
         
-        'parent', 'product_brand', 'product_class', 'product_furniture',
+        'parent', 'product_brand', 'product_class', 
+        #'product_furniture',
         
-        'product_country', 'product_color',
+        'product_country', 
+        #'product_color',
 
-        'gallery',
+        'gallery', 'file_import',
               
         'meta_title', 'meta_keywords', 'meta_description', 'date_created', 'date_updated')
     readonly_fields = ('full_slug', 'show_img', 'date_created', 'date_updated')
 
     prepopulated_fields = {'slug': ('product_article',)}
+    
+    def get_urls(self):
+        urls = super().get_urls()
+        urls.insert(-1, path('import-upload/', self.import_upload))
+        return urls
+    
+    def import_upload(self, request):
+        if request.method == 'POST':
+            
+            #from product.utils import Import_Upload
+            file = request.FILES['import']
+            import_file = Import_Upload()
+            import_file.start_import(file=file)
+            #self.start_import(file=file)
+
+
+        return render(request, 'admin/import_form.html',
+                      #{'form': form}
+                      )
+
+    
 
 class ProductsAdmin(admin.ModelAdmin):
     form = CategoriesAdminForm

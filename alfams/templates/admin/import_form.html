@@ -1,0 +1,24 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+    <div>
+        <form action="." method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <label for="id_image">Image:</label>
+            <input
+                type="file"
+                name="import"
+                class="form-control"
+                multiple=""
+                required="" id="id_image">
+                <!--accept="image/*"-->
+            <input type="submit" value="Save">
+        </form>
+
+
+            
+
+    </div>
+{% endblock %}

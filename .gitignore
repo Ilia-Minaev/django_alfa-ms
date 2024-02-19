@@ -1,6 +1,7 @@
 venv/
 .vscode/
 alfams/media/uploads
+alfams/media/import
 alfams/cache
 *.pyc
 *.zip

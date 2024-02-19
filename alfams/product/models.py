@@ -209,10 +209,12 @@ class Series(ProductBaseModel):
     
     product_brand = models.ForeignKey(ProductBrand, blank=True, null=True, related_name='series_brand', verbose_name='Производитель (бренд)', on_delete=models.PROTECT)
     product_class = models.ForeignKey(ProductClass, blank=True, null=True, related_name='series_class', verbose_name='Класс товара', on_delete=models.PROTECT)
-    product_furniture = models.ForeignKey(ProductFurniture, blank=True, null=True, related_name='series_furniture', verbose_name='Тип мебели', on_delete=models.PROTECT)
+    #product_furniture = models.ForeignKey(ProductFurniture, blank=True, null=True, related_name='series_furniture', verbose_name='Тип мебели', on_delete=models.PROTECT)
     
     product_country = models.ManyToManyField(ProductCountry, blank=True, related_name='series_country', verbose_name='Страна-производитель')
-    product_color = models.ManyToManyField(ProductColor, blank=True, related_name='series_color', verbose_name='Цвет')
+    #product_color = models.ManyToManyField(ProductColor, blank=True, related_name='series_color', verbose_name='Цвет')
+
+    file_import = models.FileField(upload_to='import/', blank=True)
 
     gallery = models.ForeignKey(Name, blank=True, null=True, related_name='series_gallery', verbose_name='series_gallery', on_delete=models.PROTECT)
 
@@ -277,16 +279,47 @@ class Series(ProductBaseModel):
             return False
     def check_session(self, *args):
         return self
-
     def save(self, *args, **kwargs):
-        if self.parent:
-            category_slug = Categories.objects.get(pk=self.parent.pk).full_slug
-            self.full_slug = category_slug + '/' + self.slug
         return super(Series, self).save(*args, **kwargs)
+    #def save(self, *args, **kwargs):
+    #    if self.parent:
+    #        category_slug = Categories.objects.get(pk=self.parent.pk).full_slug
+    #        self.full_slug = category_slug + '/' + self.slug
+    #    return super(Series, self).save(*args, **kwargs)
+    
+
     
     class Meta:
         verbose_name = 'Серия'
         verbose_name_plural = 'Серии'
+    
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.template.defaultfilters import slugify
+@receiver(pre_save, sender=Series)
+def create_slug(sender, instance, *args, **kwargs):
+    instance.slug = slugify(instance.title)
+    if instance.parent:
+        instance.full_slug = instance.parent.full_slug + '/' + instance.slug
+
+    #from django.http import HttpResponseRedirect
+    #from product.views import simple_upload
+
+    #def get_urls(self):
+    #    urls = super(Series, self).get_urls()
+        #from django.conf.urls import url
+    #    from django.urls import path
+        #custom_urls = [url('^import/$', self.process_import, name='process_import'),]
+    #    custom_urls = [path('get/', self.admin_site.admin_view(self.get_repayment), name='repayment_view'), ]
+
+    #    return custom_urls + urls
+    #change_form_template = 'product/templates/admin/monitor_change_list.html'
+
+    #def process_import_btmp(self, request):
+    #    import_custom = simple_upload()
+    #    count = import_custom.import_data() 
+    #    self.message_user(request, f"создано {count} новых записей")
+    #    return HttpResponseRedirect("../")
 
 
 

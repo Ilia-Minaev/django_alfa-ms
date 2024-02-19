@@ -53,7 +53,8 @@ class CategoryView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, ListView):
         
         context = context | context_page | context_constants
 
-        context['breadcrumbs'] = self.breadcrumbs_category()
+        #context['breadcrumbs'] = self.breadcrumbs_category()
+        context['breadcrumbs'] = self.breadcrumbs_test()
         
         return context
     
@@ -79,7 +80,8 @@ class SeriesSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVie
         context_constants = self.get_constants()
         context = context | context_page | context_constants
 
-        context['breadcrumbs'] = self.breadcrumbs_series()
+        #context['breadcrumbs'] = self.breadcrumbs_series()
+        context['breadcrumbs'] = self.breadcrumbs_test()
 
         context['products'] = Products.objects.filter(parent=self.get_category().pk).filter(is_published=True)
 
@@ -108,8 +110,8 @@ class ProductSingleView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, DetailVi
 
         context['products_colors'] = super().get_queryset().filter(product_code_color=self.get_category().product_code_color).filter(is_published=True)
 
-        context['breadcrumbs'] = self.breadcrumbs_product()
-
+        #context['breadcrumbs'] = self.breadcrumbs_product()
+        context['breadcrumbs'] = self.breadcrumbs_test()
         return context
     
 
@@ -158,3 +160,21 @@ class SearchView(ConstantsMixin, ProductMixin, BreadcrumbsMixin, ListView):
         ).filter(is_published=True)
 
         return context
+    
+
+'''
+#from django.shortcuts import render
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+
+def simple_upload(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        return render(request, 'core/simple_upload.html', {
+            'uploaded_file_url': uploaded_file_url
+        })
+    return render(request, 'core/simple_upload.html')
+    '''
