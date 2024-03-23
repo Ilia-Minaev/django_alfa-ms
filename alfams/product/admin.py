@@ -49,7 +49,7 @@ class SeriesAdmin(admin.ModelAdmin):
         'meta_title', 'meta_keywords', 'meta_description', 'date_created', 'date_updated')
     readonly_fields = ('full_slug', 'show_img', 'date_created', 'date_updated')
 
-    prepopulated_fields = {'slug': ('product_article',)}
+    #prepopulated_fields = {'slug': ('product_article',)}
     
     def get_urls(self):
         urls = super().get_urls()
@@ -75,7 +75,9 @@ class SeriesAdmin(admin.ModelAdmin):
 class ProductsAdmin(admin.ModelAdmin):
     form = CategoriesAdminForm
 
-    list_display = ('is_published', 'product_code', 'product_code_color', 'title', 'parent', 'product_brand', 'get_product_material_color', 'show_img')
+    list_display = (
+        'is_published', 'product_code', 'product_code_color', 'title', 'parent', 'product_brand', 'get_product_material_color', 'show_img'
+    )
     list_display_links = ('product_code', 'product_code_color', 'title', )
     list_filter = ('parent',)
     fields = (
@@ -90,7 +92,7 @@ class ProductsAdmin(admin.ModelAdmin):
         
         'parent', 'product_brand', 'product_class', 'product_furniture',
         
-        'product_country', 'get_product_material_color',
+        'product_country', 'product_color', 'get_product_material_color',
 
         'product_height', 'product_width', 'product_length',
 
@@ -98,9 +100,11 @@ class ProductsAdmin(admin.ModelAdmin):
               
         'meta_title', 'meta_keywords', 'meta_description', 'date_created', 'date_updated')
     
-    readonly_fields = ('full_slug', 'show_img', 'date_created', 'date_updated', 'product_code_color', 'get_product_material_color',)
+    readonly_fields = (
+        'slug','full_slug', 'show_img', 'date_created', 'date_updated', 'product_code_color', 'get_product_material_color',
+    )
     
-    prepopulated_fields = {'slug': ('product_code',)}
+    #prepopulated_fields = {'slug': ('product_code',)}
     ordering = ('product_brand', 'product_code')
     save_as = True
 

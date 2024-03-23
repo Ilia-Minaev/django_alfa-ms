@@ -2,6 +2,7 @@ from django.db import models
 from django.urls import reverse, reverse_lazy
 from django.utils.safestring import mark_safe
 from django.contrib import admin
+from django.template.defaultfilters import slugify
 
 from datetime import datetime, date
 
@@ -280,47 +281,16 @@ class Series(ProductBaseModel):
     def check_session(self, *args):
         return self
     def save(self, *args, **kwargs):
+        self.slug = slugify(self.product_article)
+        if self.parent:
+            self.full_slug = self.parent.full_slug + '/' + self.slug
+        else:
+            self.full_slug = self.slug
         return super(Series, self).save(*args, **kwargs)
-    #def save(self, *args, **kwargs):
-    #    if self.parent:
-    #        category_slug = Categories.objects.get(pk=self.parent.pk).full_slug
-    #        self.full_slug = category_slug + '/' + self.slug
-    #    return super(Series, self).save(*args, **kwargs)
-    
 
-    
     class Meta:
         verbose_name = 'Серия'
         verbose_name_plural = 'Серии'
-    
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
-from django.template.defaultfilters import slugify
-@receiver(pre_save, sender=Series)
-def create_slug(sender, instance, *args, **kwargs):
-    instance.slug = slugify(instance.title)
-    if instance.parent:
-        instance.full_slug = instance.parent.full_slug + '/' + instance.slug
-
-    #from django.http import HttpResponseRedirect
-    #from product.views import simple_upload
-
-    #def get_urls(self):
-    #    urls = super(Series, self).get_urls()
-        #from django.conf.urls import url
-    #    from django.urls import path
-        #custom_urls = [url('^import/$', self.process_import, name='process_import'),]
-    #    custom_urls = [path('get/', self.admin_site.admin_view(self.get_repayment), name='repayment_view'), ]
-
-    #    return custom_urls + urls
-    #change_form_template = 'product/templates/admin/monitor_change_list.html'
-
-    #def process_import_btmp(self, request):
-    #    import_custom = simple_upload()
-    #    count = import_custom.import_data() 
-    #    self.message_user(request, f"создано {count} новых записей")
-    #    return HttpResponseRedirect("../")
-
 
 
 class Products(ProductBaseModel):
@@ -360,6 +330,7 @@ class Products(ProductBaseModel):
     
     @admin.display(description="Материал: Цвет")
     def get_product_material_color(self):
+        return ''
         return f'{self.product_color.parent.title}: {self.product_color.title}'
     
     def get_card_slider(self):
@@ -388,30 +359,21 @@ class Products(ProductBaseModel):
         return price_mixin(obj=self)
 
     def save(self, *args, **kwargs):
-        parent = Series.objects.get(pk=self.parent.pk)
-        
+        self.slug = slugify(self.product_code)
         if self.parent:
-            self.full_slug = parent.full_slug + '/' + self.slug
-        if not self.slug:
-            self.slug = self.product_code
-        if not self.product_code_color:
-            self.product_code_color = self.product_code.split('_')[0]
+            self.full_slug = self.parent.full_slug + '/' + self.slug
+        else:
+            self.full_slug = self.slug
+
+        self.product_code_color = self.product_code.split('_')[0]
         if not self.product_guarantee:
-            self.product_guarantee = parent.product_guarantee
+            self.product_guarantee = self.parent.product_guarantee
         if not self.product_brand:
-            self.product_brand = parent.product_brand
+            self.product_brand = self.parent.product_brand
         if not self.product_class:
-            self.product_class = parent.product_class
+            self.product_class = self.parent.product_class
 
         return super(Products, self).save(*args, **kwargs)
-
-        #print(self.product_country)
-        #if not self.product_country == None:
-        #    obj = Products.objects.get(pk=self.pk)
-        #    for item in parent.product_country.all():
-        #        print(item.pk)
-        #        obj.product_country.add(item)
-        #    obj.save()
     
     class Meta:
         verbose_name = 'Товар'
